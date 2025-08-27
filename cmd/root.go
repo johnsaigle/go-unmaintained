@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -30,6 +31,8 @@ var (
 	cacheDurationHr int
 	resolveUnknown  bool
 	resolverTimeout int
+	syncMode        bool
+	concurrency     int
 
 	rootCmd = &cobra.Command{
 		Use:   "go-unmaintained",
@@ -38,7 +41,14 @@ var (
 using heuristics, similar to cargo-unmaintained for the Rust ecosystem.
 
 It analyzes go.mod files and their dependencies to detect packages that may pose 
-security or reliability risks due to lack of maintenance.`,
+security or reliability risks due to lack of maintenance.
+
+Features:
+• Multi-platform support (GitHub, GitLab, Bitbucket)
+• Smart caching for performance
+• Concurrent analysis by default for speed
+• Intelligent rate limiting
+• Clear categorization of results`,
 		RunE: runAnalysis,
 	}
 )
@@ -73,6 +83,8 @@ func init() {
 	rootCmd.Flags().BoolVar(&noCache, "no-cache", false, "Do not cache data on disk")
 	rootCmd.Flags().IntVar(&cacheDurationHr, "cache-duration", 24, "Cache duration in hours")
 	rootCmd.Flags().BoolVar(&failFast, "fail-fast", false, "Exit as soon as an unmaintained package is found")
+	rootCmd.Flags().BoolVar(&syncMode, "sync", false, "Disable async mode and use sequential processing (slower)")
+	rootCmd.Flags().IntVar(&concurrency, "concurrency", 5, "Number of concurrent requests (default: 5)")
 }
 
 func runAnalysis(cmd *cobra.Command, args []string) error {
@@ -116,6 +128,8 @@ func analyzeProject(projectPath string) error {
 		CacheDuration:   time.Duration(cacheDurationHr) * time.Hour,
 		ResolveUnknown:  resolveUnknown,
 		ResolverTimeout: time.Duration(resolverTimeout) * time.Second,
+		AsyncMode:       !syncMode,
+		Concurrency:     concurrency,
 	}
 
 	analyze, err := analyzer.NewAnalyzer(config)
@@ -125,6 +139,12 @@ func analyzeProject(projectPath string) error {
 
 	// Analyze dependencies
 	ctx := context.Background()
+
+	// Show progress indicator for async mode (default)
+	if !syncMode && !jsonOutput {
+		fmt.Printf("🚀 Running concurrent analysis with %d workers...\n\n", concurrency)
+	}
+
 	results, err := analyze.AnalyzeModule(ctx, mod)
 	if err != nil {
 		return fmt.Errorf("analysis failed: %w", err)
@@ -151,42 +171,92 @@ func outputJSON(results []analyzer.Result) error {
 func outputConsole(results []analyzer.Result) error {
 	unmaintainedFound := false
 
-	fmt.Println("Dependency Analysis Results:")
-	fmt.Println("============================")
+	// Separate results into categories
+	var unmaintained []analyzer.Result
+	var unknown []analyzer.Result
+	var maintained []analyzer.Result
 
 	for _, result := range results {
 		if result.IsUnmaintained {
+			unmaintained = append(unmaintained, result)
 			unmaintainedFound = true
+		} else if result.Reason == "unknown_source" {
+			unknown = append(unknown, result)
+		} else {
+			maintained = append(maintained, result)
+		}
+	}
+
+	fmt.Println("Dependency Analysis Results:")
+	fmt.Println("============================")
+
+	// Show unmaintained packages first (most important)
+	if len(unmaintained) > 0 {
+		fmt.Printf("\n🚨 UNMAINTAINED PACKAGES (%d found):\n", len(unmaintained))
+		fmt.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+		for _, result := range unmaintained {
 			fmt.Printf("❌ %s - %s\n", result.Package, result.Details)
 			if result.DaysSinceUpdate > 0 {
 				fmt.Printf("   Last updated: %d days ago\n", result.DaysSinceUpdate)
 			}
-		} else if result.Reason == "unknown_source" {
-			fmt.Printf("❓ %s - %s\n", result.Package, result.Details)
-		} else if verbose {
-			fmt.Printf("✅ %s - %s\n", result.Package, result.Details)
-		}
 
-		if failFast && result.IsUnmaintained {
-			break
+			if failFast {
+				break
+			}
+		}
+	}
+
+	// Show unknown status packages (informational)
+	if len(unknown) > 0 {
+		fmt.Printf("\n❓ UNKNOWN STATUS PACKAGES (%d found):\n", len(unknown))
+		fmt.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+		for _, result := range unknown {
+			fmt.Printf("❓ %s - %s\n", result.Package, result.Details)
+		}
+	}
+
+	// Show maintained packages only in verbose mode
+	if verbose && len(maintained) > 0 {
+		fmt.Printf("\n✅ MAINTAINED PACKAGES (%d found):\n", len(maintained))
+		fmt.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+		for _, result := range maintained {
+			fmt.Printf("✅ %s - %s\n", result.Package, result.Details)
 		}
 	}
 
 	// Print summary
 	summary := analyzer.GetSummary(results)
-	fmt.Printf("\nSummary:\n")
-	fmt.Printf("Total dependencies: %d\n", summary.TotalDependencies)
-	fmt.Printf("Unmaintained: %d\n", summary.UnmaintainedCount)
+	fmt.Print("\n" + strings.Repeat("═", 50) + "\n")
+	fmt.Print("📊 ANALYSIS SUMMARY\n")
+	fmt.Print(strings.Repeat("═", 50) + "\n")
+	fmt.Printf("Total dependencies analyzed: %d\n\n", summary.TotalDependencies)
+
 	if summary.UnmaintainedCount > 0 {
-		fmt.Printf("  - Archived: %d\n", summary.ArchivedCount)
-		fmt.Printf("  - Not found: %d\n", summary.NotFoundCount)
-		fmt.Printf("  - Stale/Inactive: %d\n", summary.StaleInactiveCount)
-		if checkOutdated {
-			fmt.Printf("  - Outdated: %d\n", summary.OutdatedCount)
+		fmt.Printf("🚨 UNMAINTAINED PACKAGES: %d\n", summary.UnmaintainedCount)
+		if summary.ArchivedCount > 0 {
+			fmt.Printf("   📦 Archived repositories: %d\n", summary.ArchivedCount)
 		}
+		if summary.NotFoundCount > 0 {
+			fmt.Printf("   🚫 Not found/deleted: %d\n", summary.NotFoundCount)
+		}
+		if summary.StaleInactiveCount > 0 {
+			fmt.Printf("   💤 Stale/Inactive: %d\n", summary.StaleInactiveCount)
+		}
+		if checkOutdated && summary.OutdatedCount > 0 {
+			fmt.Printf("   📅 Outdated versions: %d\n", summary.OutdatedCount)
+		}
+		fmt.Println()
 	}
+
 	if summary.UnknownCount > 0 {
-		fmt.Printf("Unknown status: %d\n", summary.UnknownCount)
+		fmt.Printf("❓ UNKNOWN STATUS: %d\n", summary.UnknownCount)
+		fmt.Printf("   (Non-GitHub dependencies that couldn't be fully analyzed)\n\n")
+	}
+
+	maintainedCount := summary.TotalDependencies - summary.UnmaintainedCount - summary.UnknownCount
+	if maintainedCount > 0 {
+		fmt.Printf("✅ MAINTAINED PACKAGES: %d\n", maintainedCount)
+		fmt.Printf("   (Active repositories with recent updates)\n")
 	}
 
 	// Set exit code

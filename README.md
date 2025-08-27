@@ -12,7 +12,7 @@ A CLI tool that identifies unmaintained Go packages using heuristics.
 - 📊 **Multiple Heuristics**: Detects archived repositories, missing packages, inactive projects, and outdated versions  
 - 🔗 **Advanced Resolution**: Resolves vanity URLs, Go module proxy, and custom domains
 - 💾 **Smart Rate Limiting**: Handles GitHub API rate limits gracefully with proper error messages
-- ⚡ **Fast Processing**: Concurrent analysis of dependencies for better performance
+- ⚡ **Fast Processing**: Concurrent analysis enabled by default for optimal performance
 - 📋 **Flexible Output**: Supports both console and JSON output formats
 
 ## Installation
@@ -66,7 +66,7 @@ go-unmaintained --token your_token_here
 
 ### Basic Usage
 
-Analyze the current project:
+Analyze the current project (uses concurrent analysis by default):
 
 ```bash
 go-unmaintained
@@ -89,6 +89,12 @@ go-unmaintained --check-outdated
 
 # Enable resolution of non-GitHub dependencies (GitLab, Bitbucket, etc.)
 go-unmaintained --resolve-unknown
+
+# Custom concurrency level (default: 5 concurrent workers)
+go-unmaintained --concurrency 10
+
+# Disable concurrent processing (use sequential mode)
+go-unmaintained --sync
 
 # Custom age threshold (default: 365 days)
 go-unmaintained --max-age 180

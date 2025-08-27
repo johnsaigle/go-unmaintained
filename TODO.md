@@ -1,11 +1,24 @@
 # TODO
 
-## True positive (unmaintained) should be clearly separated in output from status unknown or trusted packages
+## add greppable output mode
 
-right now they are all grouped together
+status, package category etc. should all be on one line. no emojis
 
-## Add support for async requests
+## inconsistent formatting
 
-This would allow faster analysis of packages
+last updated information should be formatted consistently in output across different statuses
 
-Do so in a way that still respects existing caching/batching approaches in order to optimize around rate limiting
+example problem:
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❌ github.com/grpc-ecosystem/go-grpc-prometheus - Repository is archived
+   Last updated: 21 days ago
+❌ github.com/aws/aws-sdk-go - Repository is archived
+❌ github.com/golang/snappy - Repository is archived
+   Last updated: 4 days ago
+
+❓ UNKNOWN STATUS PACKAGES (9 found):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❓ go.uber.org/zap - Active Uber-maintained Go package (trusted)
+❓ golang.org/x/crypto - Active Go extended package, last updated 1 days ago
+```

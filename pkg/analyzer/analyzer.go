@@ -25,6 +25,12 @@ const (
 	ReasonUnknown       UnmaintainedReason = "unknown_source"
 )
 
+// indexedDep represents a dependency with its index for concurrent processing
+type indexedDep struct {
+	index int
+	dep   parser.Dependency
+}
+
 // Result represents the analysis result for a single dependency
 type Result struct {
 	Package         string
@@ -47,6 +53,8 @@ type Config struct {
 	CacheDuration   time.Duration
 	ResolveUnknown  bool
 	ResolverTimeout time.Duration
+	Concurrency     int
+	AsyncMode       bool
 }
 
 // Analyzer performs unmaintained package analysis
@@ -100,6 +108,14 @@ func NewAnalyzer(config Config) (*Analyzer, error) {
 
 // AnalyzeModule analyzes all dependencies in a module
 func (a *Analyzer) AnalyzeModule(ctx context.Context, mod *parser.Module) ([]Result, error) {
+	if a.config.AsyncMode {
+		return a.analyzeModuleConcurrent(ctx, mod)
+	}
+	return a.analyzeModuleSequential(ctx, mod)
+}
+
+// analyzeModuleSequential processes dependencies one by one (original behavior)
+func (a *Analyzer) analyzeModuleSequential(ctx context.Context, mod *parser.Module) ([]Result, error) {
 	var results []Result
 
 	for _, dep := range mod.Dependencies {
@@ -116,6 +132,106 @@ func (a *Analyzer) AnalyzeModule(ctx context.Context, mod *parser.Module) ([]Res
 	}
 
 	return results, nil
+}
+
+// analyzeModuleConcurrent processes dependencies concurrently with smart rate limiting
+func (a *Analyzer) analyzeModuleConcurrent(ctx context.Context, mod *parser.Module) ([]Result, error) {
+	concurrency := a.config.Concurrency
+	if concurrency <= 0 {
+		concurrency = 5 // Default concurrency
+	}
+
+	// Prioritize dependencies: cached first, then GitHub, then others
+	var cachedDeps, githubDeps, otherDeps []indexedDep
+
+	for i, dep := range mod.Dependencies {
+		moduleInfo := parser.ParseModulePath(dep.Path)
+		if !a.config.NoCache {
+			// Check if this dependency is likely cached
+			if moduleInfo.IsGitHub {
+				_, _, cacheHit := a.cache.GetRepoInfo(moduleInfo.Owner, moduleInfo.Repo)
+				if cacheHit {
+					cachedDeps = append(cachedDeps, indexedDep{i, dep})
+					continue
+				}
+			}
+		}
+
+		if moduleInfo.IsGitHub {
+			githubDeps = append(githubDeps, indexedDep{i, dep})
+		} else {
+			otherDeps = append(otherDeps, indexedDep{i, dep})
+		}
+	}
+
+	// Process in priority order: cached (fast), then others with rate limiting
+	results := make([]Result, len(mod.Dependencies))
+
+	// Process cached dependencies first (no rate limiting needed)
+	if len(cachedDeps) > 0 {
+		a.processBatch(ctx, cachedDeps, results, concurrency*2) // Higher concurrency for cached
+	}
+
+	// Process GitHub dependencies with moderate rate limiting
+	if len(githubDeps) > 0 {
+		a.processBatch(ctx, githubDeps, results, concurrency)
+	}
+
+	// Process other dependencies with conservative rate limiting
+	if len(otherDeps) > 0 {
+		a.processBatch(ctx, otherDeps, results, max(1, concurrency/2)) // Lower concurrency for unknowns
+	}
+
+	return results, nil
+}
+
+// processBatch processes a batch of dependencies with specified concurrency
+func (a *Analyzer) processBatch(ctx context.Context, deps []indexedDep, results []Result, batchConcurrency int) {
+	if len(deps) == 0 {
+		return
+	}
+
+	semaphore := make(chan struct{}, batchConcurrency)
+
+	type indexedResult struct {
+		index  int
+		result Result
+	}
+	resultsChan := make(chan indexedResult, len(deps))
+
+	// Start workers for this batch
+	for _, idep := range deps {
+		go func(indexedDep indexedDep) {
+			// Acquire semaphore
+			semaphore <- struct{}{}
+			defer func() { <-semaphore }()
+
+			result, err := a.AnalyzeDependency(ctx, indexedDep.dep)
+			if err != nil {
+				result = Result{
+					Package:        indexedDep.dep.Path,
+					IsUnmaintained: false,
+					Details:        fmt.Sprintf("Analysis error: %v", err),
+				}
+			}
+
+			resultsChan <- indexedResult{index: indexedDep.index, result: result}
+		}(idep)
+	}
+
+	// Collect results
+	for range deps {
+		indexedRes := <-resultsChan
+		results[indexedRes.index] = indexedRes.result
+	}
+}
+
+// max returns the maximum of two integers
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 // AnalyzeDependency analyzes a single dependency
