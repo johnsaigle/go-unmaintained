@@ -14,18 +14,20 @@ import (
 
 var (
 	// Flags
-	targetPath  string
-	packageName string
-	token       string
-	maxAge      int
-	jsonOutput  bool
-	verbose     bool
-	noCache     bool
-	failFast    bool
-	tree        bool
-	colorOutput string
-	noWarnings  bool
-	noExitCode  bool
+	targetPath      string
+	packageName     string
+	token           string
+	maxAge          int
+	jsonOutput      bool
+	verbose         bool
+	noCache         bool
+	failFast        bool
+	tree            bool
+	colorOutput     string
+	noWarnings      bool
+	noExitCode      bool
+	checkOutdated   bool
+	cacheDurationHr int
 
 	rootCmd = &cobra.Command{
 		Use:   "go-unmaintained",
@@ -53,6 +55,7 @@ func init() {
 
 	// Analysis configuration
 	rootCmd.Flags().IntVar(&maxAge, "max-age", 365, "Age in days that a repository must not exceed to be considered current")
+	rootCmd.Flags().BoolVar(&checkOutdated, "check-outdated", false, "Check if dependencies are using outdated versions")
 
 	// Output options
 	rootCmd.Flags().BoolVar(&jsonOutput, "json", false, "Output JSON format")
@@ -64,6 +67,7 @@ func init() {
 
 	// Performance and caching
 	rootCmd.Flags().BoolVar(&noCache, "no-cache", false, "Do not cache data on disk")
+	rootCmd.Flags().IntVar(&cacheDurationHr, "cache-duration", 24, "Cache duration in hours")
 	rootCmd.Flags().BoolVar(&failFast, "fail-fast", false, "Exit as soon as an unmaintained package is found")
 }
 
@@ -100,9 +104,12 @@ func analyzeProject(projectPath string) error {
 
 	// Create analyzer
 	config := analyzer.Config{
-		MaxAge:  time.Duration(maxAge) * 24 * time.Hour,
-		Token:   token,
-		Verbose: verbose,
+		MaxAge:        time.Duration(maxAge) * 24 * time.Hour,
+		Token:         token,
+		Verbose:       verbose,
+		CheckOutdated: checkOutdated,
+		NoCache:       noCache,
+		CacheDuration: time.Duration(cacheDurationHr) * time.Hour,
 	}
 
 	analyze, err := analyzer.NewAnalyzer(config)
@@ -166,6 +173,9 @@ func outputConsole(results []analyzer.Result) error {
 		fmt.Printf("  - Archived: %d\n", summary.ArchivedCount)
 		fmt.Printf("  - Not found: %d\n", summary.NotFoundCount)
 		fmt.Printf("  - Stale/Inactive: %d\n", summary.StaleInactiveCount)
+		if checkOutdated {
+			fmt.Printf("  - Outdated: %d\n", summary.OutdatedCount)
+		}
 	}
 
 	// Set exit code

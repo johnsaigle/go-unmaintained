@@ -1,29 +1,14 @@
 # TODO
 
-## Add basic validation for GH token
+## Handle not GH dependencies
 
-Example error:
+Some dependencies are not based on github, and return errors like this:
 ```
-github.com/libp2p/go-libp2p - Analysis error: failed to get repository info: failed to fetch repository: GET https://api.github.com/repos/libp2p/go-libp2p: 401 Bad credentials []
-```
-
-The tool should do some kind of sanity check on the token's credentials to make sure that it is active, can read public repositories and so on.
-If not, it should abort and tell the user about the problem
-
-## Research a way to mitigate rate-limiting
-
-- Caching analyses of packages/versions
-- Batching requests to GH by using the API more cleverly
-
-## Add detection and error handling for GH token rate-limiting:
-
-Example error when running in verbose mode
-```
-✅ github.com/prometheus/common - Analysis error: failed to get repository info: failed to fetch repository: GET https://api.github.com/repos/prometheus/common: 403 API rate limit of 60 still exceeded until 2025-08-27 12:15:49 -0400 EDT, not making remote request. [rate reset in 51m59s]
+nhooyr.io/websocket - Invalid module path: invalid module path: nhooyr.io/websocket
+google.golang.org/api - Invalid module path: invalid module path: google.golang.org/api
+google.golang.org/grpc - Invalid module path: invalid module path: google.golang.org/grpc
 ```
 
-## Parse a go.mod file and check each of its dependencies to see if they are outdated.
+Minimum change: these should be included in the output as 'unknown'
 
-## Add README
-
-- Specify that a classic github token needs to be created (no permissions) in order to see the archived status of a target repo
+Better change: Try to resolve these and determine whether they are archived using other heuristics
