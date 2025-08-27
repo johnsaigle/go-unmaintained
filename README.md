@@ -1,6 +1,9 @@
 # go-unmaintained
 
-A CLI tool that identifies unmaintained Go packages using heuristics, similar to cargo-unmaintained for the Rust ecosystem.
+> [!WARNING]
+> Largely vibe-coded, trust at your own peril.
+
+A CLI tool that identifies unmaintained Go packages using heuristics.
 
 ## Features
 
@@ -225,10 +228,6 @@ Use `--no-exit-code` to always exit with code 0, useful for CI environments wher
 4. Run `make check` to ensure code quality
 5. Submit a pull request
 
-## License
-
-[License information would go here]
-
 ## Acknowledgments
 
-Inspired by [cargo-unmaintained](https://github.com/est31/cargo-unmaintained) for the Rust ecosystem.
+Inspired by [cargo-unmaintained](https://github.com/trailofbits/cargo-unmaintained) for the Rust ecosystem.
