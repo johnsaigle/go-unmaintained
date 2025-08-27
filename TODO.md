@@ -1,5 +1,15 @@
 # TODO
 
+## Add basic validation for GH token
+
+Example error:
+```
+github.com/libp2p/go-libp2p - Analysis error: failed to get repository info: failed to fetch repository: GET https://api.github.com/repos/libp2p/go-libp2p: 401 Bad credentials []
+```
+
+The tool should do some kind of sanity check on the token's credentials to make sure that it is active, can read public repositories and so on.
+If not, it should abort and tell the user about the problem
+
 ## Research a way to mitigate rate-limiting
 
 - Caching analyses of packages/versions
