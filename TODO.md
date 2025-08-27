@@ -1,5 +1,7 @@
 # TODO
 
+## Create a simple Makefile with essential targets for build/run/test/lint
+
 ## Parse a go.mod file and check each of its dependencies to see if they are outdated.
 
 ## Add README
