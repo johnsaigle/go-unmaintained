@@ -5,8 +5,9 @@ A CLI tool that identifies unmaintained Go packages using heuristics, similar to
 ## Features
 
 - 🔍 **Dependency Analysis**: Scans `go.mod` files to identify potentially unmaintained dependencies
-- 🏗️ **GitHub Integration**: Uses GitHub API to check repository status and activity
+- 🏗️ **Multi-Platform Support**: Supports GitHub, GitLab, Bitbucket, and well-known Go modules
 - 📊 **Multiple Heuristics**: Detects archived repositories, missing packages, inactive projects, and outdated versions  
+- 🔗 **Advanced Resolution**: Resolves vanity URLs, Go module proxy, and custom domains
 - 💾 **Smart Rate Limiting**: Handles GitHub API rate limits gracefully with proper error messages
 - ⚡ **Fast Processing**: Concurrent analysis of dependencies for better performance
 - 📋 **Flexible Output**: Supports both console and JSON output formats
@@ -83,6 +84,9 @@ go-unmaintained --verbose
 # Check for outdated versions in addition to unmaintained repos
 go-unmaintained --check-outdated
 
+# Enable resolution of non-GitHub dependencies (GitLab, Bitbucket, etc.)
+go-unmaintained --resolve-unknown
+
 # Custom age threshold (default: 365 days)
 go-unmaintained --max-age 180
 
@@ -111,6 +115,8 @@ Dependency Analysis Results:
 ✅ github.com/active/current - Active repository, last updated 5 days ago
 ❌ github.com/stale/inactive - Repository inactive for 500 days
 ❌ github.com/old/version - Using outdated version v1.2.0 (latest: v2.1.0)
+❓ golang.org/x/tools - Active non-GitHub dependency (golang.org): Official Go extended package
+✅ gitlab.com/example/project - Active GitLab repository, last updated 10 days ago
 
 Summary:
 Total dependencies: 25
@@ -119,16 +125,27 @@ Unmaintained: 4
   - Not found: 1
   - Stale/Inactive: 1
   - Outdated: 1
+Unknown status: 1
 ```
 
 ## Detection Heuristics
 
 The tool uses several heuristics to identify unmaintained packages:
 
-1. **Repository Archived**: GitHub repository is marked as archived
+1. **Repository Archived**: Repository is marked as archived (GitHub, GitLab, Bitbucket)
 2. **Package Not Found**: Repository doesn't exist or is inaccessible
 3. **Inactive Repository**: No commits or updates within the specified time frame (default: 365 days)
 4. **Outdated Versions**: (with `--check-outdated`) Current version is significantly behind the latest released version
+5. **Unknown Status**: Non-GitHub dependencies that couldn't be resolved (shown with ❓)
+
+## Supported Hosting Providers
+
+- ✅ **GitHub**: Full analysis with API integration
+- ✅ **GitLab**: Repository analysis via GitLab API
+- ✅ **Bitbucket**: Repository analysis via Bitbucket API
+- ✅ **Well-known Go modules**: golang.org/x/, google.golang.org/, k8s.io/, etc.
+- ✅ **Go Module Proxy**: Verification via proxy.golang.org
+- ✅ **Vanity URLs**: Custom domain resolution
 
 ## Rate Limiting
 

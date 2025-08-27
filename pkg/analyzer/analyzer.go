@@ -9,6 +9,8 @@ import (
 	"github.com/johnsaigle/go-unmaintained/pkg/cache"
 	"github.com/johnsaigle/go-unmaintained/pkg/github"
 	"github.com/johnsaigle/go-unmaintained/pkg/parser"
+	"github.com/johnsaigle/go-unmaintained/pkg/providers"
+	"github.com/johnsaigle/go-unmaintained/pkg/resolver"
 	"golang.org/x/mod/semver"
 )
 
@@ -20,6 +22,7 @@ const (
 	ReasonNotFound      UnmaintainedReason = "package_not_found"
 	ReasonStaleInactive UnmaintainedReason = "stale_dependencies_inactive_repo"
 	ReasonOutdated      UnmaintainedReason = "outdated_version"
+	ReasonUnknown       UnmaintainedReason = "unknown_source"
 )
 
 // Result represents the analysis result for a single dependency
@@ -36,19 +39,23 @@ type Result struct {
 
 // Config holds configuration for the analyzer
 type Config struct {
-	MaxAge        time.Duration
-	Token         string
-	Verbose       bool
-	CheckOutdated bool
-	NoCache       bool
-	CacheDuration time.Duration
+	MaxAge          time.Duration
+	Token           string
+	Verbose         bool
+	CheckOutdated   bool
+	NoCache         bool
+	CacheDuration   time.Duration
+	ResolveUnknown  bool
+	ResolverTimeout time.Duration
 }
 
 // Analyzer performs unmaintained package analysis
 type Analyzer struct {
-	config       Config
-	githubClient *github.Client
-	cache        *cache.Cache
+	config        Config
+	githubClient  *github.Client
+	cache         *cache.Cache
+	resolver      *resolver.Resolver
+	multiProvider *providers.MultiProvider
 }
 
 // NewAnalyzer creates a new analyzer instance
@@ -71,10 +78,23 @@ func NewAnalyzer(config Config) (*Analyzer, error) {
 		}
 	}
 
+	// Initialize resolver - always available for well-known modules
+	// Use longer timeout when not explicitly resolving unknown modules
+	resolverTimeout := config.ResolverTimeout
+	if !config.ResolveUnknown && resolverTimeout == 0 {
+		resolverTimeout = 5 * time.Second // Shorter timeout for auto-resolution
+	}
+	moduleResolver := resolver.NewResolver(resolverTimeout)
+
+	// Initialize multi-provider for GitLab, Bitbucket, etc.
+	multiProvider := providers.NewMultiProvider()
+
 	return &Analyzer{
-		config:       config,
-		githubClient: githubClient,
-		cache:        cacheInstance,
+		config:        config,
+		githubClient:  githubClient,
+		cache:         cacheInstance,
+		resolver:      moduleResolver,
+		multiProvider: multiProvider,
 	}, nil
 }
 
@@ -112,17 +132,136 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 	}
 
 	// Parse module path to get repository info
-	host, owner, repo, err := parser.ParseModulePath(dep.Path)
-	if err != nil {
-		result.Details = fmt.Sprintf("Invalid module path: %v", err)
+	moduleInfo := parser.ParseModulePath(dep.Path)
+	if !moduleInfo.IsValid {
+		result.Details = "Invalid module path format"
 		return result, nil
 	}
 
-	// Currently only support GitHub
-	if host != "github.com" {
-		result.Details = "Skipped: non-GitHub repository"
+	// Handle non-GitHub dependencies
+	if !moduleInfo.IsGitHub {
+		result.Reason = ReasonUnknown
+
+		// Check if it's a golang.org/x module - these map to GitHub
+		if githubOwner, githubRepo, ok := parser.GetGitHubMapping(dep.Path); ok {
+			// Analyze as GitHub repository
+			repoInfo, err := a.githubClient.GetRepositoryInfo(ctx, githubOwner, githubRepo)
+			if err != nil {
+				result.Details = fmt.Sprintf("Failed to fetch Go repository info: %v", err)
+				return result, nil
+			}
+
+			result.RepoInfo = repoInfo
+			result.DaysSinceUpdate = repoInfo.DaysSinceLastActivity()
+
+			if !repoInfo.Exists {
+				result.IsUnmaintained = true
+				result.Reason = ReasonNotFound
+				result.Details = "Go extended package repository not found"
+				return result, nil
+			}
+
+			if repoInfo.IsArchived {
+				result.IsUnmaintained = true
+				result.Reason = ReasonArchived
+				result.Details = "Go extended package repository is archived"
+				return result, nil
+			}
+
+			// Check if repository is inactive
+			if !repoInfo.IsRepositoryActive(a.config.MaxAge) {
+				result.IsUnmaintained = true
+				result.Reason = ReasonStaleInactive
+				result.Details = fmt.Sprintf("Go extended package inactive for %d days", result.DaysSinceUpdate)
+				return result, nil
+			}
+
+			result.Details = fmt.Sprintf("Active Go extended package, last updated %d days ago", result.DaysSinceUpdate)
+			return result, nil
+		}
+
+		// Check if it's a trusted module that should always be considered active
+		if parser.IsTrustedGoModule(dep.Path) {
+			result.Details = getTrustedModuleStatus(dep.Path)
+			return result, nil
+		}
+
+		// Check if it's a supported hosting provider (GitLab, Bitbucket)
+		if moduleInfo.IsKnownHost && (moduleInfo.Host == "gitlab.com" || moduleInfo.Host == "bitbucket.org") {
+			// Try to get repository info from the appropriate provider
+			repoInfo, err := a.multiProvider.GetRepositoryInfo(ctx, moduleInfo.Host, moduleInfo.Owner, moduleInfo.Repo)
+			if err != nil {
+				result.Details = fmt.Sprintf("Failed to fetch %s repository info: %v", moduleInfo.Host, err)
+				return result, nil
+			}
+
+			if !repoInfo.Exists {
+				result.IsUnmaintained = true
+				result.Reason = ReasonNotFound
+				result.Details = fmt.Sprintf("%s repository not found", strings.Title(strings.Split(moduleInfo.Host, ".")[0]))
+				return result, nil
+			}
+
+			result.RepoInfo = repoInfo
+			result.DaysSinceUpdate = repoInfo.DaysSinceLastActivity()
+
+			if repoInfo.IsArchived {
+				result.IsUnmaintained = true
+				result.Reason = ReasonArchived
+				result.Details = fmt.Sprintf("%s repository is archived", strings.Title(strings.Split(moduleInfo.Host, ".")[0]))
+				return result, nil
+			}
+
+			// Check if repository is inactive
+			if !repoInfo.IsRepositoryActive(a.config.MaxAge) {
+				result.IsUnmaintained = true
+				result.Reason = ReasonStaleInactive
+				result.Details = fmt.Sprintf("%s repository inactive for %d days", strings.Title(strings.Split(moduleInfo.Host, ".")[0]), result.DaysSinceUpdate)
+				return result, nil
+			}
+
+			result.Details = fmt.Sprintf("Active %s repository, last updated %d days ago", strings.Title(strings.Split(moduleInfo.Host, ".")[0]), result.DaysSinceUpdate)
+			return result, nil
+		}
+
+		// Try to resolve the module if resolution is enabled OR if it's a well-known module
+		if (a.config.ResolveUnknown || moduleInfo.IsKnownHost) && a.resolver != nil {
+			resolved := a.resolver.ResolveModule(ctx, dep.Path)
+			if resolved != nil {
+				switch resolved.Status {
+				case resolver.StatusActive:
+					result.Details = fmt.Sprintf("Active non-GitHub dependency (%s): %s", resolved.HostingProvider, resolved.Details)
+				case resolver.StatusNotFound:
+					result.IsUnmaintained = true
+					result.Reason = ReasonNotFound
+					result.Details = fmt.Sprintf("Module not found: %s", resolved.Details)
+				case resolver.StatusUnavailable:
+					result.IsUnmaintained = true
+					result.Details = fmt.Sprintf("Module unavailable (%s): %s", resolved.HostingProvider, resolved.Details)
+				default:
+					result.Details = fmt.Sprintf("Unknown status (%s): %s", resolved.HostingProvider, resolved.Details)
+				}
+			} else {
+				result.Details = fmt.Sprintf("Could not resolve non-GitHub dependency (%s)", moduleInfo.Host)
+			}
+		} else {
+			// Basic handling without resolution
+			if moduleInfo.IsKnownHost {
+				// Known hosting provider or well-known Go module
+				result.Details = fmt.Sprintf("Non-GitHub dependency (%s) - status unknown", moduleInfo.Host)
+			} else {
+				// Unknown hosting provider
+				result.Details = fmt.Sprintf("Unknown hosting provider (%s) - status unknown", moduleInfo.Host)
+			}
+		}
+
+		// Don't mark as unmaintained unless specifically determined by resolver
 		return result, nil
 	}
+
+	// Extract GitHub-specific info
+	owner := moduleInfo.Owner
+	repo := moduleInfo.Repo
 
 	// Try to get repository information from cache first
 	var repoInfo *github.RepoInfo
@@ -230,6 +369,7 @@ type SummaryStats struct {
 	NotFoundCount      int
 	StaleInactiveCount int
 	OutdatedCount      int
+	UnknownCount       int
 }
 
 // GetSummary returns summary statistics from results
@@ -251,8 +391,29 @@ func GetSummary(results []Result) SummaryStats {
 			case ReasonOutdated:
 				stats.OutdatedCount++
 			}
+		} else if result.Reason == ReasonUnknown {
+			// Track unknown dependencies separately
+			stats.UnknownCount++
 		}
 	}
 
 	return stats
+}
+
+// getTrustedModuleStatus returns appropriate status message for trusted Go modules
+func getTrustedModuleStatus(modulePath string) string {
+	switch {
+	case strings.HasPrefix(modulePath, "google.golang.org/"):
+		return "Active Google-maintained Go package (trusted)"
+	case strings.HasPrefix(modulePath, "cloud.google.com/"):
+		return "Active Google Cloud Go package (trusted)"
+	case strings.HasPrefix(modulePath, "k8s.io/"):
+		return "Active Kubernetes package (trusted)"
+	case strings.HasPrefix(modulePath, "sigs.k8s.io/"):
+		return "Active Kubernetes SIG package (trusted)"
+	case strings.HasPrefix(modulePath, "go.uber.org/"):
+		return "Active Uber-maintained Go package (trusted)"
+	default:
+		return "Active trusted Go package"
+	}
 }

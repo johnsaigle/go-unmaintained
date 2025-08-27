@@ -28,6 +28,8 @@ var (
 	noExitCode      bool
 	checkOutdated   bool
 	cacheDurationHr int
+	resolveUnknown  bool
+	resolverTimeout int
 
 	rootCmd = &cobra.Command{
 		Use:   "go-unmaintained",
@@ -56,6 +58,8 @@ func init() {
 	// Analysis configuration
 	rootCmd.Flags().IntVar(&maxAge, "max-age", 365, "Age in days that a repository must not exceed to be considered current")
 	rootCmd.Flags().BoolVar(&checkOutdated, "check-outdated", false, "Check if dependencies are using outdated versions")
+	rootCmd.Flags().BoolVar(&resolveUnknown, "resolve-unknown", false, "Try to resolve and check status of non-GitHub dependencies")
+	rootCmd.Flags().IntVar(&resolverTimeout, "resolver-timeout", 10, "Timeout in seconds for resolving non-GitHub dependencies")
 
 	// Output options
 	rootCmd.Flags().BoolVar(&jsonOutput, "json", false, "Output JSON format")
@@ -104,12 +108,14 @@ func analyzeProject(projectPath string) error {
 
 	// Create analyzer
 	config := analyzer.Config{
-		MaxAge:        time.Duration(maxAge) * 24 * time.Hour,
-		Token:         token,
-		Verbose:       verbose,
-		CheckOutdated: checkOutdated,
-		NoCache:       noCache,
-		CacheDuration: time.Duration(cacheDurationHr) * time.Hour,
+		MaxAge:          time.Duration(maxAge) * 24 * time.Hour,
+		Token:           token,
+		Verbose:         verbose,
+		CheckOutdated:   checkOutdated,
+		NoCache:         noCache,
+		CacheDuration:   time.Duration(cacheDurationHr) * time.Hour,
+		ResolveUnknown:  resolveUnknown,
+		ResolverTimeout: time.Duration(resolverTimeout) * time.Second,
 	}
 
 	analyze, err := analyzer.NewAnalyzer(config)
@@ -155,6 +161,8 @@ func outputConsole(results []analyzer.Result) error {
 			if result.DaysSinceUpdate > 0 {
 				fmt.Printf("   Last updated: %d days ago\n", result.DaysSinceUpdate)
 			}
+		} else if result.Reason == "unknown_source" {
+			fmt.Printf("❓ %s - %s\n", result.Package, result.Details)
 		} else if verbose {
 			fmt.Printf("✅ %s - %s\n", result.Package, result.Details)
 		}
@@ -176,6 +184,9 @@ func outputConsole(results []analyzer.Result) error {
 		if checkOutdated {
 			fmt.Printf("  - Outdated: %d\n", summary.OutdatedCount)
 		}
+	}
+	if summary.UnknownCount > 0 {
+		fmt.Printf("Unknown status: %d\n", summary.UnknownCount)
 	}
 
 	// Set exit code

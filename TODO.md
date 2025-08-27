@@ -1,14 +1,11 @@
 # TODO
 
-## Handle not GH dependencies
+## True positive (unmaintained) should be clearly separated in output from status unknown or trusted packages
 
-Some dependencies are not based on github, and return errors like this:
-```
-nhooyr.io/websocket - Invalid module path: invalid module path: nhooyr.io/websocket
-google.golang.org/api - Invalid module path: invalid module path: google.golang.org/api
-google.golang.org/grpc - Invalid module path: invalid module path: google.golang.org/grpc
-```
+right now they are all grouped together
 
-Minimum change: these should be included in the output as 'unknown'
+## Add support for async requests
 
-Better change: Try to resolve these and determine whether they are archived using other heuristics
+This would allow faster analysis of packages
+
+Do so in a way that still respects existing caching/batching approaches in order to optimize around rate limiting

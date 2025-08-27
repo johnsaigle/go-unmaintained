@@ -91,22 +91,123 @@ func IsValidModulePath(path string) bool {
 	return module.CheckPath(path) == nil
 }
 
-// ParseModulePath parses a module path into components
-func ParseModulePath(path string) (host, owner, repo string, err error) {
-	// Handle common Git hosting patterns
+// ModuleInfo contains parsed information about a module
+type ModuleInfo struct {
+	Host        string
+	Owner       string
+	Repo        string
+	IsGitHub    bool
+	IsKnownHost bool
+	IsValid     bool
+}
+
+// ParseModulePath parses a module path into components with enhanced information
+func ParseModulePath(path string) *ModuleInfo {
+	info := &ModuleInfo{}
+
+	if !IsValidModulePath(path) {
+		return info // IsValid remains false
+	}
+
 	parts := strings.Split(path, "/")
-	if len(parts) < 3 {
+	if len(parts) < 1 {
+		return info
+	}
+
+	info.Host = parts[0]
+	info.IsValid = true
+
+	// Check for known hosting providers
+	switch info.Host {
+	case "github.com":
+		info.IsGitHub = true
+		info.IsKnownHost = true
+		if len(parts) >= 3 {
+			info.Owner = parts[1]
+			info.Repo = parts[2]
+		}
+	case "gitlab.com", "bitbucket.org":
+		info.IsKnownHost = true
+		if len(parts) >= 3 {
+			info.Owner = parts[1]
+			info.Repo = parts[2]
+		}
+	default:
+		// Handle special cases for well-known Go modules
+		if isWellKnownGoModule(path) {
+			info.IsKnownHost = true
+		}
+
+		// Try to extract owner/repo for generic hosts
+		if len(parts) >= 3 {
+			info.Owner = parts[1]
+			info.Repo = parts[2]
+		}
+	}
+
+	return info
+}
+
+// isWellKnownGoModule checks if the module is a well-known Go module
+func isWellKnownGoModule(path string) bool {
+	wellKnownPrefixes := []string{
+		"golang.org/x/",
+		"google.golang.org/",
+		"cloud.google.com/",
+		"go.uber.org/",
+		"go.opentelemetry.io/",
+		"gopkg.in/",
+		"k8s.io/",
+		"sigs.k8s.io/",
+	}
+
+	for _, prefix := range wellKnownPrefixes {
+		if strings.HasPrefix(path, prefix) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// IsTrustedGoModule checks if the module is from a trusted, actively maintained source
+func IsTrustedGoModule(path string) bool {
+	trustedPrefixes := []string{
+		"golang.org/x/",      // Official Go extended packages
+		"google.golang.org/", // Google-maintained packages
+		"cloud.google.com/",  // Google Cloud packages
+		"k8s.io/",            // Kubernetes packages
+		"sigs.k8s.io/",       // Kubernetes SIG packages
+		"go.uber.org/",       // Uber Go packages (well-maintained)
+	}
+
+	for _, prefix := range trustedPrefixes {
+		if strings.HasPrefix(path, prefix) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// GetGitHubMapping returns the GitHub repository for golang.org/x modules
+func GetGitHubMapping(path string) (owner, repo string, ok bool) {
+	if strings.HasPrefix(path, "golang.org/x/") {
+		repoName := strings.TrimPrefix(path, "golang.org/x/")
+		// Handle sub-packages like golang.org/x/crypto/ssh
+		if idx := strings.Index(repoName, "/"); idx != -1 {
+			repoName = repoName[:idx]
+		}
+		return "golang", repoName, true
+	}
+	return "", "", false
+}
+
+// Legacy function for backward compatibility
+func ParseModulePathLegacy(path string) (host, owner, repo string, err error) {
+	info := ParseModulePath(path)
+	if !info.IsValid {
 		return "", "", "", fmt.Errorf("invalid module path: %s", path)
 	}
-
-	host = parts[0]
-	owner = parts[1]
-	repo = parts[2]
-
-	// Handle special cases like github.com/owner/repo/v2
-	if len(parts) > 3 && strings.HasPrefix(parts[3], "v") {
-		// This might be a version suffix, keep the base repo name
-	}
-
-	return host, owner, repo, nil
+	return info.Host, info.Owner, info.Repo, nil
 }
