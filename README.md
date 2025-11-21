@@ -44,7 +44,7 @@ Add to your workflow:
 - name: Check for unmaintained dependencies
   uses: johnsaigle/go-unmaintained/.github/actions/check@v1
   with:
-    github-token: ${{ secrets.GITHUB_TOKEN }}
+    github-token: ${{ secrets.PAT }}
 ```
 
 See [GitHub Action documentation](./.github/actions/check/README.md) for more details and examples.
@@ -67,7 +67,7 @@ See [GitHub Action documentation](./.github/actions/check/README.md) for more de
 Set the token as an environment variable:
 
 ```bash
-export GITHUB_TOKEN=your_token_here
+export PAT=your_token_here
 ```
 
 Or pass it directly via the `--token` flag:
@@ -220,7 +220,7 @@ make run-verbose
 # Build for all platforms
 make build-all
 
-# Run example analysis (requires GITHUB_TOKEN)
+# Run example analysis (requires PAT)
 make example
 ```
 

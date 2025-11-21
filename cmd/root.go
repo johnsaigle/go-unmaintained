@@ -66,7 +66,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&packageName, "package", "p", "", "Analyze single package instead of project")
 
 	// Authentication
-	rootCmd.Flags().StringVar(&token, "token", "", "GitHub token (can also use GITHUB_TOKEN env var)")
+	rootCmd.Flags().StringVar(&token, "token", "", "GitHub token (can also use PAT env var)")
 
 	// Analysis configuration
 	rootCmd.Flags().IntVar(&maxAge, "max-age", 365, "Age in days that a repository must not exceed to be considered current")
@@ -94,9 +94,9 @@ func init() {
 func runAnalysis(cmd *cobra.Command, args []string) error {
 	// Get GitHub token from environment if not provided
 	if token == "" {
-		token = os.Getenv("GITHUB_TOKEN")
+		token = os.Getenv("PAT")
 		if token == "" {
-			return fmt.Errorf("GitHub token is required. Set GITHUB_TOKEN environment variable or use --token flag")
+			return fmt.Errorf("GitHub token is required. Set PAT environment variable or use --token flag")
 		}
 	}
 

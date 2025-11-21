@@ -41,7 +41,7 @@ jobs:
       - name: Check dependencies (JSON for processing)
         id: check
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PAT: ${{ secrets.PAT }}
         run: |
           set +e  # Don't exit on error
           
@@ -65,7 +65,7 @@ jobs:
       
       - name: Display detailed results
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PAT: ${{ secrets.PAT }}
         run: |
           echo ""
           echo "🔍 Detailed Analysis:"

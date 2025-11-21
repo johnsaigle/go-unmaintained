@@ -149,13 +149,13 @@ example: build ## Run example analysis on current project
 	@$(BUILD_DIR)/$(BINARY_NAME) --verbose --target .
 
 .PHONY: example-with-token
-example-with-token: build ## Run example with GitHub token (requires GITHUB_TOKEN env var)
-	@if [ -z "$$GITHUB_TOKEN" ]; then \
-		echo "Please set GITHUB_TOKEN environment variable"; \
+example-with-token: build ## Run example with GitHub token (requires PAT env var)
+	@if [ -z "$$PAT" ]; then \
+		echo "Please set PAT environment variable"; \
 		exit 1; \
 	fi
 	@echo "Running example analysis with GitHub token..."
-	@$(BUILD_DIR)/$(BINARY_NAME) --verbose --target . --token $$GITHUB_TOKEN
+	@$(BUILD_DIR)/$(BINARY_NAME) --verbose --target . --token $$PAT
 
 # Docker targets (optional)
 .PHONY: docker-build

@@ -206,7 +206,7 @@ jobs:
 Use default `${{ github.token }}` for most cases (1000 requests/hour):
 
 ```yaml
-github-token: ${{ secrets.GITHUB_TOKEN }}
+github-token: ${{ secrets.PAT }}
 ```
 
 For large projects, use personal token (5000 requests/hour):
