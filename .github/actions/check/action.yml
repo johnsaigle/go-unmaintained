@@ -1,0 +1,149 @@
+name: 'Check Unmaintained Dependencies'
+description: 'Scan Go dependencies for unmaintained packages'
+author: 'johnsaigle'
+
+branding:
+  icon: 'alert-triangle'
+  color: 'orange'
+
+inputs:
+  github-token:
+    description: 'GitHub token for API access'
+    required: false
+    default: ${{ github.token }}
+  
+  max-age:
+    description: 'Max age in days for inactive repos (default: 365)'
+    required: false
+    default: '365'
+  
+  check-outdated:
+    description: 'Check for outdated versions (default: false)'
+    required: false
+    default: 'false'
+  
+  fail-on-found:
+    description: 'Fail the workflow if unmaintained packages found (default: true)'
+    required: false
+    default: 'true'
+  
+  concurrency:
+    description: 'Number of concurrent workers (default: 5)'
+    required: false
+    default: '5'
+  
+  target-path:
+    description: 'Path to Go project (default: .)'
+    required: false
+    default: '.'
+  
+  verbose:
+    description: 'Enable verbose output (default: false)'
+    required: false
+    default: 'false'
+
+outputs:
+  unmaintained-count:
+    description: 'Number of unmaintained packages found'
+    value: ${{ steps.analyze.outputs.unmaintained-count }}
+  
+  direct-count:
+    description: 'Number of direct unmaintained dependencies'
+    value: ${{ steps.analyze.outputs.direct-count }}
+  
+  indirect-count:
+    description: 'Number of indirect unmaintained dependencies'
+    value: ${{ steps.analyze.outputs.indirect-count }}
+  
+  results-json:
+    description: 'Full results in JSON format'
+    value: ${{ steps.analyze.outputs.results }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '>=1.21.0'
+        cache: false
+    
+    - name: Install go-unmaintained
+      shell: bash
+      run: |
+        echo "Installing go-unmaintained..."
+        go install github.com/johnsaigle/go-unmaintained@latest
+    
+    - name: Run analysis
+      id: analyze
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: |
+        set +e  # Don't exit on error, we'll handle it
+        
+        # Build command flags
+        FLAGS="--target ${{ inputs.target-path }}"
+        FLAGS="$FLAGS --max-age ${{ inputs.max-age }}"
+        FLAGS="$FLAGS --concurrency ${{ inputs.concurrency }}"
+        
+        if [ "${{ inputs.check-outdated }}" = "true" ]; then
+          FLAGS="$FLAGS --check-outdated"
+        fi
+        
+        if [ "${{ inputs.verbose }}" = "true" ]; then
+          FLAGS="$FLAGS --verbose"
+        fi
+        
+        # Always disable exit code for JSON run
+        echo "Running analysis with JSON output..."
+        go-unmaintained $FLAGS --json --no-exit-code > results.json
+        
+        # Parse results and set outputs
+        if [ -f results.json ]; then
+          UNMAINTAINED=$(jq -r '.summary.UnmaintainedCount // 0' results.json)
+          DIRECT=$(jq -r '.summary.DirectUnmaintained // 0' results.json)
+          INDIRECT=$(jq -r '.summary.IndirectUnmaintained // 0' results.json)
+          
+          echo "unmaintained-count=$UNMAINTAINED" >> $GITHUB_OUTPUT
+          echo "direct-count=$DIRECT" >> $GITHUB_OUTPUT
+          echo "indirect-count=$INDIRECT" >> $GITHUB_OUTPUT
+          
+          # Store full JSON results
+          echo "results<<EOF" >> $GITHUB_OUTPUT
+          cat results.json >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "Found $UNMAINTAINED unmaintained dependencies ($DIRECT direct, $INDIRECT indirect)"
+        else
+          echo "Error: results.json not found"
+          exit 1
+        fi
+        
+        # Run again with human-readable output
+        echo ""
+        echo "Detailed analysis:"
+        echo "===================="
+        
+        if [ "${{ inputs.fail-on-found }}" = "false" ]; then
+          FLAGS="$FLAGS --no-exit-code"
+        fi
+        
+        go-unmaintained $FLAGS
+        EXIT_CODE=$?
+        
+        # Exit with appropriate code
+        if [ "${{ inputs.fail-on-found }}" = "true" ] && [ $EXIT_CODE -ne 0 ]; then
+          echo "::error::Found $UNMAINTAINED unmaintained dependencies"
+          exit 1
+        fi
+        
+        exit 0
+    
+    - name: Upload results artifact
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: unmaintained-dependencies-report
+        path: results.json
+        retention-days: 30

@@ -1,0 +1,265 @@
+# Dogfooding workflow - check our own dependencies
+name: Self Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run weekly on Monday morning
+    - cron: '0 9 * * 1'
+  workflow_dispatch:  # Allow manual triggering
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  check-self:
+    name: Check Own Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '>=1.21.0'
+          cache: true
+      
+      - name: Build from source
+        run: |
+          echo "Building go-unmaintained from source..."
+          make build
+          echo "Built version:"
+          ./bin/go-unmaintained --help | head -20
+      
+      - name: Check dependencies (JSON for processing)
+        id: check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e  # Don't exit on error
+          
+          echo "Running self-check with JSON output..."
+          ./bin/go-unmaintained --json --no-exit-code > results.json
+          
+          # Parse results
+          UNMAINTAINED=$(jq -r '.summary.UnmaintainedCount // 0' results.json)
+          DIRECT=$(jq -r '.summary.DirectUnmaintained // 0' results.json)
+          INDIRECT=$(jq -r '.summary.IndirectUnmaintained // 0' results.json)
+          TOTAL=$(jq -r '.summary.TotalDependencies // 0' results.json)
+          
+          echo "unmaintained-count=$UNMAINTAINED" >> $GITHUB_OUTPUT
+          echo "direct-count=$DIRECT" >> $GITHUB_OUTPUT
+          echo "indirect-count=$INDIRECT" >> $GITHUB_OUTPUT
+          echo "total-count=$TOTAL" >> $GITHUB_OUTPUT
+          
+          echo "📊 Analysis complete:"
+          echo "  Total dependencies: $TOTAL"
+          echo "  Unmaintained: $UNMAINTAINED ($DIRECT direct, $INDIRECT indirect)"
+      
+      - name: Display detailed results
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo ""
+          echo "🔍 Detailed Analysis:"
+          echo "===================="
+          ./bin/go-unmaintained --verbose --check-outdated
+      
+      - name: Upload results artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: self-check-results
+          path: results.json
+          retention-days: 90
+      
+      - name: Comment on PR (if PR)
+        if: github.event_name == 'pull_request' && steps.check.outputs.unmaintained-count > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const results = require('./results.json');
+            const unmaintainedCount = ${{ steps.check.outputs.unmaintained-count }};
+            const directCount = ${{ steps.check.outputs.direct-count }};
+            const indirectCount = ${{ steps.check.outputs.indirect-count }};
+            
+            let comment = '## 🔍 Self-Check: Unmaintained Dependencies\n\n';
+            comment += `This PR affects a project that has **${unmaintainedCount}** unmaintained dependencies:\n`;
+            comment += `- 🔴 **${directCount}** direct dependencies\n`;
+            comment += `- 🟡 **${indirectCount}** indirect dependencies\n\n`;
+            
+            comment += '> ⚠️ This is a self-check - go-unmaintained is analyzing its own dependencies!\n\n';
+            
+            // Group by direct/indirect
+            const direct = results.results.filter(r => r.is_unmaintained && r.is_direct);
+            const indirect = results.results.filter(r => r.is_unmaintained && !r.is_direct);
+            
+            if (direct.length > 0) {
+              comment += '### 🔴 Direct Dependencies\n\n';
+              comment += '| Package | Issue | URL |\n';
+              comment += '|---------|-------|-----|\n';
+              for (const r of direct) {
+                const url = r.repo_info?.url || 'N/A';
+                comment += `| \`${r.package}\` | ${r.details} | [View](${url}) |\n`;
+              }
+              comment += '\n';
+            }
+            
+            if (indirect.length > 0) {
+              comment += '### 🟡 Indirect Dependencies\n\n';
+              comment += '| Package | Issue | Path |\n';
+              comment += '|---------|-------|------|\n';
+              for (const r of indirect) {
+                const path = r.dependency_path?.join(' → ') || 'N/A';
+                comment += `| \`${r.package}\` | ${r.details} | ${path} |\n`;
+              }
+              comment += '\n';
+            }
+            
+            comment += '---\n';
+            comment += '*🐕 Dogfooding in action! This check was run by go-unmaintained on itself.*\n';
+            
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+      
+      - name: Create/Update issue (if scheduled and problems found)
+        if: github.event_name == 'schedule' && steps.check.outputs.unmaintained-count > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const results = require('./results.json');
+            const unmaintainedCount = ${{ steps.check.outputs.unmaintained-count }};
+            const directCount = ${{ steps.check.outputs.direct-count }};
+            const indirectCount = ${{ steps.check.outputs.indirect-count }};
+            const totalCount = ${{ steps.check.outputs.total-count }};
+            
+            // Check for existing issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'dependencies,self-check'
+            });
+            
+            const existingIssue = issues.data.find(i => 
+              i.title.includes('🐕 Self-Check: Unmaintained Dependencies')
+            );
+            
+            let body = `# 🐕 Dogfooding Report: Our Own Dependencies\n\n`;
+            body += `**Check Date:** ${new Date().toISOString().split('T')[0]}\n\n`;
+            body += `> 🔍 This issue was created by running go-unmaintained on itself!\n\n`;
+            body += `## Summary\n\n`;
+            body += `- **Total Dependencies:** ${totalCount}\n`;
+            body += `- **Unmaintained:** ${unmaintainedCount}\n`;
+            body += `- **Direct:** ${directCount} 🔴\n`;
+            body += `- **Indirect:** ${indirectCount} 🟡\n\n`;
+            
+            // Group by severity
+            const archived = results.results.filter(r => r.is_unmaintained && r.reason === 'repository_archived');
+            const notFound = results.results.filter(r => r.is_unmaintained && r.reason === 'package_not_found');
+            const stale = results.results.filter(r => r.is_unmaintained && r.reason === 'stale_dependencies_inactive_repo');
+            const outdated = results.results.filter(r => r.is_unmaintained && r.reason === 'outdated_version');
+            
+            if (archived.length > 0) {
+              body += `## 📦 Archived (${archived.length})\n\n`;
+              for (const r of archived) {
+                const type = r.is_direct ? '🔴 Direct' : '🟡 Indirect';
+                const url = r.repo_info?.url || '';
+                body += `- **${type}** [\`${r.package}\`](${url})\n`;
+                if (r.dependency_path?.length > 0) {
+                  body += `  - Path: ${r.dependency_path.join(' → ')}\n`;
+                }
+              }
+              body += '\n';
+            }
+            
+            if (notFound.length > 0) {
+              body += `## 🚫 Not Found (${notFound.length})\n\n`;
+              for (const r of notFound) {
+                const type = r.is_direct ? '🔴 Direct' : '🟡 Indirect';
+                body += `- **${type}** \`${r.package}\`\n`;
+              }
+              body += '\n';
+            }
+            
+            if (stale.length > 0) {
+              body += `## 💤 Inactive (${stale.length})\n\n`;
+              for (const r of stale) {
+                const type = r.is_direct ? '🔴 Direct' : '🟡 Indirect';
+                const days = r.repo_info?.last_commit_days || r.days_since_update;
+                const url = r.repo_info?.url || '';
+                body += `- **${type}** [\`${r.package}\`](${url}) - ${days} days\n`;
+              }
+              body += '\n';
+            }
+            
+            if (outdated.length > 0) {
+              body += `## 📅 Outdated (${outdated.length})\n\n`;
+              for (const r of outdated) {
+                const type = r.is_direct ? '🔴 Direct' : '🟡 Indirect';
+                body += `- **${type}** \`${r.package}\` - ${r.current_version} → ${r.latest_version}\n`;
+              }
+              body += '\n';
+            }
+            
+            body += `## 📋 How to Fix\n\n`;
+            body += `1. **Direct Dependencies:** Update in \`go.mod\`\n`;
+            body += `   \`\`\`bash\n`;
+            body += `   go get <package>@latest\n`;
+            body += `   go mod tidy\n`;
+            body += `   \`\`\`\n\n`;
+            body += `2. **Indirect Dependencies:** Update parent packages\n`;
+            body += `   \`\`\`bash\n`;
+            body += `   go get -u ./...\n`;
+            body += `   go mod tidy\n`;
+            body += `   \`\`\`\n\n`;
+            body += `3. **Archived Repos:** Find maintained alternatives\n\n`;
+            body += `---\n`;
+            body += `*🐕 Generated by self-check workflow. We practice what we preach!*\n`;
+            
+            if (existingIssue) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `## 🔄 Updated Report\n\n${body}`
+              });
+              console.log(`Updated issue #${existingIssue.number}`);
+            } else {
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🐕 Self-Check: Unmaintained Dependencies Detected',
+                body: body,
+                labels: ['dependencies', 'self-check', 'automated']
+              });
+              console.log(`Created issue #${issue.data.number}`);
+            }
+      
+      - name: Add status badge info
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "📊 Self-Check Results:"
+          echo "  Total: ${{ steps.check.outputs.total-count }}"
+          echo "  Unmaintained: ${{ steps.check.outputs.unmaintained-count }}"
+          echo ""
+          echo "Badge URL: https://img.shields.io/badge/dependencies-${{ steps.check.outputs.unmaintained-count }}%20unmaintained-orange"
+      
+      - name: Fail if critical issues (direct archived)
+        if: steps.check.outputs.direct-count > 0
+        run: |
+          echo "::warning::Found ${{ steps.check.outputs.direct-count }} direct unmaintained dependencies"
+          # Don't fail the workflow - just warn
+          # Uncomment below to enforce strict checks:
+          # exit 1

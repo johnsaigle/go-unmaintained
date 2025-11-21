@@ -1,0 +1,166 @@
+# Example workflow for scheduled weekly dependency audits
+name: Weekly Dependency Audit
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:  # Allow manual triggering
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit:
+    name: Weekly Dependency Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Run dependency audit
+        id: audit
+        uses: ./.github/actions/check
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          max-age: 365
+          check-outdated: true
+          fail-on-found: false  # Don't fail, create issue instead
+          verbose: true
+      
+      - name: Create issue if problems found
+        if: steps.audit.outputs.unmaintained-count > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const results = JSON.parse(process.env.RESULTS);
+            const unmaintainedCount = ${{ steps.audit.outputs.unmaintained-count }};
+            const directCount = ${{ steps.audit.outputs.direct-count }};
+            const indirectCount = ${{ steps.audit.outputs.indirect-count }};
+            
+            // Check if there's already an open issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'dependencies,security'
+            });
+            
+            const existingIssue = issues.data.find(issue => 
+              issue.title.includes('Unmaintained Dependencies Detected')
+            );
+            
+            let body = `# 🚨 Unmaintained Dependencies Report\n\n`;
+            body += `**Audit Date:** ${new Date().toISOString().split('T')[0]}\n\n`;
+            body += `## Summary\n\n`;
+            body += `- **Total Unmaintained:** ${unmaintainedCount}\n`;
+            body += `- **Direct Dependencies:** ${directCount} 🔴\n`;
+            body += `- **Indirect Dependencies:** ${indirectCount} 🟡\n\n`;
+            
+            // Group by severity
+            const archived = [];
+            const notFound = [];
+            const stale = [];
+            const outdated = [];
+            
+            for (const result of results.results) {
+              if (result.is_unmaintained) {
+                switch (result.reason) {
+                  case 'repository_archived':
+                    archived.push(result);
+                    break;
+                  case 'package_not_found':
+                    notFound.push(result);
+                    break;
+                  case 'stale_dependencies_inactive_repo':
+                    stale.push(result);
+                    break;
+                  case 'outdated_version':
+                    outdated.push(result);
+                    break;
+                }
+              }
+            }
+            
+            // Format each category
+            if (archived.length > 0) {
+              body += `## 📦 Archived Repositories (${archived.length})\n\n`;
+              body += 'These repositories have been officially archived and will receive no updates.\n\n';
+              for (const result of archived) {
+                const type = result.is_direct ? '🔴 Direct' : '🟡 Indirect';
+                const url = result.repo_info?.url || '';
+                body += `- **${type}** [\`${result.package}\`](${url})\n`;
+                if (result.dependency_path?.length > 0) {
+                  body += `  - Path: ${result.dependency_path.join(' → ')}\n`;
+                }
+              }
+              body += '\n';
+            }
+            
+            if (notFound.length > 0) {
+              body += `## 🚫 Not Found / Deleted (${notFound.length})\n\n`;
+              body += 'These packages could not be found (may have been deleted).\n\n';
+              for (const result of notFound) {
+                const type = result.is_direct ? '🔴 Direct' : '🟡 Indirect';
+                body += `- **${type}** \`${result.package}\`\n`;
+              }
+              body += '\n';
+            }
+            
+            if (stale.length > 0) {
+              body += `## 💤 Inactive / Stale (${stale.length})\n\n`;
+              body += 'These repositories have not been updated in over a year.\n\n';
+              for (const result of stale) {
+                const type = result.is_direct ? '🔴 Direct' : '🟡 Indirect';
+                const days = result.repo_info?.last_commit_days || result.days_since_update || 'N/A';
+                const url = result.repo_info?.url || '';
+                body += `- **${type}** [\`${result.package}\`](${url}) - Last commit ${days} days ago\n`;
+              }
+              body += '\n';
+            }
+            
+            if (outdated.length > 0) {
+              body += `## 📅 Outdated Versions (${outdated.length})\n\n`;
+              body += 'These packages are using outdated versions.\n\n';
+              for (const result of outdated) {
+                const type = result.is_direct ? '🔴 Direct' : '🟡 Indirect';
+                body += `- **${type}** \`${result.package}\` - Current: ${result.current_version}, Latest: ${result.latest_version}\n`;
+              }
+              body += '\n';
+            }
+            
+            body += '## 📋 Recommended Actions\n\n';
+            body += '1. **Direct Dependencies (🔴)**: Update or replace in `go.mod`\n';
+            body += '2. **Indirect Dependencies (🟡)**: Update parent packages or use `replace` directive\n';
+            body += '3. **Archived Repos**: Find actively maintained alternatives\n';
+            body += '4. **Inactive Repos**: Assess risk and consider alternatives\n\n';
+            body += '---\n';
+            body += '*This issue was automatically generated by the weekly dependency audit workflow.*\n';
+            body += '*To disable these notifications, remove or modify `.github/workflows/scheduled-audit.yml`*\n';
+            
+            if (existingIssue) {
+              // Update existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `## Updated Audit Results\n\n${body}`
+              });
+              
+              console.log(`Updated existing issue #${existingIssue.number}`);
+            } else {
+              // Create new issue
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🚨 Unmaintained Dependencies Detected',
+                body: body,
+                labels: ['dependencies', 'security', 'automated']
+              });
+              
+              console.log(`Created new issue #${issue.data.number}`);
+            }
+        env:
+          RESULTS: ${{ steps.audit.outputs.results-json }}

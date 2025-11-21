@@ -1,5 +1,7 @@
 # go-unmaintained
 
+[![Dependency Health](https://github.com/johnsaigle/go-unmaintained/actions/workflows/self-check.yml/badge.svg)](https://github.com/johnsaigle/go-unmaintained/actions/workflows/self-check.yml)
+
 > [!WARNING]
 > Largely vibe-coded, trust at your own peril.
 
@@ -13,7 +15,8 @@ A CLI tool that identifies unmaintained Go packages using heuristics.
 - 🔗 **Advanced Resolution**: Resolves vanity URLs, Go module proxy, and custom domains
 - 💾 **Smart Rate Limiting**: Handles GitHub API rate limits gracefully with proper error messages
 - ⚡ **Fast Processing**: Concurrent analysis enabled by default for optimal performance
-- 📋 **Flexible Output**: Supports both console and JSON output formats
+- 📋 **Flexible Output**: Supports console, JSON, and GitHub Actions annotation formats
+- 🤖 **GitHub Actions**: Ready-to-use action for CI/CD integration
 
 ## Installation
 
@@ -32,6 +35,19 @@ The binary will be available at `./bin/go-unmaintained`.
 ```bash
 make install
 ```
+
+### As GitHub Action
+
+Add to your workflow:
+
+```yaml
+- name: Check for unmaintained dependencies
+  uses: johnsaigle/go-unmaintained/.github/actions/check@v1
+  with:
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+See [GitHub Action documentation](./.github/actions/check/README.md) for more details and examples.
 
 ## GitHub Token Setup
 
@@ -101,6 +117,9 @@ go-unmaintained --max-age 180
 
 # JSON output for programmatic use
 go-unmaintained --json
+
+# GitHub Actions annotations (for CI/CD)
+go-unmaintained --github-actions
 
 # Fail fast - exit as soon as first unmaintained package is found
 go-unmaintained --fail-fast

@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 	"time"
 
@@ -20,6 +22,7 @@ var (
 	token           string
 	maxAge          int
 	jsonOutput      bool
+	githubActions   bool
 	verbose         bool
 	noCache         bool
 	failFast        bool
@@ -73,6 +76,7 @@ func init() {
 
 	// Output options
 	rootCmd.Flags().BoolVar(&jsonOutput, "json", false, "Output JSON format")
+	rootCmd.Flags().BoolVar(&githubActions, "github-actions", false, "Output GitHub Actions annotations format")
 	rootCmd.Flags().BoolVar(&verbose, "verbose", false, "Show detailed information")
 	rootCmd.Flags().BoolVar(&tree, "tree", false, "Show dependency tree paths")
 	rootCmd.Flags().StringVar(&colorOutput, "color", "auto", "When to use color: always, auto, or never")
@@ -173,7 +177,61 @@ func analyzeProject(projectPath string) error {
 		return outputJSON(results)
 	}
 
+	if githubActions {
+		return outputGitHubActions(results)
+	}
+
 	return outputConsole(results)
+}
+
+func outputGitHubActions(results []analyzer.Result) error {
+	// Output GitHub Actions workflow commands
+	// https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
+
+	for _, result := range results {
+		if result.IsUnmaintained {
+			depType := "indirect"
+			if result.IsDirect {
+				depType = "direct"
+			}
+
+			// Determine severity
+			severity := "error"
+			if result.Reason == "stale_dependencies_inactive_repo" {
+				severity = "warning"
+			}
+
+			// Get URL for reference
+			url := getRepositoryURL(result)
+
+			// Format message
+			message := fmt.Sprintf("%s (%s): %s", result.Package, depType, result.Details)
+			if url != "" {
+				message += fmt.Sprintf(" - %s", url)
+			}
+
+			// Output annotation
+			// Format: ::{severity} file={name},line={line},title={title}::{message}
+			fmt.Printf("::%s file=go.mod,title=Unmaintained Dependency::%s\n", severity, message)
+
+			// For indirect dependencies, add additional context
+			if !result.IsDirect && len(result.DependencyPath) > 0 {
+				pathStr := strings.Join(result.DependencyPath, " → ")
+				fmt.Printf("::notice file=go.mod,title=Dependency Path::%s\n", pathStr)
+			}
+		}
+	}
+
+	// Output summary
+	summary := analyzer.GetSummary(results)
+	if summary.UnmaintainedCount > 0 {
+		fmt.Printf("::warning::Found %d unmaintained packages (%d direct, %d indirect)\n",
+			summary.UnmaintainedCount, summary.DirectUnmaintained, summary.IndirectUnmaintained)
+	} else {
+		fmt.Printf("::notice::All dependencies are maintained\n")
+	}
+
+	return nil
 }
 
 func analyzeSinglePackage(pkg string) error {
@@ -181,9 +239,85 @@ func analyzeSinglePackage(pkg string) error {
 	return fmt.Errorf("single package analysis not yet implemented")
 }
 
+// JSONOutput represents the JSON output structure
+type JSONOutput struct {
+	Summary   analyzer.SummaryStats `json:"summary"`
+	Results   []JSONResult          `json:"results"`
+	Timestamp time.Time             `json:"timestamp"`
+	Version   string                `json:"version"`
+}
+
+// JSONResult represents a single dependency result in JSON format
+type JSONResult struct {
+	Package         string        `json:"package"`
+	IsUnmaintained  bool          `json:"is_unmaintained"`
+	IsDirect        bool          `json:"is_direct"`
+	Reason          string        `json:"reason,omitempty"`
+	Details         string        `json:"details"`
+	CurrentVersion  string        `json:"current_version,omitempty"`
+	LatestVersion   string        `json:"latest_version,omitempty"`
+	DaysSinceUpdate int           `json:"days_since_update,omitempty"`
+	DependencyPath  []string      `json:"dependency_path,omitempty"`
+	RepoInfo        *JSONRepoInfo `json:"repo_info,omitempty"`
+}
+
+// JSONRepoInfo represents repository information in JSON format
+type JSONRepoInfo struct {
+	URL            string    `json:"url,omitempty"`
+	IsArchived     bool      `json:"is_archived"`
+	LastCommitDays int       `json:"last_commit_days,omitempty"`
+	CreatedAt      time.Time `json:"created_at,omitempty"`
+	UpdatedAt      time.Time `json:"updated_at,omitempty"`
+}
+
 func outputJSON(results []analyzer.Result) error {
-	// TODO: Implement JSON output
-	return fmt.Errorf("JSON output not yet implemented")
+	summary := analyzer.GetSummary(results)
+
+	// Convert results to JSON-friendly format
+	jsonResults := make([]JSONResult, len(results))
+	for i, result := range results {
+		jsonResult := JSONResult{
+			Package:         result.Package,
+			IsUnmaintained:  result.IsUnmaintained,
+			IsDirect:        result.IsDirect,
+			Reason:          string(result.Reason),
+			Details:         result.Details,
+			CurrentVersion:  result.CurrentVersion,
+			LatestVersion:   result.LatestVersion,
+			DaysSinceUpdate: result.DaysSinceUpdate,
+			DependencyPath:  result.DependencyPath,
+		}
+
+		// Add repo info if available
+		if result.RepoInfo != nil {
+			repoInfo := &JSONRepoInfo{
+				URL:        result.RepoInfo.URL,
+				IsArchived: result.RepoInfo.IsArchived,
+				CreatedAt:  result.RepoInfo.CreatedAt,
+				UpdatedAt:  result.RepoInfo.UpdatedAt,
+			}
+
+			// Calculate days since last commit
+			if result.RepoInfo.LastCommitAt != nil {
+				repoInfo.LastCommitDays = int(time.Since(*result.RepoInfo.LastCommitAt).Hours() / 24)
+			}
+
+			jsonResult.RepoInfo = repoInfo
+		}
+
+		jsonResults[i] = jsonResult
+	}
+
+	output := JSONOutput{
+		Summary:   summary,
+		Results:   jsonResults,
+		Timestamp: time.Now(),
+		Version:   "1.0.0", // Tool version
+	}
+
+	encoder := json.NewEncoder(os.Stdout)
+	encoder.SetIndent("", "  ")
+	return encoder.Encode(output)
 }
 
 // getRepositoryURL extracts or constructs a repository URL from the result
@@ -220,6 +354,42 @@ func getRepositoryURL(result analyzer.Result) string {
 	return ""
 }
 
+// getSeverityScore returns a score for sorting (lower = more severe)
+func getSeverityScore(result analyzer.Result) int {
+	// Priority order:
+	// 1. Direct + Archived (most critical)
+	// 2. Direct + Not Found
+	// 3. Direct + Stale/Inactive
+	// 4. Direct + Outdated
+	// 5. Indirect + Archived
+	// 6. Indirect + Not Found
+	// 7. Indirect + Stale/Inactive
+	// 8. Indirect + Outdated
+
+	baseScore := 0
+
+	// Reason severity
+	switch result.Reason {
+	case "repository_archived":
+		baseScore = 0
+	case "package_not_found":
+		baseScore = 10
+	case "stale_dependencies_inactive_repo":
+		baseScore = 20
+	case "outdated_version":
+		baseScore = 30
+	default:
+		baseScore = 40
+	}
+
+	// Add penalty for indirect dependencies
+	if !result.IsDirect {
+		baseScore += 50
+	}
+
+	return baseScore
+}
+
 func outputConsole(results []analyzer.Result) error {
 	unmaintainedFound := false
 
@@ -238,6 +408,19 @@ func outputConsole(results []analyzer.Result) error {
 			maintained = append(maintained, result)
 		}
 	}
+
+	// Sort unmaintained by severity (most critical first)
+	sort.Slice(unmaintained, func(i, j int) bool {
+		scoreI := getSeverityScore(unmaintained[i])
+		scoreJ := getSeverityScore(unmaintained[j])
+
+		// If same severity, sort alphabetically by package name
+		if scoreI == scoreJ {
+			return unmaintained[i].Package < unmaintained[j].Package
+		}
+
+		return scoreI < scoreJ
+	})
 
 	fmt.Println("Dependency Analysis Results:")
 	fmt.Println("============================")

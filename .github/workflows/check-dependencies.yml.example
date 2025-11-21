@@ -1,0 +1,26 @@
+# Example workflow for checking dependencies on push and pull requests
+name: Check Dependencies
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-unmaintained:
+    name: Check for Unmaintained Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check for unmaintained dependencies
+        uses: ./.github/actions/check
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          max-age: 365
+          check-outdated: false
+          fail-on-found: true
+          concurrency: 5
