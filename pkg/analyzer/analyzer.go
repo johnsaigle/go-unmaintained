@@ -41,6 +41,8 @@ type Result struct {
 	Details         string
 	CurrentVersion  string
 	LatestVersion   string
+	IsDirect        bool
+	DependencyPath  []string
 }
 
 // Config holds configuration for the analyzer
@@ -55,6 +57,8 @@ type Config struct {
 	ResolverTimeout time.Duration
 	Concurrency     int
 	AsyncMode       bool
+	ShowProgress    bool
+	ShowDepPath     bool
 }
 
 // Analyzer performs unmaintained package analysis
@@ -128,6 +132,15 @@ func (a *Analyzer) analyzeModuleSequential(ctx context.Context, mod *parser.Modu
 				Details:        fmt.Sprintf("Analysis error: %v", err),
 			}
 		}
+
+		// Get dependency path for indirect unmaintained dependencies
+		if a.config.ShowDepPath && result.IsUnmaintained && !result.IsDirect {
+			depPath, err := parser.GetDependencyPath(ctx, mod.ProjectPath, dep.Path)
+			if err == nil && len(depPath) > 0 {
+				result.DependencyPath = depPath
+			}
+		}
+
 		results = append(results, result)
 	}
 
@@ -239,6 +252,7 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 	result := Result{
 		Package:        dep.Path,
 		CurrentVersion: dep.Version,
+		IsDirect:       !dep.Indirect,
 	}
 
 	// Skip replaced dependencies for now
@@ -479,13 +493,15 @@ func (a *Analyzer) isVersionOutdated(current, latest string) bool {
 
 // SummaryStats holds summary statistics
 type SummaryStats struct {
-	TotalDependencies  int
-	UnmaintainedCount  int
-	ArchivedCount      int
-	NotFoundCount      int
-	StaleInactiveCount int
-	OutdatedCount      int
-	UnknownCount       int
+	TotalDependencies    int
+	UnmaintainedCount    int
+	DirectUnmaintained   int
+	IndirectUnmaintained int
+	ArchivedCount        int
+	NotFoundCount        int
+	StaleInactiveCount   int
+	OutdatedCount        int
+	UnknownCount         int
 }
 
 // GetSummary returns summary statistics from results
@@ -497,6 +513,14 @@ func GetSummary(results []Result) SummaryStats {
 	for _, result := range results {
 		if result.IsUnmaintained {
 			stats.UnmaintainedCount++
+
+			// Track direct vs indirect
+			if result.IsDirect {
+				stats.DirectUnmaintained++
+			} else {
+				stats.IndirectUnmaintained++
+			}
+
 			switch result.Reason {
 			case ReasonArchived:
 				stats.ArchivedCount++

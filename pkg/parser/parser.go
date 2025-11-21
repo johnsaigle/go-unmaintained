@@ -1,8 +1,10 @@
 package parser
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -12,9 +14,10 @@ import (
 
 // Dependency represents a single module dependency
 type Dependency struct {
-	Path    string
-	Version string
-	Replace *Replace
+	Path     string
+	Version  string
+	Replace  *Replace
+	Indirect bool
 }
 
 // Replace represents a replace directive
@@ -30,6 +33,7 @@ type Module struct {
 	GoVersion    string
 	Dependencies []Dependency
 	Replaces     []Replace
+	ProjectPath  string // Path to the project directory for go commands
 }
 
 // ParseGoMod parses a go.mod file and returns module information
@@ -47,19 +51,17 @@ func ParseGoMod(projectPath string) (*Module, error) {
 	}
 
 	mod := &Module{
-		Path:      modFile.Module.Mod.Path,
-		GoVersion: modFile.Go.Version,
+		Path:        modFile.Module.Mod.Path,
+		GoVersion:   modFile.Go.Version,
+		ProjectPath: projectPath,
 	}
 
-	// Parse dependencies
+	// Parse dependencies (both direct and indirect)
 	for _, req := range modFile.Require {
-		if req.Indirect {
-			continue // Skip indirect dependencies for now
-		}
-
 		dep := Dependency{
-			Path:    req.Mod.Path,
-			Version: req.Mod.Version,
+			Path:     req.Mod.Path,
+			Version:  req.Mod.Version,
+			Indirect: req.Indirect,
 		}
 
 		mod.Dependencies = append(mod.Dependencies, dep)
@@ -201,6 +203,53 @@ func GetGitHubMapping(path string) (owner, repo string, ok bool) {
 		return "golang", repoName, true
 	}
 	return "", "", false
+}
+
+// GetDependencyPath returns the dependency path for a given package using go mod why
+func GetDependencyPath(ctx context.Context, projectPath, packagePath string) ([]string, error) {
+	cmd := exec.CommandContext(ctx, "go", "mod", "why", "-m", packagePath)
+	cmd.Dir = projectPath
+
+	output, err := cmd.Output()
+	if err != nil {
+		return nil, fmt.Errorf("failed to run go mod why: %w", err)
+	}
+
+	lines := strings.Split(strings.TrimSpace(string(output)), "\n")
+	if len(lines) == 0 {
+		return nil, nil
+	}
+
+	// Parse the output - go mod why shows the import path
+	// Format is:
+	// # package-name
+	// module-a
+	// module-b
+	// ...
+	// target-module
+
+	var path []string
+	for i, line := range lines {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+		// Skip the comment line (starts with #)
+		if strings.HasPrefix(line, "#") {
+			continue
+		}
+		// Skip "(main module)" line
+		if strings.Contains(line, "(main module)") {
+			continue
+		}
+		path = append(path, line)
+		// If we see the target module, we're done
+		if i > 0 && strings.Contains(line, packagePath) {
+			break
+		}
+	}
+
+	return path, nil
 }
 
 // Legacy function for backward compatibility

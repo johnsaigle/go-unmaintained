@@ -112,10 +112,23 @@ func analyzeProject(projectPath string) error {
 		return fmt.Errorf("failed to parse go.mod: %w", err)
 	}
 
-	if verbose {
-		fmt.Printf("Analyzing project: %s\n", mod.Path)
-		fmt.Printf("Go version: %s\n", mod.GoVersion)
-		fmt.Printf("Dependencies: %d\n\n", len(mod.Dependencies))
+	// Always show startup message (not just in verbose mode)
+	if !jsonOutput {
+		fmt.Printf("📦 Project: %s\n", mod.Path)
+		fmt.Printf("🔍 Analyzing %d dependencies", len(mod.Dependencies))
+
+		// Show mode indicator
+		if !syncMode {
+			fmt.Printf(" (concurrent: %d workers)", concurrency)
+		} else {
+			fmt.Printf(" (sequential mode)")
+		}
+		fmt.Println("...")
+
+		if verbose {
+			fmt.Printf("   Go version: %s\n", mod.GoVersion)
+		}
+		fmt.Println()
 	}
 
 	// Create analyzer
@@ -140,14 +153,19 @@ func analyzeProject(projectPath string) error {
 	// Analyze dependencies
 	ctx := context.Background()
 
-	// Show progress indicator for async mode (default)
-	if !syncMode && !jsonOutput {
-		fmt.Printf("🚀 Running concurrent analysis with %d workers...\n\n", concurrency)
-	}
-
 	results, err := analyze.AnalyzeModule(ctx, mod)
 	if err != nil {
 		return fmt.Errorf("analysis failed: %w", err)
+	}
+
+	// Fetch dependency paths for indirect unmaintained dependencies
+	for i := range results {
+		if results[i].IsUnmaintained && !results[i].IsDirect {
+			depPath, err := parser.GetDependencyPath(ctx, mod.ProjectPath, results[i].Package)
+			if err == nil && len(depPath) > 0 {
+				results[i].DependencyPath = depPath
+			}
+		}
 	}
 
 	// Output results
@@ -166,6 +184,40 @@ func analyzeSinglePackage(pkg string) error {
 func outputJSON(results []analyzer.Result) error {
 	// TODO: Implement JSON output
 	return fmt.Errorf("JSON output not yet implemented")
+}
+
+// getRepositoryURL extracts or constructs a repository URL from the result
+func getRepositoryURL(result analyzer.Result) string {
+	// Try to use the URL from RepoInfo first
+	if result.RepoInfo != nil && result.RepoInfo.URL != "" {
+		return result.RepoInfo.URL
+	}
+
+	// Try to construct URL from package path for GitHub repos
+	if strings.HasPrefix(result.Package, "github.com/") {
+		parts := strings.Split(result.Package, "/")
+		if len(parts) >= 3 {
+			return fmt.Sprintf("https://github.com/%s/%s", parts[1], parts[2])
+		}
+	}
+
+	// Try for GitLab repos
+	if strings.HasPrefix(result.Package, "gitlab.com/") {
+		parts := strings.Split(result.Package, "/")
+		if len(parts) >= 3 {
+			return fmt.Sprintf("https://gitlab.com/%s/%s", parts[1], parts[2])
+		}
+	}
+
+	// Try for Bitbucket repos
+	if strings.HasPrefix(result.Package, "bitbucket.org/") {
+		parts := strings.Split(result.Package, "/")
+		if len(parts) >= 3 {
+			return fmt.Sprintf("https://bitbucket.org/%s/%s", parts[1], parts[2])
+		}
+	}
+
+	return ""
 }
 
 func outputConsole(results []analyzer.Result) error {
@@ -195,9 +247,38 @@ func outputConsole(results []analyzer.Result) error {
 		fmt.Printf("\n🚨 UNMAINTAINED PACKAGES (%d found):\n", len(unmaintained))
 		fmt.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 		for _, result := range unmaintained {
-			fmt.Printf("❌ %s - %s\n", result.Package, result.Details)
-			if result.DaysSinceUpdate > 0 {
-				fmt.Printf("   Last updated: %d days ago\n", result.DaysSinceUpdate)
+			// Show dependency type
+			depType := "indirect"
+			if result.IsDirect {
+				depType = "direct"
+			}
+
+			fmt.Printf("❌ %s (%s) - %s\n", result.Package, depType, result.Details)
+
+			// Show repository URL for verification
+			if url := getRepositoryURL(result); url != "" {
+				fmt.Printf("   🔗 %s\n", url)
+			}
+
+			// Show last activity information with context
+			if result.RepoInfo != nil {
+				if result.RepoInfo.LastCommitAt != nil {
+					daysSinceCommit := int(time.Since(*result.RepoInfo.LastCommitAt).Hours() / 24)
+					fmt.Printf("   Last commit: %d days ago\n", daysSinceCommit)
+				} else if result.DaysSinceUpdate > 0 {
+					// Fall back to UpdatedAt if no commit info available
+					fmt.Printf("   Last activity: %d days ago\n", result.DaysSinceUpdate)
+				}
+
+				// For archived repos, note that they're archived (archive date not available from API)
+				if result.RepoInfo.IsArchived {
+					fmt.Printf("   ⚠️  Repository archived (no new commits possible)\n")
+				}
+			}
+
+			// Show dependency path for indirect dependencies
+			if !result.IsDirect && len(result.DependencyPath) > 0 {
+				fmt.Printf("   📍 Dependency path: %s\n", strings.Join(result.DependencyPath, " → "))
 			}
 
 			if failFast {
@@ -220,7 +301,18 @@ func outputConsole(results []analyzer.Result) error {
 		fmt.Printf("\n✅ MAINTAINED PACKAGES (%d found):\n", len(maintained))
 		fmt.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 		for _, result := range maintained {
-			fmt.Printf("✅ %s - %s\n", result.Package, result.Details)
+			// Show dependency type in verbose mode
+			depType := "indirect"
+			if result.IsDirect {
+				depType = "direct"
+			}
+
+			fmt.Printf("✅ %s (%s) - %s\n", result.Package, depType, result.Details)
+
+			// Show URL in verbose mode for verification
+			if url := getRepositoryURL(result); url != "" {
+				fmt.Printf("   🔗 %s\n", url)
+			}
 		}
 	}
 
@@ -232,7 +324,12 @@ func outputConsole(results []analyzer.Result) error {
 	fmt.Printf("Total dependencies analyzed: %d\n\n", summary.TotalDependencies)
 
 	if summary.UnmaintainedCount > 0 {
-		fmt.Printf("🚨 UNMAINTAINED PACKAGES: %d\n", summary.UnmaintainedCount)
+		fmt.Printf("🚨 UNMAINTAINED PACKAGES: %d", summary.UnmaintainedCount)
+		if summary.DirectUnmaintained > 0 || summary.IndirectUnmaintained > 0 {
+			fmt.Printf(" (%d direct, %d indirect)", summary.DirectUnmaintained, summary.IndirectUnmaintained)
+		}
+		fmt.Println()
+
 		if summary.ArchivedCount > 0 {
 			fmt.Printf("   📦 Archived repositories: %d\n", summary.ArchivedCount)
 		}
