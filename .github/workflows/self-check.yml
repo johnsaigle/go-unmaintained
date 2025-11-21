@@ -85,7 +85,8 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const results = require('./results.json');
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('./results.json', 'utf8'));
             const unmaintainedCount = ${{ steps.check.outputs.unmaintained-count }};
             const directCount = ${{ steps.check.outputs.direct-count }};
             const indirectCount = ${{ steps.check.outputs.indirect-count }};
@@ -138,7 +139,8 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const results = require('./results.json');
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('./results.json', 'utf8'));
             const unmaintainedCount = ${{ steps.check.outputs.unmaintained-count }};
             const directCount = ${{ steps.check.outputs.direct-count }};
             const indirectCount = ${{ steps.check.outputs.indirect-count }};
