@@ -1,2 +1,7 @@
 # binary
 go-unmaintained
+bin/*
+
+# LLM
+AGENTS.md
+CLAUDE.md
