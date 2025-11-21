@@ -1,6 +1,6 @@
 module github.com/johnsaigle/go-unmaintained
 
-go 1.24.1
+go 1.25.4
 
 require golang.org/x/mod v0.27.0
 
