@@ -72,13 +72,7 @@ bench: ## Run benchmarks
 # Lint and format targets
 .PHONY: lint
 lint: ## Run golangci-lint
-	@echo "Running linter..."
-	@if command -v golangci-lint >/dev/null 2>&1; then \
-		golangci-lint run; \
-	else \
-		echo "golangci-lint not found. Please install it: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"; \
-		exit 1; \
-	fi
+	golangci-lint run
 
 .PHONY: fmt
 fmt: ## Format Go code
