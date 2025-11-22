@@ -152,7 +152,7 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 
 	if summary.UnknownCount > 0 {
 		fmt.Fprintf(w, "❓ UNKNOWN STATUS: %d\n", summary.UnknownCount)
-		fmt.Fprintln(w, "   (Non-GitHub dependencies that couldn't be fully analyzed)\n")
+		fmt.Fprintln(w, "   (Non-GitHub dependencies that couldn't be fully analyzed)")
 	}
 
 	maintainedCount := summary.TotalDependencies - summary.UnmaintainedCount - summary.UnknownCount
