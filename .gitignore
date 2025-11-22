@@ -6,3 +6,4 @@ bin/*
 # LLM
 AGENTS.md
 CLAUDE.md
+.opencode/
