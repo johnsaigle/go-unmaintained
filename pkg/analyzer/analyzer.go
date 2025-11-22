@@ -9,6 +9,7 @@ import (
 	"github.com/johnsaigle/go-unmaintained/pkg/cache"
 	"github.com/johnsaigle/go-unmaintained/pkg/github"
 	"github.com/johnsaigle/go-unmaintained/pkg/parser"
+	"github.com/johnsaigle/go-unmaintained/pkg/popular"
 	"github.com/johnsaigle/go-unmaintained/pkg/providers"
 	"github.com/johnsaigle/go-unmaintained/pkg/resolver"
 	"golang.org/x/mod/semver"
@@ -259,6 +260,11 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 	if dep.Replace != nil {
 		result.Details = "Skipped: has replace directive"
 		return result, nil
+	}
+
+	// Check popular cache first for GitHub packages
+	if entry, found := popular.Lookup(dep.Path); found {
+		return a.resultFromPopularEntry(entry, dep), nil
 	}
 
 	// Parse module path to get repository info
@@ -556,4 +562,34 @@ func getTrustedModuleStatus(modulePath string) string {
 	default:
 		return "Active trusted Go package"
 	}
+}
+
+// resultFromPopularEntry converts a popular cache entry to an analysis result
+func (a *Analyzer) resultFromPopularEntry(entry *popular.Entry, dep parser.Dependency) Result {
+	result := Result{
+		Package:         dep.Path,
+		CurrentVersion:  dep.Version,
+		IsDirect:        !dep.Indirect,
+		DaysSinceUpdate: entry.DaysSinceUpdate,
+	}
+
+	switch entry.Status {
+	case popular.StatusArchived:
+		result.IsUnmaintained = true
+		result.Reason = ReasonArchived
+		result.Details = "Repository is archived (from popular cache)"
+	case popular.StatusInactive:
+		result.IsUnmaintained = true
+		result.Reason = ReasonStaleInactive
+		result.Details = fmt.Sprintf("Repository inactive for %d days (from popular cache)", entry.DaysSinceUpdate)
+	case popular.StatusNotFound:
+		result.IsUnmaintained = true
+		result.Reason = ReasonNotFound
+		result.Details = "Repository not found (from popular cache)"
+	case popular.StatusActive:
+		result.IsUnmaintained = false
+		result.Details = fmt.Sprintf("Active repository, last updated %d days ago (from popular cache)", entry.DaysSinceUpdate)
+	}
+
+	return result
 }

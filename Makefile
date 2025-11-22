@@ -174,6 +174,27 @@ version: ## Show version information
 	@echo "Git commit: $$(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')"
 	@echo "Build date: $$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
+# Popular cache targets
+.PHONY: build-cache
+build-cache: ## Build popular packages cache (requires PAT env var)
+	@if [ -z "$$PAT" ]; then \
+		echo "Error: PAT environment variable is required"; \
+		exit 1; \
+	fi
+	@echo "Building popular packages cache (500 repos)..."
+	@go run ./cmd/cache-builder --count 500 --output ./pkg/popular/data/popular-packages.json --token $$PAT
+	@echo "✓ Cache built successfully"
+
+.PHONY: build-cache-small
+build-cache-small: ## Build small popular packages cache (100 repos, for testing)
+	@if [ -z "$$PAT" ]; then \
+		echo "Error: PAT environment variable is required"; \
+		exit 1; \
+	fi
+	@echo "Building small popular packages cache (10 repos)..."
+	@go run ./cmd/cache-builder --count 10 --output ./pkg/popular/data/popular-packages.json --token $$PAT
+	@echo "✓ Cache built successfully"
+
 # Quick development workflow
 .PHONY: quick
 quick: fmt vet build ## Quick development cycle: format, vet, and build
