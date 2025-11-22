@@ -13,6 +13,8 @@ import (
 	"github.com/johnsaigle/go-unmaintained/pkg/providers"
 	"github.com/johnsaigle/go-unmaintained/pkg/resolver"
 	"golang.org/x/mod/semver"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // UnmaintainedReason represents why a package is considered unmaintained
@@ -28,35 +30,35 @@ const (
 
 // indexedDep represents a dependency with its index for concurrent processing
 type indexedDep struct {
-	index int
 	dep   parser.Dependency
+	index int
 }
 
 // Result represents the analysis result for a single dependency
 type Result struct {
-	Package         string
-	IsUnmaintained  bool
-	Reason          UnmaintainedReason
 	RepoInfo        *github.RepoInfo
-	DaysSinceUpdate int
+	Package         string
+	Reason          UnmaintainedReason
 	Details         string
 	CurrentVersion  string
 	LatestVersion   string
-	IsDirect        bool
 	DependencyPath  []string
+	DaysSinceUpdate int
+	IsUnmaintained  bool
+	IsDirect        bool
 }
 
 // Config holds configuration for the analyzer
 type Config struct {
-	MaxAge          time.Duration
 	Token           string
+	MaxAge          time.Duration
+	CacheDuration   time.Duration
+	ResolverTimeout time.Duration
+	Concurrency     int
 	Verbose         bool
 	CheckOutdated   bool
 	NoCache         bool
-	CacheDuration   time.Duration
 	ResolveUnknown  bool
-	ResolverTimeout time.Duration
-	Concurrency     int
 	AsyncMode       bool
 	ShowProgress    bool
 	ShowDepPath     bool
@@ -64,11 +66,11 @@ type Config struct {
 
 // Analyzer performs unmaintained package analysis
 type Analyzer struct {
-	config        Config
 	githubClient  *github.Client
 	cache         *cache.Cache
 	resolver      *resolver.Resolver
 	multiProvider *providers.MultiProvider
+	config        Config
 }
 
 // NewAnalyzer creates a new analyzer instance
@@ -86,9 +88,8 @@ func NewAnalyzer(config Config) (*Analyzer, error) {
 
 	// Clean expired cache entries
 	if !config.NoCache {
-		if err := cacheInstance.CleanExpired(); err != nil && config.Verbose {
-			// Non-fatal error, just log in verbose mode
-		}
+		_ = cacheInstance.CleanExpired()
+		// Non-fatal error, silently ignore
 	}
 
 	// Initialize resolver - always available for well-known modules
@@ -121,7 +122,7 @@ func (a *Analyzer) AnalyzeModule(ctx context.Context, mod *parser.Module) ([]Res
 
 // analyzeModuleSequential processes dependencies one by one (original behavior)
 func (a *Analyzer) analyzeModuleSequential(ctx context.Context, mod *parser.Module) ([]Result, error) {
-	var results []Result
+	results := make([]Result, 0, len(mod.Dependencies))
 
 	for _, dep := range mod.Dependencies {
 		result, err := a.AnalyzeDependency(ctx, dep)
@@ -165,16 +166,16 @@ func (a *Analyzer) analyzeModuleConcurrent(ctx context.Context, mod *parser.Modu
 			if moduleInfo.IsGitHub {
 				_, _, cacheHit := a.cache.GetRepoInfo(moduleInfo.Owner, moduleInfo.Repo)
 				if cacheHit {
-					cachedDeps = append(cachedDeps, indexedDep{i, dep})
+					cachedDeps = append(cachedDeps, indexedDep{dep, i})
 					continue
 				}
 			}
 		}
 
 		if moduleInfo.IsGitHub {
-			githubDeps = append(githubDeps, indexedDep{i, dep})
+			githubDeps = append(githubDeps, indexedDep{dep, i})
 		} else {
-			otherDeps = append(otherDeps, indexedDep{i, dep})
+			otherDeps = append(otherDeps, indexedDep{dep, i})
 		}
 	}
 
@@ -193,7 +194,7 @@ func (a *Analyzer) analyzeModuleConcurrent(ctx context.Context, mod *parser.Modu
 
 	// Process other dependencies with conservative rate limiting
 	if len(otherDeps) > 0 {
-		a.processBatch(ctx, otherDeps, results, max(1, concurrency/2)) // Lower concurrency for unknowns
+		a.processBatch(ctx, otherDeps, results, maxInt(1, concurrency/2)) // Lower concurrency for unknowns
 	}
 
 	return results, nil
@@ -208,8 +209,8 @@ func (a *Analyzer) processBatch(ctx context.Context, deps []indexedDep, results 
 	semaphore := make(chan struct{}, batchConcurrency)
 
 	type indexedResult struct {
-		index  int
 		result Result
+		index  int
 	}
 	resultsChan := make(chan indexedResult, len(deps))
 
@@ -240,8 +241,8 @@ func (a *Analyzer) processBatch(ctx context.Context, deps []indexedDep, results 
 	}
 }
 
-// max returns the maximum of two integers
-func max(a, b int) int {
+// maxInt returns the maximum of two integers
+func maxInt(a, b int) int {
 	if a > b {
 		return a
 	}
@@ -331,10 +332,13 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 				return result, nil
 			}
 
+			caser := cases.Title(language.English)
+			hostName := caser.String(strings.Split(moduleInfo.Host, ".")[0])
+
 			if !repoInfo.Exists {
 				result.IsUnmaintained = true
 				result.Reason = ReasonNotFound
-				result.Details = fmt.Sprintf("%s repository not found", strings.Title(strings.Split(moduleInfo.Host, ".")[0]))
+				result.Details = fmt.Sprintf("%s repository not found", hostName)
 				return result, nil
 			}
 
@@ -344,7 +348,7 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 			if repoInfo.IsArchived {
 				result.IsUnmaintained = true
 				result.Reason = ReasonArchived
-				result.Details = fmt.Sprintf("%s repository is archived", strings.Title(strings.Split(moduleInfo.Host, ".")[0]))
+				result.Details = fmt.Sprintf("%s repository is archived", hostName)
 				return result, nil
 			}
 
@@ -352,11 +356,11 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 			if !repoInfo.IsRepositoryActive(a.config.MaxAge) {
 				result.IsUnmaintained = true
 				result.Reason = ReasonStaleInactive
-				result.Details = fmt.Sprintf("%s repository inactive for %d days", strings.Title(strings.Split(moduleInfo.Host, ".")[0]), result.DaysSinceUpdate)
+				result.Details = fmt.Sprintf("%s repository inactive for %d days", hostName, result.DaysSinceUpdate)
 				return result, nil
 			}
 
-			result.Details = fmt.Sprintf("Active %s repository, last updated %d days ago", strings.Title(strings.Split(moduleInfo.Host, ".")[0]), result.DaysSinceUpdate)
+			result.Details = fmt.Sprintf("Active %s repository, last updated %d days ago", hostName, result.DaysSinceUpdate)
 			return result, nil
 		}
 

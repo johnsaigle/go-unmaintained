@@ -14,9 +14,9 @@ import (
 
 // Dependency represents a single module dependency
 type Dependency struct {
+	Replace  *Replace
 	Path     string
 	Version  string
-	Replace  *Replace
 	Indirect bool
 }
 
@@ -31,9 +31,9 @@ type Replace struct {
 type Module struct {
 	Path         string
 	GoVersion    string
+	ProjectPath  string
 	Dependencies []Dependency
 	Replaces     []Replace
-	ProjectPath  string // Path to the project directory for go commands
 }
 
 // ParseGoMod parses a go.mod file and returns module information
@@ -228,7 +228,7 @@ func GetDependencyPath(ctx context.Context, projectPath, packagePath string) ([]
 	// ...
 	// target-module
 
-	var path []string
+	path := make([]string, 0)
 	for i, line := range lines {
 		line = strings.TrimSpace(line)
 		if line == "" {

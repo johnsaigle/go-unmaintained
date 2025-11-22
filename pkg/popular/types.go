@@ -14,13 +14,13 @@ const (
 
 // Entry represents a cached popular package entry
 type Entry struct {
-	Package         string    `json:"package"`           // e.g., "github.com/gin-gonic/gin"
-	Owner           string    `json:"owner"`             // GitHub owner
-	Repo            string    `json:"repo"`              // GitHub repo name
-	Status          Status    `json:"status"`            // Maintenance status
-	DaysSinceUpdate int       `json:"days_since_update"` // Days since last commit/update
-	LastUpdated     time.Time `json:"last_updated"`      // When the repo was last updated
-	CacheBuiltAt    time.Time `json:"cache_built_at"`    // When this cache entry was created
+	LastUpdated     time.Time `json:"last_updated"`
+	CacheBuiltAt    time.Time `json:"cache_built_at"`
+	Package         string    `json:"package"`
+	Owner           string    `json:"owner"`
+	Repo            string    `json:"repo"`
+	Status          Status    `json:"status"`
+	DaysSinceUpdate int       `json:"days_since_update"`
 }
 
 // IsUnmaintained returns true if the package is considered unmaintained

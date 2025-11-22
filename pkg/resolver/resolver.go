@@ -16,9 +16,9 @@ type ResolverResult struct {
 	ModulePath      string
 	ActualURL       string
 	HostingProvider string
-	IsRedirect      bool
 	Status          ModuleStatus
 	Details         string
+	IsRedirect      bool
 }
 
 // ModuleStatus represents the status of a resolved module
@@ -81,7 +81,7 @@ func (r *Resolver) ResolveModule(ctx context.Context, modulePath string) *Resolv
 		return resolved
 	}
 
-	if resolved := r.tryWellKnownPatterns(ctx, modulePath, moduleInfo); resolved != nil {
+	if resolved := r.tryWellKnownPatterns(modulePath, moduleInfo); resolved != nil {
 		return resolved
 	}
 
@@ -177,7 +177,7 @@ func (r *Resolver) tryVanityURL(ctx context.Context, modulePath string) *Resolve
 }
 
 // tryWellKnownPatterns attempts to resolve modules using well-known patterns
-func (r *Resolver) tryWellKnownPatterns(ctx context.Context, modulePath string, moduleInfo *parser.ModuleInfo) *ResolverResult {
+func (r *Resolver) tryWellKnownPatterns(modulePath string, moduleInfo *parser.ModuleInfo) *ResolverResult {
 	result := &ResolverResult{
 		ModulePath:      modulePath,
 		HostingProvider: moduleInfo.Host,
@@ -220,7 +220,7 @@ func (r *Resolver) tryWellKnownPatterns(ctx context.Context, modulePath string, 
 	default:
 		// Try to construct potential GitHub URLs for common patterns
 		if moduleInfo.Owner != "" && moduleInfo.Repo != "" {
-			result.Details = fmt.Sprintf("Unknown hosting provider, may be self-hosted")
+			result.Details = "Unknown hosting provider, may be self-hosted"
 		} else {
 			result.Details = "Could not determine hosting provider"
 		}

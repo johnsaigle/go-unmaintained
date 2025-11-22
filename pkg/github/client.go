@@ -21,13 +21,13 @@ type Client struct {
 
 // RepoInfo holds repository information
 type RepoInfo struct {
-	IsArchived    bool
-	Description   string
-	DefaultBranch string
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
 	LastCommitAt  *time.Time
+	Description   string
+	DefaultBranch string
 	URL           string
+	IsArchived    bool
 	Exists        bool
 }
 
@@ -149,10 +149,8 @@ func (c *Client) GetRepositoryInfo(ctx context.Context, owner, repo string) (*Re
 	})
 	if err != nil {
 		// Handle rate limiting for commits API call
-		if resp != nil && resp.StatusCode == 403 && resp.Header.Get("X-RateLimit-Remaining") == "0" {
-			// Don't fail the entire request for commit info, just skip it
-			// The rate limit error will be visible in logs if verbose mode is enabled
-		}
+		// Don't fail the entire request for commit info, just skip it
+		_ = resp // Silence unused warning
 	} else if len(commits) > 0 {
 		commitDate := commits[0].GetCommit().GetCommitter().GetDate()
 		info.LastCommitAt = &commitDate

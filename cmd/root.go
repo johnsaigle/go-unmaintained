@@ -169,8 +169,8 @@ func analyzeProject(projectPath string) error {
 	if tree {
 		for i := range results {
 			if results[i].IsUnmaintained && !results[i].IsDirect {
-				depPath, err := parser.GetDependencyPath(ctx, mod.ProjectPath, results[i].Package)
-				if err == nil && len(depPath) > 0 {
+				depPath, pathErr := parser.GetDependencyPath(ctx, mod.ProjectPath, results[i].Package)
+				if pathErr == nil && len(depPath) > 0 {
 					results[i].DependencyPath = depPath
 				}
 			}

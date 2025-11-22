@@ -15,33 +15,33 @@ type JSONFormatter struct {
 
 // JSONOutput represents the JSON output structure
 type JSONOutput struct {
-	Summary   analyzer.SummaryStats `json:"summary"`
-	Results   []JSONResult          `json:"results"`
 	Timestamp time.Time             `json:"timestamp"`
 	Version   string                `json:"version"`
+	Results   []JSONResult          `json:"results"`
+	Summary   analyzer.SummaryStats `json:"summary"`
 }
 
 // JSONResult represents a single dependency result in JSON format
 type JSONResult struct {
+	RepoInfo        *JSONRepoInfo `json:"repo_info,omitempty"`
 	Package         string        `json:"package"`
-	IsUnmaintained  bool          `json:"is_unmaintained"`
-	IsDirect        bool          `json:"is_direct"`
 	Reason          string        `json:"reason,omitempty"`
 	Details         string        `json:"details"`
 	CurrentVersion  string        `json:"current_version,omitempty"`
 	LatestVersion   string        `json:"latest_version,omitempty"`
-	DaysSinceUpdate int           `json:"days_since_update,omitempty"`
 	DependencyPath  []string      `json:"dependency_path,omitempty"`
-	RepoInfo        *JSONRepoInfo `json:"repo_info,omitempty"`
+	DaysSinceUpdate int           `json:"days_since_update,omitempty"`
+	IsUnmaintained  bool          `json:"is_unmaintained"`
+	IsDirect        bool          `json:"is_direct"`
 }
 
 // JSONRepoInfo represents repository information in JSON format
 type JSONRepoInfo struct {
-	URL            string    `json:"url,omitempty"`
-	IsArchived     bool      `json:"is_archived"`
-	LastCommitDays int       `json:"last_commit_days,omitempty"`
 	CreatedAt      time.Time `json:"created_at,omitempty"`
 	UpdatedAt      time.Time `json:"updated_at,omitempty"`
+	URL            string    `json:"url,omitempty"`
+	LastCommitDays int       `json:"last_commit_days,omitempty"`
+	IsArchived     bool      `json:"is_archived"`
 }
 
 // Format writes results in JSON format

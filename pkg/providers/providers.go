@@ -51,14 +51,14 @@ type GitLabProvider struct {
 
 // GitLabProject represents a GitLab project response
 type GitLabProject struct {
-	ID             int       `json:"id"`
+	CreatedAt      time.Time `json:"created_at"`
+	LastActivityAt time.Time `json:"last_activity_at"`
 	Name           string    `json:"name"`
 	Description    string    `json:"description"`
 	WebURL         string    `json:"web_url"`
-	CreatedAt      time.Time `json:"created_at"`
-	LastActivityAt time.Time `json:"last_activity_at"`
-	Archived       bool      `json:"archived"`
 	DefaultBranch  string    `json:"default_branch"`
+	ID             int       `json:"id"`
+	Archived       bool      `json:"archived"`
 }
 
 // NewGitLabProvider creates a new GitLab provider
@@ -136,12 +136,11 @@ type BitbucketProvider struct {
 
 // BitbucketRepository represents a Bitbucket repository response
 type BitbucketRepository struct {
+	CreatedOn   time.Time `json:"created_on"`
+	UpdatedOn   time.Time `json:"updated_on"`
 	Name        string    `json:"name"`
 	FullName    string    `json:"full_name"`
 	Description string    `json:"description"`
-	IsPrivate   bool      `json:"is_private"`
-	CreatedOn   time.Time `json:"created_on"`
-	UpdatedOn   time.Time `json:"updated_on"`
 	Language    string    `json:"language"`
 	Links       struct {
 		HTML struct {
@@ -151,6 +150,7 @@ type BitbucketRepository struct {
 	MainBranch struct {
 		Name string `json:"name"`
 	} `json:"mainbranch"`
+	IsPrivate bool `json:"is_private"`
 }
 
 // NewBitbucketProvider creates a new Bitbucket provider
@@ -193,7 +193,7 @@ func (bp *BitbucketProvider) GetRepositoryInfo(ctx context.Context, owner, repo 
 	}
 
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("Bitbucket API returned status %d", resp.StatusCode)
+		return nil, fmt.Errorf("bitbucket API returned status %d", resp.StatusCode)
 	}
 
 	var repository BitbucketRepository

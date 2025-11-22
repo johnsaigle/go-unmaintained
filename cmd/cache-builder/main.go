@@ -55,7 +55,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := os.WriteFile(*output, data, 0644); err != nil {
+	if err := os.WriteFile(*output, data, 0600); err != nil {
 		fmt.Fprintf(os.Stderr, "Error writing file: %v\n", err)
 		os.Exit(1)
 	}
@@ -97,9 +97,9 @@ func calculateStats(entries []popular.Entry) stats {
 }
 
 type repoTask struct {
-	index int
 	owner string
 	repo  string
+	index int
 }
 
 func buildCache(token string, count, maxAge int) ([]popular.Entry, error) {
@@ -145,10 +145,10 @@ func buildCache(token string, count, maxAge int) ([]popular.Entry, error) {
 		fmt.Printf("  Fetched page %d/%d (%d repos so far)\n", page, pages, len(allRepos))
 
 		// Check rate limit
-		if resp.Rate.Remaining < 100 {
-			fmt.Printf("  Warning: Only %d API calls remaining\n", resp.Rate.Remaining)
-			if resp.Rate.Remaining < 50 {
-				waitTime := time.Until(resp.Rate.Reset.Time) + time.Second
+		if resp.Remaining < 100 {
+			fmt.Printf("  Warning: Only %d API calls remaining\n", resp.Remaining)
+			if resp.Remaining < 50 {
+				waitTime := time.Until(resp.Reset.Time) + time.Second
 				fmt.Printf("  Waiting %v for rate limit reset...\n", waitTime)
 				time.Sleep(waitTime)
 			}
@@ -183,8 +183,8 @@ func processRepositoriesConcurrent(ctx context.Context, ghClient *ghclient.Clien
 
 	// Results channel
 	type indexedEntry struct {
-		index int
 		entry popular.Entry
+		index int
 	}
 	results := make(chan indexedEntry, len(repos))
 

@@ -2,7 +2,10 @@ module github.com/johnsaigle/go-unmaintained
 
 go 1.25.4
 
-require golang.org/x/mod v0.27.0
+require (
+	golang.org/x/mod v0.29.0
+	golang.org/x/text v0.31.0
+)
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
