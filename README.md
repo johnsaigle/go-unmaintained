@@ -9,14 +9,11 @@ A CLI tool that identifies unmaintained Go packages using heuristics.
 
 ## Features
 
-- 🔍 **Dependency Analysis**: Scans `go.mod` files to identify potentially unmaintained dependencies
-- 🏗️ **Multi-Platform Support**: Supports GitHub, GitLab, Bitbucket, and well-known Go modules
-- 📊 **Multiple Heuristics**: Detects archived repositories, missing packages, inactive projects, and outdated versions  
-- 🔗 **Advanced Resolution**: Resolves vanity URLs, Go module proxy, and custom domains
-- 💾 **Smart Rate Limiting**: Handles GitHub API rate limits gracefully with proper error messages
-- ⚡ **Fast Processing**: Concurrent analysis enabled by default for optimal performance
-- 📋 **Flexible Output**: Supports console, JSON, and GitHub Actions annotation formats
-- 🤖 **GitHub Actions**: Ready-to-use action for CI/CD integration
+- Scans `go.mod` files to identify potentially unmaintained dependencies
+- Supports GitHub, GitLab, Bitbucket, and well-known Go modules  
+- Detects archived repositories, missing packages, inactive projects, and outdated versions
+- Concurrent analysis with smart rate limiting
+- Multiple output formats: console, JSON, GitHub Actions annotations
 
 ## Installation
 
@@ -51,32 +48,13 @@ See [GitHub Action documentation](./.github/actions/check/README.md) for more de
 
 ## GitHub Token Setup
 
-**Important**: To check repository archival status and access detailed GitHub information, you need a GitHub personal access token.
-
-### Creating a Classic GitHub Token
-
-1. Go to [GitHub Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens)
-2. Click "Generate new token (classic)"
-3. Give it a descriptive name like "go-unmaintained"
-4. **No scopes/permissions are required** - leave all checkboxes unchecked
-5. Click "Generate token"
-6. Copy the token and store it securely
-
-### Using the Token
-
-Set the token as an environment variable:
+[Create a GitHub token](https://github.com/settings/tokens) (no scopes required) and set it as an environment variable:
 
 ```bash
 export PAT=your_token_here
 ```
 
-Or pass it directly via the `--token` flag:
-
-```bash
-go-unmaintained --token your_token_here
-```
-
-**Note**: The token is validated when the tool starts. If it's invalid, expired, or lacks necessary permissions, you'll get a clear error message.
+Or use the `--token` flag when running the tool.
 
 ## Usage
 
@@ -94,39 +72,20 @@ Analyze a specific project:
 go-unmaintained --target /path/to/project
 ```
 
-### Advanced Options
+### Common Options
 
 ```bash
-# Verbose output with detailed information
-go-unmaintained --verbose
-
-# Check for outdated versions in addition to unmaintained repos
+# Check for outdated versions
 go-unmaintained --check-outdated
 
-# Enable resolution of non-GitHub dependencies (GitLab, Bitbucket, etc.)
-go-unmaintained --resolve-unknown
-
-# Custom concurrency level (default: 5 concurrent workers)
-go-unmaintained --concurrency 10
-
-# Disable concurrent processing (use sequential mode)
-go-unmaintained --sync
-
-# Custom age threshold (default: 365 days)
-go-unmaintained --max-age 180
-
-# JSON output for programmatic use
+# JSON output
 go-unmaintained --json
 
-# GitHub Actions annotations (for CI/CD)
-go-unmaintained --github-actions
-
-# Fail fast - exit as soon as first unmaintained package is found
-go-unmaintained --fail-fast
-
-# Analyze a single package
-go-unmaintained --package github.com/example/package
+# Verbose details
+go-unmaintained --verbose
 ```
+
+See `go-unmaintained --help` for all options.
 
 ### Example Output
 
@@ -177,19 +136,7 @@ The tool uses several heuristics to identify unmaintained packages:
 
 ## Rate Limiting
 
-The tool handles GitHub API rate limiting intelligently:
-
-- **Authentication**: Authenticated requests get 5,000 requests/hour vs 60 for unauthenticated
-- **Error Handling**: Clear error messages when rate limits are exceeded, including reset time
-- **Graceful Degradation**: Some features may be skipped if rate limits are hit during analysis
-
-### Future Rate Limiting Improvements
-
-Planned improvements for better rate limit handling:
-
-- **Caching**: Store repository analysis results to avoid repeated API calls
-- **Request Batching**: Use GitHub's GraphQL API for more efficient bulk operations
-- **Smart Scheduling**: Distribute API calls over time to stay within limits
+Authenticated requests get 5,000 GitHub API requests/hour vs 60 for unauthenticated. The tool uses caching to minimize API calls and provides clear error messages when rate limits are exceeded.
 
 ## Development
 
@@ -199,43 +146,15 @@ Planned improvements for better rate limit handling:
 - `golangci-lint` for linting
 - `goimports` for import formatting
 
-### Setup Development Environment
-
-```bash
-make dev-setup
-```
-
 ### Common Commands
 
 ```bash
-# Quick development cycle (format, vet, build)
-make quick
-
-# Run all checks (format, vet, lint, test)
-make check
-
-# Run with verbose output
-make run-verbose
-
-# Build for all platforms
-make build-all
-
-# Run example analysis (requires PAT)
-make example
+make dev-setup  # Setup development environment
+make check      # Run all checks (format, vet, lint, test)
+make test       # Run tests
 ```
 
-### Testing
-
-```bash
-# Run tests
-make test
-
-# Run tests with coverage
-make test-coverage
-
-# Run tests with race detection
-make test-race
-```
+See `Makefile` for all available commands.
 
 ## Exit Codes
 

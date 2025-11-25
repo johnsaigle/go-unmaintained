@@ -62,7 +62,7 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 			fmt.Fprintf(w, "❌ %s (%s) - %s\n", result.Package, depType, result.Details)
 
 			// Show repository URL for verification
-			if url := getRepositoryURL(result); url != "" {
+			if url := GetRepositoryURL(result); url != "" {
 				fmt.Fprintf(w, "   🔗 %s\n", url)
 			}
 
@@ -116,7 +116,7 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 			fmt.Fprintf(w, "✅ %s (%s) - %s\n", result.Package, depType, result.Details)
 
 			// Show URL in verbose mode for verification
-			if url := getRepositoryURL(result); url != "" {
+			if url := GetRepositoryURL(result); url != "" {
 				fmt.Fprintf(w, "   🔗 %s\n", url)
 			}
 		}
@@ -166,51 +166,7 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 
 // ShouldExit returns the exit code based on results
 func (f *ConsoleFormatter) ShouldExit(results []analyzer.Result) int {
-	if f.opts.NoExitCode {
-		return 0
-	}
-
-	for _, result := range results {
-		if result.IsUnmaintained {
-			return 1
-		}
-	}
-
-	return 0
-}
-
-// getRepositoryURL extracts or constructs a repository URL from the result
-func getRepositoryURL(result analyzer.Result) string {
-	// Try to use the URL from RepoInfo first
-	if result.RepoInfo != nil && result.RepoInfo.URL != "" {
-		return result.RepoInfo.URL
-	}
-
-	// Try to construct URL from package path for GitHub repos
-	if strings.HasPrefix(result.Package, "github.com/") {
-		parts := strings.Split(result.Package, "/")
-		if len(parts) >= 3 {
-			return fmt.Sprintf("https://github.com/%s/%s", parts[1], parts[2])
-		}
-	}
-
-	// Try for GitLab repos
-	if strings.HasPrefix(result.Package, "gitlab.com/") {
-		parts := strings.Split(result.Package, "/")
-		if len(parts) >= 3 {
-			return fmt.Sprintf("https://gitlab.com/%s/%s", parts[1], parts[2])
-		}
-	}
-
-	// Try for Bitbucket repos
-	if strings.HasPrefix(result.Package, "bitbucket.org/") {
-		parts := strings.Split(result.Package, "/")
-		if len(parts) >= 3 {
-			return fmt.Sprintf("https://bitbucket.org/%s/%s", parts[1], parts[2])
-		}
-	}
-
-	return ""
+	return DefaultShouldExit(results, f.opts.NoExitCode)
 }
 
 // getSeverityScore returns a score for sorting (lower = more severe)

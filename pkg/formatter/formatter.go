@@ -3,6 +3,7 @@ package formatter
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/johnsaigle/go-unmaintained/pkg/analyzer"
 )
@@ -39,4 +40,49 @@ func New(format string, opts Options) (Formatter, error) {
 	default:
 		return nil, fmt.Errorf("unknown format: %s", format)
 	}
+}
+
+// DefaultShouldExit returns the standard exit code based on results
+// Used by formatters that don't need custom exit code logic
+func DefaultShouldExit(results []analyzer.Result, noExitCode bool) int {
+	if noExitCode {
+		return 0
+	}
+
+	for _, result := range results {
+		if result.IsUnmaintained {
+			return 1
+		}
+	}
+
+	return 0
+}
+
+// GetRepositoryURL extracts or constructs a repository URL from the result
+func GetRepositoryURL(result analyzer.Result) string {
+	// Try to use the URL from RepoInfo first
+	if result.RepoInfo != nil && result.RepoInfo.URL != "" {
+		return result.RepoInfo.URL
+	}
+
+	// Try to construct URL from package path for known hosts
+	hosts := []struct {
+		prefix string
+		urlFmt string
+	}{
+		{"github.com/", "https://github.com/%s/%s"},
+		{"gitlab.com/", "https://gitlab.com/%s/%s"},
+		{"bitbucket.org/", "https://bitbucket.org/%s/%s"},
+	}
+
+	for _, host := range hosts {
+		if strings.HasPrefix(result.Package, host.prefix) {
+			parts := strings.Split(result.Package, "/")
+			if len(parts) >= 3 {
+				return fmt.Sprintf(host.urlFmt, parts[1], parts[2])
+			}
+		}
+	}
+
+	return ""
 }

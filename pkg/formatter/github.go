@@ -33,7 +33,7 @@ func (f *GitHubActionsFormatter) Format(w io.Writer, results []analyzer.Result, 
 		}
 
 		// Get URL for reference
-		url := getRepositoryURL(result)
+		url := GetRepositoryURL(result)
 
 		// Format message
 		message := fmt.Sprintf("%s (%s): %s", result.Package, depType, result.Details)
@@ -65,15 +65,5 @@ func (f *GitHubActionsFormatter) Format(w io.Writer, results []analyzer.Result, 
 
 // ShouldExit returns the exit code based on results
 func (f *GitHubActionsFormatter) ShouldExit(results []analyzer.Result) int {
-	if f.opts.NoExitCode {
-		return 0
-	}
-
-	for _, result := range results {
-		if result.IsUnmaintained {
-			return 1
-		}
-	}
-
-	return 0
+	return DefaultShouldExit(results, f.opts.NoExitCode)
 }
