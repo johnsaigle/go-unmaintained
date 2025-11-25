@@ -10,7 +10,6 @@ A CLI tool that identifies unmaintained Go packages using heuristics.
 ## Features
 
 - Scans `go.mod` files to identify potentially unmaintained dependencies
-- Supports GitHub, GitLab, Bitbucket, and well-known Go modules  
 - Detects archived repositories, missing packages, inactive projects, and outdated versions
 - Concurrent analysis with smart rate limiting
 - Multiple output formats: console, JSON, GitHub Actions annotations
@@ -125,52 +124,9 @@ The tool uses several heuristics to identify unmaintained packages:
 4. **Outdated Versions**: (with `--check-outdated`) Current version is significantly behind the latest released version
 5. **Unknown Status**: Non-GitHub dependencies that couldn't be resolved (shown with ❓)
 
-## Supported Hosting Providers
-
-- ✅ **GitHub**: Full analysis with API integration
-- ✅ **GitLab**: Repository analysis via GitLab API
-- ✅ **Bitbucket**: Repository analysis via Bitbucket API
-- ✅ **Well-known Go modules**: golang.org/x/, google.golang.org/, k8s.io/, etc.
-- ✅ **Go Module Proxy**: Verification via proxy.golang.org
-- ✅ **Vanity URLs**: Custom domain resolution
-
 ## Rate Limiting
 
 Authenticated requests get 5,000 GitHub API requests/hour vs 60 for unauthenticated. The tool uses caching to minimize API calls and provides clear error messages when rate limits are exceeded.
-
-## Development
-
-### Prerequisites
-
-- Go 1.21 or later
-- `golangci-lint` for linting
-- `goimports` for import formatting
-
-### Common Commands
-
-```bash
-make dev-setup  # Setup development environment
-make check      # Run all checks (format, vet, lint, test)
-make test       # Run tests
-```
-
-See `Makefile` for all available commands.
-
-## Exit Codes
-
-- `0`: Success (no unmaintained packages found)
-- `1`: Unmaintained packages detected
-- `2`: Tool error (invalid arguments, missing token, etc.)
-
-Use `--no-exit-code` to always exit with code 0, useful for CI environments where you want to collect results without failing the build.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run `make check` to ensure code quality
-5. Submit a pull request
 
 ## Acknowledgments
 
