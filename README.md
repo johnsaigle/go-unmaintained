@@ -40,20 +40,32 @@ Add to your workflow:
 - name: Check for unmaintained dependencies
   uses: johnsaigle/go-unmaintained/.github/actions/check@v1
   with:
-    github-token: ${{ secrets.PAT }}
+    github-token: ${{ secrets.PAT }}  # Required: see setup below
 ```
 
 See [GitHub Action documentation](./.github/actions/check/README.md) for more details and examples.
 
 ## GitHub Token Setup
 
-[Create a GitHub token](https://github.com/settings/tokens) (no scopes required) and set it as an environment variable:
+A GitHub Personal Access Token (PAT) is required for API access:
 
-```bash
-export PAT=your_token_here
-```
+**For CLI usage:**
+1. [Create a GitHub PAT](https://github.com/settings/tokens) (no scopes required - public repo access only)
+2. Set it as an environment variable:
+   ```bash
+   export PAT=your_token_here
+   ```
+   Or use the `--token` flag when running the tool
 
-Or use the `--token` flag when running the tool.
+**For GitHub Actions:**
+1. [Create a GitHub PAT](https://github.com/settings/tokens) (no scopes required)
+2. Add it as a repository secret named `PAT`:
+   - Go to repository Settings → Secrets and variables → Actions
+   - Click "New repository secret"
+   - Name: `PAT`, Value: your token
+3. Use it in workflows: `github-token: ${{ secrets.PAT }}`
+
+> **Note:** `GITHUB_TOKEN` (the default Actions token) has insufficient permissions for this tool. A PAT is required.
 
 ## Usage
 

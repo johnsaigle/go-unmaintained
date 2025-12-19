@@ -1,1 +1,92 @@
-[]
+[
+  {
+    "last_updated": "2025-12-19T19:55:15Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/avelino/awesome-go",
+    "owner": "avelino",
+    "repo": "awesome-go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:49:49Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/ollama/ollama",
+    "owner": "ollama",
+    "repo": "ollama",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:00:22Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/golang/go",
+    "owner": "golang",
+    "repo": "go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T19:52:44Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/kubernetes/kubernetes",
+    "owner": "kubernetes",
+    "repo": "kubernetes",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T19:39:00Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/fatedier/frp",
+    "owner": "fatedier",
+    "repo": "frp",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:17:27Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/gin-gonic/gin",
+    "owner": "gin-gonic",
+    "repo": "gin",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T18:32:30Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/gohugoio/hugo",
+    "owner": "gohugoio",
+    "repo": "hugo",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:55:11Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/syncthing/syncthing",
+    "owner": "syncthing",
+    "repo": "syncthing",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:43:05Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/junegunn/fzf",
+    "owner": "junegunn",
+    "repo": "fzf",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T18:06:42Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/moby/moby",
+    "owner": "moby",
+    "repo": "moby",
+    "status": "active",
+    "days_since_update": 0
+  }
+]

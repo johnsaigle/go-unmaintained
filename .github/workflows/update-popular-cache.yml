@@ -24,7 +24,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
       
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -36,7 +36,7 @@ jobs:
       
       - name: Build popular packages cache
         env:
-          PAT: ${{ secrets.GITHUB_TOKEN }}
+          PAT: ${{ secrets.PAT }}
         run: |
           PACKAGE_COUNT="${{ github.event.inputs.count || '500' }}"
           echo "Building cache with ${PACKAGE_COUNT} packages..."

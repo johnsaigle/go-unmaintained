@@ -16,7 +16,7 @@ This action scans your Go project for unmaintained dependencies using heuristics
 - name: Check for unmaintained dependencies
   uses: johnsaigle/go-unmaintained/.github/actions/check@v1
   with:
-    github-token: ${{ secrets.GITHUB_TOKEN }}
+    github-token: ${{ secrets.PAT }}
 ```
 
 ### With All Options
@@ -25,7 +25,7 @@ This action scans your Go project for unmaintained dependencies using heuristics
 - name: Check for unmaintained dependencies
   uses: johnsaigle/go-unmaintained/.github/actions/check@v1
   with:
-    github-token: ${{ secrets.GITHUB_TOKEN }}
+    github-token: ${{ secrets.PAT }}
     max-age: 365
     check-outdated: true
     fail-on-found: true
@@ -38,7 +38,7 @@ This action scans your Go project for unmaintained dependencies using heuristics
 
 | Input | Description | Required | Default |
 |-------|-------------|----------|---------|
-| `github-token` | GitHub token for API access | No | `${{ github.token }}` |
+| `github-token` | GitHub Personal Access Token (PAT) for API access | Yes | N/A |
 | `max-age` | Max age in days for inactive repos | No | `365` |
 | `check-outdated` | Check for outdated versions | No | `false` |
 | `fail-on-found` | Fail if unmaintained packages found | No | `true` |
@@ -96,7 +96,15 @@ jobs:
 
 Default 5 concurrent workers. Typical runtime: 30-60 seconds for 50 dependencies.
 
-If you hit rate limits, reduce `concurrency` or use a personal access token instead of the default `${{ github.token }}`.
+If you hit rate limits, reduce `concurrency`.
+
+### Required Setup
+
+This action requires a GitHub Personal Access Token (PAT):
+
+1. [Create a GitHub PAT](https://github.com/settings/tokens) with no scopes required (public repo access only)
+2. Add it as a repository secret named `PAT` in Settings → Secrets and variables → Actions → New repository secret
+3. Pass it to the action via `github-token: ${{ secrets.PAT }}`
 
 ## License
 

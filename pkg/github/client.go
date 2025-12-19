@@ -64,8 +64,10 @@ func (c *Client) ValidateToken(ctx context.Context) error {
 		return errors.New("GitHub client is nil")
 	}
 
-	// Test the token by fetching the authenticated user
-	user, resp, err := c.client.Users.Get(ctx, "")
+	// Test the token by trying to access a known public repository
+	// This works for both PATs and GITHUB_TOKEN (Actions token)
+	// Unlike Users.Get(), repository access doesn't require user-level permissions
+	_, resp, err := c.client.Repositories.Get(ctx, "golang", "go")
 	if err != nil {
 		if resp != nil {
 			switch resp.StatusCode {
@@ -75,23 +77,15 @@ func (c *Client) ValidateToken(ctx context.Context) error {
 				if resp.Header.Get("X-RateLimit-Remaining") == "0" {
 					return errors.New("GitHub API rate limit exceeded")
 				}
-				return errors.New("GitHub token lacks necessary permissions")
+				return errors.New("GitHub token lacks necessary permissions to access public repositories")
+			case 404:
+				// Repository not found, but token is valid enough to make the request
+				// This shouldn't happen with golang/go but handle gracefully
+				return nil
 			}
 		}
-		return fmt.Errorf("failed to validate GitHub token: %w", err)
-	}
-
-	if user == nil {
-		return errors.New("GitHub token validation returned nil user")
-	}
-
-	// Test access to public repositories by trying to access a known public repo
-	_, resp, err = c.client.Repositories.Get(ctx, "golang", "go")
-	if err != nil {
-		if resp != nil && resp.StatusCode == 403 {
-			return errors.New("GitHub token cannot access public repositories")
-		}
-		// Don't fail validation for other errors as the repo might not exist or be temporarily unavailable
+		// For other errors, don't fail validation - the token might still work
+		// Network issues, temporary GitHub outages, etc. shouldn't block usage
 	}
 
 	return nil
