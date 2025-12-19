@@ -1,17 +1,17 @@
 name: Update Popular Packages Cache
 
 on:
-  # Run weekly on Sundays at 00:00 UTC
+  # Run nightly at 02:00 UTC
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '0 2 * * *'
   
   # Allow manual trigger
   workflow_dispatch:
     inputs:
-      count:
-        description: 'Number of packages to cache'
+      new-entries:
+        description: 'Number of new entries to fetch (default: 10)'
         required: false
-        default: '500'
+        default: '10'
         type: string
 
 jobs:
@@ -34,14 +34,14 @@ jobs:
       - name: Build cache builder
         run: go build -o cache-builder ./cmd/cache-builder
       
-      - name: Build popular packages cache
+      - name: Build popular packages cache (incremental)
         env:
           PAT: ${{ secrets.PAT }}
         run: |
-          PACKAGE_COUNT="${{ github.event.inputs.count || '500' }}"
-          echo "Building cache with ${PACKAGE_COUNT} packages..."
+          NEW_ENTRIES="${{ github.event.inputs.new-entries || '10' }}"
+          echo "Building cache incrementally with ${NEW_ENTRIES} new entries..."
           ./cache-builder \
-            --count ${PACKAGE_COUNT} \
+            --new-entries ${NEW_ENTRIES} \
             --output ./pkg/popular/data/popular-packages.json \
             --token $PAT
       
@@ -62,23 +62,26 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add pkg/popular/data/popular-packages.json
-          git commit -m "chore: update popular packages cache
+          git commit -m "chore: update popular packages cache (incremental)
 
-          - Updated cache with top ${{ github.event.inputs.count || '500' }} Go packages
+          - Added ${{ github.event.inputs.new-entries || '10' }} new/refreshed entries
           - Built on $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          - Automated via GitHub Actions"
+          - Automated nightly via GitHub Actions"
           git push
       
       - name: Create summary
         if: steps.check_changes.outputs.changed == 'true'
         run: |
+          TOTAL_ENTRIES=$(jq 'length' pkg/popular/data/popular-packages.json)
           echo "## Cache Updated Successfully ✓" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Packages**: ${{ github.event.inputs.count || '500' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **New entries requested**: ${{ github.event.inputs.new-entries || '10' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total entries in cache**: ${TOTAL_ENTRIES}" >> $GITHUB_STEP_SUMMARY
           echo "- **Timestamp**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
           echo "- **File**: pkg/popular/data/popular-packages.json" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "The cache has been committed and pushed to the repository." >> $GITHUB_STEP_SUMMARY
+          echo "Incremental build: only new or stale (>90 days) entries were fetched." >> $GITHUB_STEP_SUMMARY
       
       - name: No changes summary
         if: steps.check_changes.outputs.changed == 'false'
