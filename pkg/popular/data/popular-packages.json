@@ -9,20 +9,20 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-19T20:49:49Z",
+    "last_updated": "2025-12-19T19:39:00Z",
     "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/ollama/ollama",
-    "owner": "ollama",
-    "repo": "ollama",
+    "package": "github.com/fatedier/frp",
+    "owner": "fatedier",
+    "repo": "frp",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-19T20:00:22Z",
+    "last_updated": "2025-12-19T20:43:05Z",
     "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/golang/go",
-    "owner": "golang",
-    "repo": "go",
+    "package": "github.com/junegunn/fzf",
+    "owner": "junegunn",
+    "repo": "fzf",
     "status": "active",
     "days_since_update": 0
   },
@@ -36,11 +36,47 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-19T19:39:00Z",
+    "last_updated": "2025-12-22T13:37:02Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/caddyserver/caddy",
+    "owner": "caddyserver",
+    "repo": "caddy",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:23:07Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/minio/minio",
+    "owner": "minio",
+    "repo": "minio",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T12:29:16Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/FiloSottile/mkcert",
+    "owner": "FiloSottile",
+    "repo": "mkcert",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:44:20Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/rclone/rclone",
+    "owner": "rclone",
+    "repo": "rclone",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:49:49Z",
     "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/fatedier/frp",
-    "owner": "fatedier",
-    "repo": "frp",
+    "package": "github.com/ollama/ollama",
+    "owner": "ollama",
+    "repo": "ollama",
     "status": "active",
     "days_since_update": 0
   },
@@ -63,6 +99,42 @@
     "days_since_update": 0
   },
   {
+    "last_updated": "2025-12-22T13:24:34Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/jesseduffield/lazygit",
+    "owner": "jesseduffield",
+    "repo": "lazygit",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:27:02Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/nektos/act",
+    "owner": "nektos",
+    "repo": "act",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:17:17Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/prometheus/prometheus",
+    "owner": "prometheus",
+    "repo": "prometheus",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:03:19Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/pocketbase/pocketbase",
+    "owner": "pocketbase",
+    "repo": "pocketbase",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
     "last_updated": "2025-12-19T20:55:11Z",
     "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
     "package": "github.com/syncthing/syncthing",
@@ -72,11 +144,11 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-19T20:43:05Z",
+    "last_updated": "2025-12-19T20:00:22Z",
     "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/junegunn/fzf",
-    "owner": "junegunn",
-    "repo": "fzf",
+    "package": "github.com/golang/go",
+    "owner": "golang",
+    "repo": "go",
     "status": "active",
     "days_since_update": 0
   },
@@ -86,6 +158,24 @@
     "package": "github.com/moby/moby",
     "owner": "moby",
     "repo": "moby",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-21T16:49:38Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/base/node",
+    "owner": "base",
+    "repo": "node",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:38:54Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/traefik/traefik",
+    "owner": "traefik",
+    "repo": "traefik",
     "status": "active",
     "days_since_update": 0
   }
