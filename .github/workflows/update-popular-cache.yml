@@ -18,7 +18,7 @@ jobs:
   update-cache:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Need write permission to commit
+      contents: write  # Workflow needs write permission (note: PAT secret must also have write access)
     
     steps:
       - name: Checkout repository

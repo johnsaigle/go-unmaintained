@@ -69,6 +69,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: johnsaigle/go-unmaintained/.github/actions/check@v1
+        with:
+          github-token: ${{ secrets.PAT }}
 ```
 
 ### Fail Only on Direct Dependencies
@@ -78,6 +80,7 @@ jobs:
   id: check
   uses: johnsaigle/go-unmaintained/.github/actions/check@v1
   with:
+    github-token: ${{ secrets.PAT }}
     fail-on-found: false
 
 - name: Fail if direct dependencies unmaintained
@@ -102,9 +105,23 @@ If you hit rate limits, reduce `concurrency`.
 
 This action requires a GitHub Personal Access Token (PAT):
 
-1. [Create a GitHub PAT](https://github.com/settings/tokens) with no scopes required (public repo access only)
-2. Add it as a repository secret named `PAT` in Settings → Secrets and variables → Actions → New repository secret
+1. [Create a GitHub PAT](https://github.com/settings/tokens):
+   - **For fine-grained tokens (recommended)**: 
+     - Click "Generate new token" → "Fine-grained tokens" → "Generate new token"
+     - Repository access: "All repositories" or "Only select repositories"
+     - Under "Repository permissions":
+       - **Metadata**: Automatically set to **Read-only** (required for all tokens)
+       - No other permissions needed for public repos
+   - **For classic tokens**: 
+     - Click "Generate new token" → "Generate new token (classic)"
+     - Select `public_repo` scope (or no scopes for read-only public access)
+2. Add it as a repository secret named `PAT`:
+   - Go to Settings → Secrets and variables → Actions
+   - Click "New repository secret"
+   - Name: `PAT`, Value: your token
 3. Pass it to the action via `github-token: ${{ secrets.PAT }}`
+
+**Note:** This action only reads repository data and doesn't commit anything, so it only needs read access.
 
 ## License
 
