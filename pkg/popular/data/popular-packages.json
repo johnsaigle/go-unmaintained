@@ -1,145 +1,10 @@
 [
   {
-    "last_updated": "2025-12-23T02:26:46Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/jesseduffield/lazydocker",
-    "owner": "jesseduffield",
-    "repo": "lazydocker",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T19:39:00Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/fatedier/frp",
-    "owner": "fatedier",
-    "repo": "frp",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T02:21:17Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/astaxie/build-web-application-with-golang",
-    "owner": "astaxie",
-    "repo": "build-web-application-with-golang",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T03:00:55Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/mudler/LocalAI",
-    "owner": "mudler",
-    "repo": "LocalAI",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T22:41:13Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/photoprism/photoprism",
-    "owner": "photoprism",
-    "repo": "photoprism",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T12:29:16Z",
+    "last_updated": "2025-12-22T13:44:20Z",
     "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/FiloSottile/mkcert",
-    "owner": "FiloSottile",
-    "repo": "mkcert",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:03:19Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/pocketbase/pocketbase",
-    "owner": "pocketbase",
-    "repo": "pocketbase",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T01:43:59Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/gogs/gogs",
-    "owner": "gogs",
-    "repo": "gogs",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T02:24:21Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/coreybutler/nvm-windows",
-    "owner": "coreybutler",
-    "repo": "nvm-windows",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T20:17:27Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/gin-gonic/gin",
-    "owner": "gin-gonic",
-    "repo": "gin",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:38:54Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/traefik/traefik",
-    "owner": "traefik",
-    "repo": "traefik",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T00:45:56Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/AlistGo/alist",
-    "owner": "AlistGo",
-    "repo": "alist",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:23:07Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/minio/minio",
-    "owner": "minio",
-    "repo": "minio",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T20:00:22Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/golang/go",
-    "owner": "golang",
-    "repo": "go",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:37:02Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/caddyserver/caddy",
-    "owner": "caddyserver",
-    "repo": "caddy",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:17:17Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/prometheus/prometheus",
-    "owner": "prometheus",
-    "repo": "prometheus",
+    "package": "github.com/rclone/rclone",
+    "owner": "rclone",
+    "repo": "rclone",
     "status": "active",
     "days_since_update": 0
   },
@@ -153,74 +18,11 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-19T18:06:42Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/moby/moby",
-    "owner": "moby",
-    "repo": "moby",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
     "last_updated": "2025-12-24T02:48:21Z",
     "cache_built_at": "2025-12-24T03:17:19.291556225Z",
     "package": "github.com/spf13/cobra",
     "owner": "spf13",
     "repo": "cobra",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T03:13:59Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/etcd-io/etcd",
-    "owner": "etcd-io",
-    "repo": "etcd",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T20:49:49Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/ollama/ollama",
-    "owner": "ollama",
-    "repo": "ollama",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T01:04:04Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/go-gitea/gitea",
-    "owner": "go-gitea",
-    "repo": "gitea",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T02:14:19Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/evanw/esbuild",
-    "owner": "evanw",
-    "repo": "esbuild",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T03:10:48Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/gofiber/fiber",
-    "owner": "gofiber",
-    "repo": "fiber",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T19:55:15Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/avelino/awesome-go",
-    "owner": "avelino",
-    "repo": "awesome-go",
     "status": "active",
     "days_since_update": 0
   },
@@ -234,65 +36,20 @@
     "days_since_update": 0
   },
   {
+    "last_updated": "2025-12-25T02:05:15Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/harness/harness",
+    "owner": "harness",
+    "repo": "harness",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
     "last_updated": "2025-12-19T20:43:05Z",
     "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
     "package": "github.com/junegunn/fzf",
     "owner": "junegunn",
     "repo": "fzf",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T19:20:08Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/go-gorm/gorm",
-    "owner": "go-gorm",
-    "repo": "gorm",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:44:20Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/rclone/rclone",
-    "owner": "rclone",
-    "repo": "rclone",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:27:02Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/nektos/act",
-    "owner": "nektos",
-    "repo": "act",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T00:28:12Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/ethereum/go-ethereum",
-    "owner": "ethereum",
-    "repo": "go-ethereum",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:24:34Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/jesseduffield/lazygit",
-    "owner": "jesseduffield",
-    "repo": "lazygit",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T01:43:55Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/hashicorp/terraform",
-    "owner": "hashicorp",
-    "repo": "terraform",
     "status": "active",
     "days_since_update": 0
   },
@@ -306,29 +63,83 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-24T02:40:20Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/milvus-io/milvus",
-    "owner": "milvus-io",
-    "repo": "milvus",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T01:33:20Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/pingcap/tidb",
-    "owner": "pingcap",
-    "repo": "tidb",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T18:40:38Z",
+    "last_updated": "2025-12-23T01:43:59Z",
     "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/wagoodman/dive",
-    "owner": "wagoodman",
-    "repo": "dive",
+    "package": "github.com/gogs/gogs",
+    "owner": "gogs",
+    "repo": "gogs",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:18:19Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/docker/compose",
+    "owner": "docker",
+    "repo": "compose",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:54:35Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/hashicorp/vault",
+    "owner": "hashicorp",
+    "repo": "vault",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:24:34Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/jesseduffield/lazygit",
+    "owner": "jesseduffield",
+    "repo": "lazygit",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:38:54Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/traefik/traefik",
+    "owner": "traefik",
+    "repo": "traefik",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:17:17Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/prometheus/prometheus",
+    "owner": "prometheus",
+    "repo": "prometheus",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T02:21:17Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/astaxie/build-web-application-with-golang",
+    "owner": "astaxie",
+    "repo": "build-web-application-with-golang",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T19:55:15Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/avelino/awesome-go",
+    "owner": "avelino",
+    "repo": "awesome-go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T03:13:59Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/etcd-io/etcd",
+    "owner": "etcd-io",
+    "repo": "etcd",
     "status": "active",
     "days_since_update": 0
   },
@@ -342,6 +153,150 @@
     "days_since_update": 0
   },
   {
+    "last_updated": "2025-12-19T20:17:27Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/gin-gonic/gin",
+    "owner": "gin-gonic",
+    "repo": "gin",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T00:45:56Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/AlistGo/alist",
+    "owner": "AlistGo",
+    "repo": "alist",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T03:00:55Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/mudler/LocalAI",
+    "owner": "mudler",
+    "repo": "LocalAI",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T01:28:53Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/unknwon/the-way-to-go_ZH_CN",
+    "owner": "unknwon",
+    "repo": "the-way-to-go_ZH_CN",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T17:19:42Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/halfrost/LeetCode-Go",
+    "owner": "halfrost",
+    "repo": "LeetCode-Go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T22:41:13Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/photoprism/photoprism",
+    "owner": "photoprism",
+    "repo": "photoprism",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T18:40:38Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/wagoodman/dive",
+    "owner": "wagoodman",
+    "repo": "dive",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T19:20:08Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/go-gorm/gorm",
+    "owner": "go-gorm",
+    "repo": "gorm",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T19:39:00Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/fatedier/frp",
+    "owner": "fatedier",
+    "repo": "frp",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:00:22Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/golang/go",
+    "owner": "golang",
+    "repo": "go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:49:49Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/ollama/ollama",
+    "owner": "ollama",
+    "repo": "ollama",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T02:26:46Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/jesseduffield/lazydocker",
+    "owner": "jesseduffield",
+    "repo": "lazydocker",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T02:40:20Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/milvus-io/milvus",
+    "owner": "milvus-io",
+    "repo": "milvus",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T02:24:21Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/coreybutler/nvm-windows",
+    "owner": "coreybutler",
+    "repo": "nvm-windows",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T03:10:48Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/gofiber/fiber",
+    "owner": "gofiber",
+    "repo": "fiber",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T01:43:55Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/hashicorp/terraform",
+    "owner": "hashicorp",
+    "repo": "terraform",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
     "last_updated": "2025-12-19T18:32:30Z",
     "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
     "package": "github.com/gohugoio/hugo",
@@ -351,11 +306,146 @@
     "days_since_update": 0
   },
   {
+    "last_updated": "2025-12-24T02:14:19Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/evanw/esbuild",
+    "owner": "evanw",
+    "repo": "esbuild",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:23:07Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/minio/minio",
+    "owner": "minio",
+    "repo": "minio",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:37:02Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/caddyserver/caddy",
+    "owner": "caddyserver",
+    "repo": "caddy",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T19:29:42Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/istio/istio",
+    "owner": "istio",
+    "repo": "istio",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T12:29:16Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/FiloSottile/mkcert",
+    "owner": "FiloSottile",
+    "repo": "mkcert",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T01:33:20Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/pingcap/tidb",
+    "owner": "pingcap",
+    "repo": "tidb",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T03:14:31Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/danielmiessler/Fabric",
+    "owner": "danielmiessler",
+    "repo": "Fabric",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T00:28:12Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/ethereum/go-ethereum",
+    "owner": "ethereum",
+    "repo": "go-ethereum",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
     "last_updated": "2025-12-23T17:47:40Z",
     "cache_built_at": "2025-12-24T03:17:19.291556225Z",
     "package": "github.com/cli/cli",
     "owner": "cli",
     "repo": "cli",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T01:04:04Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/go-gitea/gitea",
+    "owner": "go-gitea",
+    "repo": "gitea",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:55:25Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/charmbracelet/bubbletea",
+    "owner": "charmbracelet",
+    "repo": "bubbletea",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:37:17Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/ehang-io/nps",
+    "owner": "ehang-io",
+    "repo": "nps",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:53:30Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/juanfont/headscale",
+    "owner": "juanfont",
+    "repo": "headscale",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:27:02Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/nektos/act",
+    "owner": "nektos",
+    "repo": "act",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:03:19Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/pocketbase/pocketbase",
+    "owner": "pocketbase",
+    "repo": "pocketbase",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T18:06:42Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/moby/moby",
+    "owner": "moby",
+    "repo": "moby",
     "status": "active",
     "days_since_update": 0
   }
