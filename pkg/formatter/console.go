@@ -49,6 +49,7 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 	fmt.Fprintln(w, "============================")
 
 	// Show unmaintained packages first (most important)
+	//nolint:nestif // Formatting logic requires nested conditionals for different display scenarios
 	if len(unmaintained) > 0 {
 		fmt.Fprintf(w, "\n🚨 UNMAINTAINED PACKAGES (%d found):\n", len(unmaintained))
 		fmt.Fprintln(w, "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -128,6 +129,7 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 	fmt.Fprint(w, strings.Repeat("═", 50)+"\n")
 	fmt.Fprintf(w, "Total dependencies analyzed: %d\n\n", summary.TotalDependencies)
 
+	//nolint:nestif // Summary formatting requires nested conditionals for different counts
 	if summary.UnmaintainedCount > 0 {
 		fmt.Fprintf(w, "🚨 UNMAINTAINED PACKAGES: %d", summary.UnmaintainedCount)
 		if summary.DirectUnmaintained > 0 || summary.IndirectUnmaintained > 0 {

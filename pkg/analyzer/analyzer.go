@@ -276,6 +276,7 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 	}
 
 	// Handle non-GitHub dependencies
+	//nolint:nestif // Complex dependency resolution logic requires nested conditionals
 	if !moduleInfo.IsGitHub {
 		result.Reason = ReasonUnknown
 
@@ -408,6 +409,7 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 	var latestVersion string
 
 	cachedRepoInfo, cachedVersion, cacheHit := a.cache.GetRepoInfo(owner, repo)
+	//nolint:nestif // Cache handling requires nested conditionals for different scenarios
 	if cacheHit {
 		repoInfo = cachedRepoInfo
 		latestVersion = cachedVersion
