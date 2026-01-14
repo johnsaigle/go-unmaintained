@@ -1,442 +1,28 @@
 [
   {
-    "last_updated": "2026-01-10T23:37:17Z",
-    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
-    "package": "github.com/GoogleContainerTools/skaffold",
-    "owner": "GoogleContainerTools",
-    "repo": "skaffold",
+    "last_updated": "2025-12-31T03:19:06Z",
+    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
+    "package": "github.com/gorilla/websocket",
+    "owner": "gorilla",
+    "repo": "websocket",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-28T01:21:34Z",
-    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
-    "package": "github.com/SagerNet/sing-box",
-    "owner": "SagerNet",
-    "repo": "sing-box",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T19:20:08Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/go-gorm/gorm",
-    "owner": "go-gorm",
-    "repo": "gorm",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T03:26:33Z",
-    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
-    "package": "github.com/spf13/viper",
-    "owner": "spf13",
-    "repo": "viper",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-25T02:55:25Z",
-    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
-    "package": "github.com/charmbracelet/bubbletea",
-    "owner": "charmbracelet",
-    "repo": "bubbletea",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-03T23:40:18Z",
-    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
-    "package": "github.com/inancgumus/learngo",
-    "owner": "inancgumus",
-    "repo": "learngo",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-03T02:59:19Z",
-    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
-    "package": "github.com/JanDeDobbeleer/oh-my-posh",
-    "owner": "JanDeDobbeleer",
-    "repo": "oh-my-posh",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-29T01:55:56Z",
-    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
-    "package": "github.com/cloudreve/cloudreve",
-    "owner": "cloudreve",
-    "repo": "cloudreve",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-25T03:14:31Z",
-    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
-    "package": "github.com/danielmiessler/Fabric",
-    "owner": "danielmiessler",
-    "repo": "Fabric",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-02T02:36:35Z",
-    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
-    "package": "github.com/jaegertracing/jaeger",
-    "owner": "jaegertracing",
-    "repo": "jaeger",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-13T01:19:21Z",
-    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
-    "package": "github.com/plandex-ai/plandex",
-    "owner": "plandex-ai",
-    "repo": "plandex",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T02:26:46Z",
+    "last_updated": "2025-12-23T00:41:51Z",
     "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/jesseduffield/lazydocker",
-    "owner": "jesseduffield",
-    "repo": "lazydocker",
+    "package": "github.com/v2ray/v2ray-core",
+    "owner": "v2ray",
+    "repo": "v2ray-core",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-24T02:14:19Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/evanw/esbuild",
-    "owner": "evanw",
-    "repo": "esbuild",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T19:39:00Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/fatedier/frp",
-    "owner": "fatedier",
-    "repo": "frp",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T01:43:15Z",
-    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
-    "package": "github.com/TecharoHQ/anubis",
-    "owner": "TecharoHQ",
-    "repo": "anubis",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-03T21:56:13Z",
-    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
-    "package": "github.com/lima-vm/lima",
-    "owner": "lima-vm",
-    "repo": "lima",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-03T02:02:55Z",
-    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
-    "package": "github.com/FiloSottile/age",
-    "owner": "FiloSottile",
-    "repo": "age",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T18:32:30Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/gohugoio/hugo",
-    "owner": "gohugoio",
-    "repo": "hugo",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-09T23:40:47Z",
-    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
-    "package": "github.com/VictoriaMetrics/VictoriaMetrics",
-    "owner": "VictoriaMetrics",
-    "repo": "VictoriaMetrics",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-12T03:38:09Z",
-    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
-    "package": "github.com/weaviate/weaviate",
-    "owner": "weaviate",
-    "repo": "weaviate",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-29T23:00:41Z",
-    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
-    "package": "github.com/yeasy/docker_practice",
-    "owner": "yeasy",
-    "repo": "docker_practice",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-05T03:29:08Z",
-    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
-    "package": "github.com/OpenListTeam/OpenList",
-    "owner": "OpenListTeam",
-    "repo": "OpenList",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T02:50:24Z",
-    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
-    "package": "github.com/binwiederhier/ntfy",
-    "owner": "binwiederhier",
-    "repo": "ntfy",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T20:00:22Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/golang/go",
-    "owner": "golang",
-    "repo": "go",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T02:48:21Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/spf13/cobra",
-    "owner": "spf13",
-    "repo": "cobra",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T17:47:40Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/cli/cli",
-    "owner": "cli",
-    "repo": "cli",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-01T03:01:24Z",
-    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
-    "package": "github.com/trufflesecurity/trufflehog",
-    "owner": "trufflesecurity",
-    "repo": "trufflehog",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-11T03:10:33Z",
-    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
-    "package": "github.com/GoogleContainerTools/kaniko",
-    "owner": "GoogleContainerTools",
-    "repo": "kaniko",
-    "status": "archived",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-30T01:47:49Z",
-    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
-    "package": "github.com/stretchr/testify",
-    "owner": "stretchr",
-    "repo": "testify",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-31T00:38:19Z",
-    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
-    "package": "github.com/asdf-vm/asdf",
-    "owner": "asdf-vm",
-    "repo": "asdf",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T01:39:12Z",
-    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
-    "package": "github.com/twpayne/chezmoi",
-    "owner": "twpayne",
-    "repo": "chezmoi",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-30T01:47:14Z",
-    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
-    "package": "github.com/go-kratos/kratos",
-    "owner": "go-kratos",
-    "repo": "kratos",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-01T03:22:00Z",
-    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
-    "package": "github.com/usememos/memos",
-    "owner": "usememos",
-    "repo": "memos",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-26T02:34:33Z",
-    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
-    "package": "github.com/XTLS/Xray-core",
-    "owner": "XTLS",
-    "repo": "Xray-core",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-30T02:46:53Z",
-    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
-    "package": "github.com/sirupsen/logrus",
-    "owner": "sirupsen",
-    "repo": "logrus",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-26T02:43:03Z",
-    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
-    "package": "github.com/1Panel-dev/1Panel",
-    "owner": "1Panel-dev",
-    "repo": "1Panel",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:24:34Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/jesseduffield/lazygit",
-    "owner": "jesseduffield",
-    "repo": "lazygit",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T02:27:56Z",
-    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
-    "package": "github.com/tinygo-org/tinygo",
-    "owner": "tinygo-org",
-    "repo": "tinygo",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-25T02:18:19Z",
-    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
-    "package": "github.com/docker/compose",
-    "owner": "docker",
-    "repo": "compose",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T03:27:30Z",
-    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
-    "package": "github.com/go-kit/kit",
-    "owner": "go-kit",
-    "repo": "kit",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T19:55:15Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/avelino/awesome-go",
-    "owner": "avelino",
-    "repo": "awesome-go",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-26T01:40:41Z",
-    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
-    "package": "github.com/derailed/k9s",
-    "owner": "derailed",
-    "repo": "k9s",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-30T21:41:06Z",
-    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
-    "package": "github.com/containrrr/watchtower",
-    "owner": "containrrr",
-    "repo": "watchtower",
-    "status": "archived",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-29T18:03:07Z",
-    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
-    "package": "github.com/inconshreveable/ngrok",
-    "owner": "inconshreveable",
-    "repo": "ngrok",
-    "status": "archived",
-    "days_since_update": 1
-  },
-  {
-    "last_updated": "2025-12-31T02:33:46Z",
-    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
-    "package": "github.com/gitleaks/gitleaks",
-    "owner": "gitleaks",
-    "repo": "gitleaks",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-26T19:20:54Z",
-    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
-    "package": "github.com/kubernetes/minikube",
-    "owner": "kubernetes",
-    "repo": "minikube",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-25T02:53:30Z",
-    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
-    "package": "github.com/juanfont/headscale",
-    "owner": "juanfont",
-    "repo": "headscale",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T23:51:08Z",
-    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
-    "package": "github.com/mailhog/MailHog",
-    "owner": "mailhog",
-    "repo": "MailHog",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T14:57:16Z",
-    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
-    "package": "github.com/hashicorp/packer",
-    "owner": "hashicorp",
-    "repo": "packer",
+    "last_updated": "2026-01-08T20:34:28Z",
+    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
+    "package": "github.com/influxdata/telegraf",
+    "owner": "influxdata",
+    "repo": "telegraf",
     "status": "active",
     "days_since_update": 0
   },
@@ -450,6 +36,78 @@
     "days_since_update": 0
   },
   {
+    "last_updated": "2026-01-13T11:15:42Z",
+    "cache_built_at": "2026-01-14T03:29:10.274494205Z",
+    "package": "github.com/xtaci/kcptun",
+    "owner": "xtaci",
+    "repo": "kcptun",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-09T03:05:02Z",
+    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
+    "package": "github.com/geektutu/7days-golang",
+    "owner": "geektutu",
+    "repo": "7days-golang",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-30T02:46:53Z",
+    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
+    "package": "github.com/sirupsen/logrus",
+    "owner": "sirupsen",
+    "repo": "logrus",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T02:29:18Z",
+    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
+    "package": "github.com/emirpasic/gods",
+    "owner": "emirpasic",
+    "repo": "gods",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-30T02:45:23Z",
+    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
+    "package": "github.com/github/github-mcp-server",
+    "owner": "github",
+    "repo": "github-mcp-server",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-01T07:52:36Z",
+    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
+    "package": "github.com/micro/go-micro",
+    "owner": "micro",
+    "repo": "go-micro",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-01T03:22:00Z",
+    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
+    "package": "github.com/usememos/memos",
+    "owner": "usememos",
+    "repo": "memos",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-29T01:35:27Z",
+    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
+    "package": "github.com/tailscale/tailscale",
+    "owner": "tailscale",
+    "repo": "tailscale",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
     "last_updated": "2026-01-02T23:11:44Z",
     "cache_built_at": "2026-01-03T03:16:01.940297627Z",
     "package": "github.com/dgraph-io/dgraph",
@@ -459,56 +117,11 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-27T03:00:20Z",
-    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
-    "package": "github.com/containers/podman",
-    "owner": "containers",
-    "repo": "podman",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-02T02:51:30Z",
-    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
-    "package": "github.com/terrastruct/d2",
-    "owner": "terrastruct",
-    "repo": "d2",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-05T13:36:41Z",
-    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
-    "package": "github.com/matryer/xbar",
-    "owner": "matryer",
-    "repo": "xbar",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-31T16:53:02Z",
-    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
-    "package": "github.com/valyala/fasthttp",
-    "owner": "valyala",
-    "repo": "fasthttp",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-29T12:07:55Z",
-    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
-    "package": "github.com/openfaas/faas",
-    "owner": "openfaas",
-    "repo": "faas",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-01T20:11:58Z",
-    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
-    "package": "github.com/mislav/hub",
-    "owner": "mislav",
-    "repo": "hub",
+    "last_updated": "2026-01-07T01:37:30Z",
+    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
+    "package": "github.com/bcicen/ctop",
+    "owner": "bcicen",
+    "repo": "ctop",
     "status": "active",
     "days_since_update": 0
   },
@@ -522,65 +135,47 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-04T02:14:35Z",
+    "last_updated": "2026-01-04T03:26:24Z",
     "cache_built_at": "2026-01-04T03:43:14.324117266Z",
-    "package": "github.com/casbin/casbin",
-    "owner": "casbin",
-    "repo": "casbin",
+    "package": "github.com/chaitin/SafeLine",
+    "owner": "chaitin",
+    "repo": "SafeLine",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-07T01:09:21Z",
-    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
-    "package": "github.com/google/gvisor",
-    "owner": "google",
-    "repo": "gvisor",
+    "last_updated": "2025-12-25T03:14:31Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/danielmiessler/Fabric",
+    "owner": "danielmiessler",
+    "repo": "Fabric",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-19T20:49:49Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/ollama/ollama",
-    "owner": "ollama",
-    "repo": "ollama",
+    "last_updated": "2026-01-09T18:01:45Z",
+    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
+    "package": "github.com/argoproj/argo-workflows",
+    "owner": "argoproj",
+    "repo": "argo-workflows",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-30T14:22:42Z",
-    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
-    "package": "github.com/tsenart/vegeta",
-    "owner": "tsenart",
-    "repo": "vegeta",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T02:21:07Z",
-    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
-    "package": "github.com/helm/helm",
-    "owner": "helm",
-    "repo": "helm",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-01T03:22:42Z",
-    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
-    "package": "github.com/XIU2/CloudflareSpeedTest",
-    "owner": "XIU2",
-    "repo": "CloudflareSpeedTest",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-26T01:07:55Z",
+    "last_updated": "2025-12-26T02:34:33Z",
     "cache_built_at": "2025-12-26T03:18:03.48057643Z",
-    "package": "github.com/labstack/echo",
-    "owner": "labstack",
-    "repo": "echo",
+    "package": "github.com/XTLS/Xray-core",
+    "owner": "XTLS",
+    "repo": "Xray-core",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-03T21:56:13Z",
+    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
+    "package": "github.com/lima-vm/lima",
+    "owner": "lima-vm",
+    "repo": "lima",
     "status": "active",
     "days_since_update": 0
   },
@@ -594,11 +189,182 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-08T21:44:30Z",
-    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
-    "package": "github.com/slackhq/nebula",
-    "owner": "slackhq",
-    "repo": "nebula",
+    "last_updated": "2025-12-24T02:14:19Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/evanw/esbuild",
+    "owner": "evanw",
+    "repo": "esbuild",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T02:48:21Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/spf13/cobra",
+    "owner": "spf13",
+    "repo": "cobra",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:55:11Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/syncthing/syncthing",
+    "owner": "syncthing",
+    "repo": "syncthing",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-30T21:41:06Z",
+    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
+    "package": "github.com/containrrr/watchtower",
+    "owner": "containrrr",
+    "repo": "watchtower",
+    "status": "archived",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-03T20:36:02Z",
+    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
+    "package": "github.com/grpc-ecosystem/grpc-gateway",
+    "owner": "grpc-ecosystem",
+    "repo": "grpc-gateway",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-04T08:13:30Z",
+    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
+    "package": "github.com/ahmetb/kubectx",
+    "owner": "ahmetb",
+    "repo": "kubectx",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-31T00:38:19Z",
+    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
+    "package": "github.com/asdf-vm/asdf",
+    "owner": "asdf-vm",
+    "repo": "asdf",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T19:39:00Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/fatedier/frp",
+    "owner": "fatedier",
+    "repo": "frp",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:24:34Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/jesseduffield/lazygit",
+    "owner": "jesseduffield",
+    "repo": "lazygit",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T01:21:34Z",
+    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
+    "package": "github.com/SagerNet/sing-box",
+    "owner": "SagerNet",
+    "repo": "sing-box",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-27T03:14:28Z",
+    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
+    "package": "github.com/wailsapp/wails",
+    "owner": "wailsapp",
+    "repo": "wails",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-01T03:22:42Z",
+    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
+    "package": "github.com/XIU2/CloudflareSpeedTest",
+    "owner": "XIU2",
+    "repo": "CloudflareSpeedTest",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T00:07:39Z",
+    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
+    "package": "github.com/charmbracelet/vhs",
+    "owner": "charmbracelet",
+    "repo": "vhs",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T23:26:28Z",
+    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
+    "package": "github.com/jmoiron/sqlx",
+    "owner": "jmoiron",
+    "repo": "sqlx",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-21T16:49:38Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/base/node",
+    "owner": "base",
+    "repo": "node",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-03T01:48:29Z",
+    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
+    "package": "github.com/go-chi/chi",
+    "owner": "go-chi",
+    "repo": "chi",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T14:00:13Z",
+    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
+    "package": "github.com/beego/beego",
+    "owner": "beego",
+    "repo": "beego",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-02T19:36:18Z",
+    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
+    "package": "github.com/argoproj/argo-cd",
+    "owner": "argoproj",
+    "repo": "argo-cd",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-29T03:26:26Z",
+    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
+    "package": "github.com/Wox-launcher/Wox",
+    "owner": "Wox-launcher",
+    "repo": "Wox",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-31T17:08:25Z",
+    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
+    "package": "github.com/flipped-aurora/gin-vue-admin",
+    "owner": "flipped-aurora",
+    "repo": "gin-vue-admin",
     "status": "active",
     "days_since_update": 0
   },
@@ -612,29 +378,38 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-06T02:39:08Z",
+    "last_updated": "2026-01-11T05:18:16Z",
+    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
+    "package": "github.com/dgraph-io/badger",
+    "owner": "dgraph-io",
+    "repo": "badger",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-27T01:48:12Z",
+    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
+    "package": "github.com/glanceapp/glance",
+    "owner": "glanceapp",
+    "repo": "glance",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T02:48:32Z",
     "cache_built_at": "2026-01-06T03:22:20.391456332Z",
-    "package": "github.com/henrygd/beszel",
-    "owner": "henrygd",
-    "repo": "beszel",
+    "package": "github.com/nats-io/nats-server",
+    "owner": "nats-io",
+    "repo": "nats-server",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-31T15:19:57Z",
-    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
-    "package": "github.com/microsoft/typescript-go",
-    "owner": "microsoft",
-    "repo": "typescript-go",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-26T02:39:07Z",
-    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
-    "package": "github.com/schollz/croc",
-    "owner": "schollz",
-    "repo": "croc",
+    "last_updated": "2025-12-23T03:13:59Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/etcd-io/etcd",
+    "owner": "etcd-io",
+    "repo": "etcd",
     "status": "active",
     "days_since_update": 0
   },
@@ -648,119 +423,137 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-04T00:06:47Z",
+    "last_updated": "2026-01-03T07:23:03Z",
     "cache_built_at": "2026-01-04T03:43:14.324117266Z",
-    "package": "github.com/getsops/sops",
-    "owner": "getsops",
-    "repo": "sops",
+    "package": "github.com/chai2010/advanced-go-programming-book",
+    "owner": "chai2010",
+    "repo": "advanced-go-programming-book",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-07T03:18:31Z",
+    "last_updated": "2025-12-19T20:00:22Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/golang/go",
+    "owner": "golang",
+    "repo": "go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-07T02:59:33Z",
     "cache_built_at": "2026-01-07T03:22:11.693715728Z",
-    "package": "github.com/ginuerzh/gost",
-    "owner": "ginuerzh",
-    "repo": "gost",
+    "package": "github.com/bluenviron/mediamtx",
+    "owner": "bluenviron",
+    "repo": "mediamtx",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-07T09:34:47Z",
+    "last_updated": "2026-01-03T00:32:30Z",
+    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
+    "package": "github.com/samber/lo",
+    "owner": "samber",
+    "repo": "lo",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T03:20:16Z",
     "cache_built_at": "2026-01-08T03:22:38.448208254Z",
-    "package": "github.com/julienschmidt/httprouter",
-    "owner": "julienschmidt",
-    "repo": "httprouter",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-30T23:42:16Z",
-    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
-    "package": "github.com/gocolly/colly",
-    "owner": "gocolly",
-    "repo": "colly",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-05T01:21:05Z",
-    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
-    "package": "github.com/yudai/gotty",
-    "owner": "yudai",
-    "repo": "gotty",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T02:57:00Z",
-    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
-    "package": "github.com/yorukot/superfile",
-    "owner": "yorukot",
-    "repo": "superfile",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T02:24:21Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/coreybutler/nvm-windows",
-    "owner": "coreybutler",
-    "repo": "nvm-windows",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T02:46:11Z",
-    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
-    "package": "github.com/goharbor/harbor",
-    "owner": "goharbor",
-    "repo": "harbor",
-    "status": "active",
-    "days_since_update": 1
-  },
-  {
-    "last_updated": "2026-01-08T22:03:41Z",
-    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
-    "package": "github.com/snail007/goproxy",
-    "owner": "snail007",
-    "repo": "goproxy",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:17:17Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/prometheus/prometheus",
-    "owner": "prometheus",
-    "repo": "prometheus",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-29T20:11:51Z",
-    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
-    "package": "github.com/kataras/iris",
-    "owner": "kataras",
-    "repo": "iris",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-11T02:02:25Z",
-    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
-    "package": "github.com/sundowndev/phoneinfoga",
-    "owner": "sundowndev",
-    "repo": "phoneinfoga",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-02T03:23:00Z",
-    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
-    "package": "github.com/charmbracelet/glow",
+    "package": "github.com/charmbracelet/crush",
     "owner": "charmbracelet",
-    "repo": "glow",
+    "repo": "crush",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-04T18:26:15Z",
+    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
+    "package": "github.com/go-playground/validator",
+    "owner": "go-playground",
+    "repo": "validator",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T01:39:12Z",
+    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
+    "package": "github.com/twpayne/chezmoi",
+    "owner": "twpayne",
+    "repo": "chezmoi",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-10T01:47:14Z",
+    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
+    "package": "github.com/wavetermdev/waveterm",
+    "owner": "wavetermdev",
+    "repo": "waveterm",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-26T02:39:07Z",
+    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
+    "package": "github.com/schollz/croc",
+    "owner": "schollz",
+    "repo": "croc",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-29T23:00:41Z",
+    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
+    "package": "github.com/yeasy/docker_practice",
+    "owner": "yeasy",
+    "repo": "docker_practice",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-10T05:52:20Z",
+    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
+    "package": "github.com/openimsdk/open-im-server",
+    "owner": "openimsdk",
+    "repo": "open-im-server",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-01T20:16:18Z",
+    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
+    "package": "github.com/slimtoolkit/slim",
+    "owner": "slimtoolkit",
+    "repo": "slim",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T22:41:13Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/photoprism/photoprism",
+    "owner": "photoprism",
+    "repo": "photoprism",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T19:20:08Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/go-gorm/gorm",
+    "owner": "go-gorm",
+    "repo": "gorm",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T14:13:01Z",
+    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
+    "package": "github.com/zincsearch/zincsearch",
+    "owner": "zincsearch",
+    "repo": "zincsearch",
     "status": "active",
     "days_since_update": 0
   },
@@ -774,38 +567,128 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-24T01:33:20Z",
+    "last_updated": "2026-01-10T02:57:00Z",
+    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
+    "package": "github.com/yorukot/superfile",
+    "owner": "yorukot",
+    "repo": "superfile",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-14T00:23:48Z",
+    "cache_built_at": "2026-01-14T03:29:10.274494205Z",
+    "package": "github.com/go-task/task",
+    "owner": "go-task",
+    "repo": "task",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-05T03:29:08Z",
+    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
+    "package": "github.com/OpenListTeam/OpenList",
+    "owner": "OpenListTeam",
+    "repo": "OpenList",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-13T02:09:04Z",
+    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
+    "package": "github.com/boltdb/bolt",
+    "owner": "boltdb",
+    "repo": "bolt",
+    "status": "archived",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-09T21:27:01Z",
+    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
+    "package": "github.com/hashicorp/nomad",
+    "owner": "hashicorp",
+    "repo": "nomad",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:44:20Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/rclone/rclone",
+    "owner": "rclone",
+    "repo": "rclone",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:43:05Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/junegunn/fzf",
+    "owner": "junegunn",
+    "repo": "fzf",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T03:00:55Z",
     "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/pingcap/tidb",
-    "owner": "pingcap",
-    "repo": "tidb",
+    "package": "github.com/mudler/LocalAI",
+    "owner": "mudler",
+    "repo": "LocalAI",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-03T00:27:53Z",
-    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
-    "package": "github.com/netbirdio/netbird",
-    "owner": "netbirdio",
-    "repo": "netbird",
+    "last_updated": "2026-01-06T03:20:31Z",
+    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
+    "package": "github.com/google/cadvisor",
+    "owner": "google",
+    "repo": "cadvisor",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-03T20:36:02Z",
-    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
-    "package": "github.com/grpc-ecosystem/grpc-gateway",
-    "owner": "grpc-ecosystem",
-    "repo": "grpc-gateway",
+    "last_updated": "2025-12-29T02:59:03Z",
+    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
+    "package": "github.com/projectdiscovery/nuclei",
+    "owner": "projectdiscovery",
+    "repo": "nuclei",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-27T01:59:26Z",
-    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
-    "package": "github.com/AdguardTeam/AdGuardHome",
-    "owner": "AdguardTeam",
-    "repo": "AdGuardHome",
+    "last_updated": "2026-01-02T02:51:30Z",
+    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
+    "package": "github.com/terrastruct/d2",
+    "owner": "terrastruct",
+    "repo": "d2",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T17:47:40Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/cli/cli",
+    "owner": "cli",
+    "repo": "cli",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T02:57:43Z",
+    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
+    "package": "github.com/apernet/hysteria",
+    "owner": "apernet",
+    "repo": "hysteria",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-26T02:43:03Z",
+    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
+    "package": "github.com/1Panel-dev/1Panel",
+    "owner": "1Panel-dev",
+    "repo": "1Panel",
     "status": "active",
     "days_since_update": 0
   },
@@ -828,146 +711,20 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-22T13:38:54Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/traefik/traefik",
-    "owner": "traefik",
-    "repo": "traefik",
+    "last_updated": "2025-12-31T15:19:57Z",
+    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
+    "package": "github.com/microsoft/typescript-go",
+    "owner": "microsoft",
+    "repo": "typescript-go",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-22T12:29:16Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/FiloSottile/mkcert",
-    "owner": "FiloSottile",
-    "repo": "mkcert",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:27:02Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/nektos/act",
-    "owner": "nektos",
-    "repo": "act",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-25T01:28:53Z",
-    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
-    "package": "github.com/unknwon/the-way-to-go_ZH_CN",
-    "owner": "unknwon",
-    "repo": "the-way-to-go_ZH_CN",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:44:20Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/rclone/rclone",
-    "owner": "rclone",
-    "repo": "rclone",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T00:45:02Z",
-    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
-    "package": "github.com/ent/ent",
-    "owner": "ent",
-    "repo": "ent",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-03T00:32:30Z",
+    "last_updated": "2026-01-03T02:59:19Z",
     "cache_built_at": "2026-01-03T03:16:01.940297627Z",
-    "package": "github.com/samber/lo",
-    "owner": "samber",
-    "repo": "lo",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-06T02:37:57Z",
-    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
-    "package": "github.com/navidrome/navidrome",
-    "owner": "navidrome",
-    "repo": "navidrome",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-02T19:36:18Z",
-    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
-    "package": "github.com/argoproj/argo-cd",
-    "owner": "argoproj",
-    "repo": "argo-cd",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-13T03:20:10Z",
-    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
-    "package": "github.com/keploy/keploy",
-    "owner": "keploy",
-    "repo": "keploy",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T19:29:42Z",
-    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
-    "package": "github.com/istio/istio",
-    "owner": "istio",
-    "repo": "istio",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-25T14:00:13Z",
-    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
-    "package": "github.com/beego/beego",
-    "owner": "beego",
-    "repo": "beego",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T02:45:02Z",
-    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
-    "package": "github.com/seaweedfs/seaweedfs",
-    "owner": "seaweedfs",
-    "repo": "seaweedfs",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-05T00:54:30Z",
-    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
-    "package": "github.com/rakyll/hey",
-    "owner": "rakyll",
-    "repo": "hey",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-27T01:31:13Z",
-    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
-    "package": "github.com/cockroachdb/cockroach",
-    "owner": "cockroachdb",
-    "repo": "cockroach",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T00:34:27Z",
-    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
-    "package": "github.com/fyne-io/fyne",
-    "owner": "fyne-io",
-    "repo": "fyne",
+    "package": "github.com/JanDeDobbeleer/oh-my-posh",
+    "owner": "JanDeDobbeleer",
+    "repo": "oh-my-posh",
     "status": "active",
     "days_since_update": 0
   },
@@ -981,668 +738,11 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-10T05:52:20Z",
-    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
-    "package": "github.com/openimsdk/open-im-server",
-    "owner": "openimsdk",
-    "repo": "open-im-server",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T23:59:08Z",
-    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
-    "package": "github.com/jpillora/chisel",
-    "owner": "jpillora",
-    "repo": "chisel",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-02T00:29:01Z",
-    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
-    "package": "github.com/GopeedLab/gopeed",
-    "owner": "GopeedLab",
-    "repo": "gopeed",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-12T03:41:23Z",
-    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
-    "package": "github.com/ffuf/ffuf",
-    "owner": "ffuf",
-    "repo": "ffuf",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T20:17:27Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/gin-gonic/gin",
-    "owner": "gin-gonic",
-    "repo": "gin",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-01T16:30:39Z",
-    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
-    "package": "github.com/grpc/grpc-go",
-    "owner": "grpc",
-    "repo": "grpc-go",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T17:24:15Z",
-    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
-    "package": "github.com/hyperledger/fabric",
-    "owner": "hyperledger",
-    "repo": "fabric",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T14:57:23Z",
-    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
-    "package": "github.com/hoanhan101/ultimate-go",
-    "owner": "hoanhan101",
-    "repo": "ultimate-go",
-    "status": "active",
-    "days_since_update": 2
-  },
-  {
-    "last_updated": "2025-12-23T03:13:59Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/etcd-io/etcd",
-    "owner": "etcd-io",
-    "repo": "etcd",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T19:52:44Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/kubernetes/kubernetes",
-    "owner": "kubernetes",
-    "repo": "kubernetes",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-02T19:39:07Z",
-    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
-    "package": "github.com/redis/go-redis",
-    "owner": "redis",
-    "repo": "go-redis",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-31T17:01:31Z",
-    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
-    "package": "github.com/urfave/cli",
-    "owner": "urfave",
-    "repo": "cli",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-31T03:19:06Z",
-    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
-    "package": "github.com/gorilla/websocket",
-    "owner": "gorilla",
-    "repo": "websocket",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-02T00:56:46Z",
-    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
-    "package": "github.com/charmbracelet/gum",
-    "owner": "charmbracelet",
-    "repo": "gum",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T02:29:18Z",
-    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
-    "package": "github.com/emirpasic/gods",
-    "owner": "emirpasic",
-    "repo": "gods",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T16:12:14Z",
-    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
-    "package": "github.com/goreleaser/goreleaser",
-    "owner": "goreleaser",
-    "repo": "goreleaser",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-26T02:32:20Z",
-    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
-    "package": "github.com/v2fly/v2ray-core",
-    "owner": "v2fly",
-    "repo": "v2ray-core",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T00:28:12Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/ethereum/go-ethereum",
-    "owner": "ethereum",
-    "repo": "go-ethereum",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T02:59:17Z",
-    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
-    "package": "github.com/jeessy2/ddns-go",
-    "owner": "jeessy2",
-    "repo": "ddns-go",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-11T05:18:16Z",
-    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
-    "package": "github.com/dgraph-io/badger",
-    "owner": "dgraph-io",
-    "repo": "badger",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-30T03:19:58Z",
-    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
-    "package": "github.com/nsqio/nsq",
-    "owner": "nsqio",
-    "repo": "nsq",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-30T03:17:05Z",
-    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
-    "package": "github.com/ccxt/ccxt",
-    "owner": "ccxt",
-    "repo": "ccxt",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:23:07Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/minio/minio",
-    "owner": "minio",
-    "repo": "minio",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-07T02:22:52Z",
-    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
-    "package": "github.com/temporalio/temporal",
-    "owner": "temporalio",
-    "repo": "temporal",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T20:55:11Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/syncthing/syncthing",
-    "owner": "syncthing",
-    "repo": "syncthing",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T01:39:59Z",
-    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
-    "package": "github.com/zyedidia/micro",
-    "owner": "zyedidia",
-    "repo": "micro",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T18:06:42Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/moby/moby",
-    "owner": "moby",
-    "repo": "moby",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T09:57:10Z",
-    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
-    "package": "github.com/kubernetes/kops",
-    "owner": "kubernetes",
-    "repo": "kops",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T01:47:14Z",
-    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
-    "package": "github.com/wavetermdev/waveterm",
-    "owner": "wavetermdev",
-    "repo": "waveterm",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-12T00:19:23Z",
-    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
-    "package": "github.com/apache/answer",
-    "owner": "apache",
-    "repo": "answer",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T17:19:42Z",
-    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
-    "package": "github.com/halfrost/LeetCode-Go",
-    "owner": "halfrost",
-    "repo": "LeetCode-Go",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-31T10:42:08Z",
-    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
-    "package": "github.com/quii/learn-go-with-tests",
-    "owner": "quii",
-    "repo": "learn-go-with-tests",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-06T00:07:39Z",
-    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
-    "package": "github.com/charmbracelet/vhs",
-    "owner": "charmbracelet",
-    "repo": "vhs",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T01:19:27Z",
-    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
-    "package": "github.com/helm/charts",
-    "owner": "helm",
-    "repo": "charts",
-    "status": "archived",
-    "days_since_update": 3
-  },
-  {
-    "last_updated": "2026-01-12T00:35:01Z",
-    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
-    "package": "github.com/dagger/dagger",
-    "owner": "dagger",
-    "repo": "dagger",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-30T23:39:36Z",
-    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
-    "package": "github.com/go-delve/delve",
-    "owner": "go-delve",
-    "repo": "delve",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T03:20:16Z",
-    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
-    "package": "github.com/charmbracelet/crush",
-    "owner": "charmbracelet",
-    "repo": "crush",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-27T01:49:03Z",
-    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
-    "package": "github.com/aquasecurity/trivy",
-    "owner": "aquasecurity",
-    "repo": "trivy",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-09T16:37:24Z",
-    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
-    "package": "github.com/pion/webrtc",
-    "owner": "pion",
-    "repo": "webrtc",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-04T00:54:34Z",
-    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
-    "package": "github.com/containerd/containerd",
-    "owner": "containerd",
-    "repo": "containerd",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-02T01:44:26Z",
-    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
-    "package": "github.com/air-verse/air",
-    "owner": "air-verse",
-    "repo": "air",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-13T02:09:04Z",
-    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
-    "package": "github.com/boltdb/bolt",
-    "owner": "boltdb",
-    "repo": "bolt",
-    "status": "archived",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-01T01:44:36Z",
-    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
-    "package": "github.com/cilium/cilium",
-    "owner": "cilium",
-    "repo": "cilium",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-07T01:37:30Z",
-    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
-    "package": "github.com/bcicen/ctop",
-    "owner": "bcicen",
-    "repo": "ctop",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-07T02:59:33Z",
-    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
-    "package": "github.com/bluenviron/mediamtx",
-    "owner": "bluenviron",
-    "repo": "mediamtx",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-27T02:49:57Z",
-    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
-    "package": "github.com/restic/restic",
-    "owner": "restic",
-    "repo": "restic",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-13T00:40:58Z",
-    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
-    "package": "github.com/cayleygraph/cayley",
-    "owner": "cayleygraph",
-    "repo": "cayley",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-09T03:10:37Z",
-    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
-    "package": "github.com/Netflix/chaosmonkey",
-    "owner": "Netflix",
-    "repo": "chaosmonkey",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-09T03:05:02Z",
-    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
-    "package": "github.com/geektutu/7days-golang",
-    "owner": "geektutu",
-    "repo": "7days-golang",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-06T23:26:28Z",
-    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
-    "package": "github.com/jmoiron/sqlx",
-    "owner": "jmoiron",
-    "repo": "sqlx",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-04T08:13:30Z",
-    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
-    "package": "github.com/ahmetb/kubectx",
-    "owner": "ahmetb",
-    "repo": "kubectx",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T16:09:50Z",
-    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
-    "package": "github.com/grafana/loki",
-    "owner": "grafana",
-    "repo": "loki",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T00:45:56Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/AlistGo/alist",
-    "owner": "AlistGo",
-    "repo": "alist",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T02:40:20Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/milvus-io/milvus",
-    "owner": "milvus-io",
-    "repo": "milvus",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-01T05:22:40Z",
-    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
-    "package": "github.com/buger/goreplay",
-    "owner": "buger",
-    "repo": "goreplay",
-    "status": "active",
-    "days_since_update": 3
-  },
-  {
-    "last_updated": "2025-12-29T03:26:26Z",
-    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
-    "package": "github.com/Wox-launcher/Wox",
-    "owner": "Wox-launcher",
-    "repo": "Wox",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-29T02:59:03Z",
-    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
-    "package": "github.com/projectdiscovery/nuclei",
-    "owner": "projectdiscovery",
-    "repo": "nuclei",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T02:50:22Z",
-    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
-    "package": "github.com/livekit/livekit",
-    "owner": "livekit",
-    "repo": "livekit",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-03T01:48:29Z",
-    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
-    "package": "github.com/go-chi/chi",
-    "owner": "go-chi",
-    "repo": "chi",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-30T17:39:08Z",
-    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
-    "package": "github.com/rancher/rancher",
-    "owner": "rancher",
-    "repo": "rancher",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
     "last_updated": "2025-12-22T18:40:38Z",
     "cache_built_at": "2025-12-23T03:19:59.698643665Z",
     "package": "github.com/wagoodman/dive",
     "owner": "wagoodman",
     "repo": "dive",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-03T07:23:03Z",
-    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
-    "package": "github.com/chai2010/advanced-go-programming-book",
-    "owner": "chai2010",
-    "repo": "advanced-go-programming-book",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-09T02:34:16Z",
-    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
-    "package": "github.com/m1k1o/neko",
-    "owner": "m1k1o",
-    "repo": "neko",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-06T02:57:43Z",
-    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
-    "package": "github.com/apernet/hysteria",
-    "owner": "apernet",
-    "repo": "hysteria",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-12T03:10:50Z",
-    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
-    "package": "github.com/go-sql-driver/mysql",
-    "owner": "go-sql-driver",
-    "repo": "mysql",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-04T18:26:15Z",
-    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
-    "package": "github.com/go-playground/validator",
-    "owner": "go-playground",
-    "repo": "validator",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T01:04:04Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/go-gitea/gitea",
-    "owner": "go-gitea",
-    "repo": "gitea",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-04T03:26:24Z",
-    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
-    "package": "github.com/chaitin/SafeLine",
-    "owner": "chaitin",
-    "repo": "SafeLine",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-13T03:14:40Z",
-    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
-    "package": "github.com/mikefarah/yq",
-    "owner": "mikefarah",
-    "repo": "yq",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-09T23:41:10Z",
-    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
-    "package": "github.com/dutchcoders/transfer.sh",
-    "owner": "dutchcoders",
-    "repo": "transfer.sh",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-31T17:08:25Z",
-    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
-    "package": "github.com/flipped-aurora/gin-vue-admin",
-    "owner": "flipped-aurora",
-    "repo": "gin-vue-admin",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-13T00:49:26Z",
-    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
-    "package": "github.com/PuerkitoBio/goquery",
-    "owner": "PuerkitoBio",
-    "repo": "goquery",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-26T03:08:02Z",
-    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
-    "package": "github.com/filebrowser/filebrowser",
-    "owner": "filebrowser",
-    "repo": "filebrowser",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-10T09:53:11Z",
-    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
-    "package": "github.com/greyireland/algorithm-pattern",
-    "owner": "greyireland",
-    "repo": "algorithm-pattern",
     "status": "active",
     "days_since_update": 0
   },
@@ -1656,434 +756,47 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-27T03:09:38Z",
-    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
-    "package": "github.com/k3s-io/k3s",
-    "owner": "k3s-io",
-    "repo": "k3s",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-29T01:37:12Z",
-    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
-    "package": "github.com/abiosoft/colima",
-    "owner": "abiosoft",
-    "repo": "colima",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-11T00:04:53Z",
-    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
-    "package": "github.com/kubernetes/dashboard",
-    "owner": "kubernetes",
-    "repo": "dashboard",
-    "status": "active",
-    "days_since_update": 1
-  },
-  {
-    "last_updated": "2026-01-05T01:02:17Z",
-    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
-    "package": "github.com/kubernetes/ingress-nginx",
-    "owner": "kubernetes",
-    "repo": "ingress-nginx",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-25T02:37:17Z",
-    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
-    "package": "github.com/ehang-io/nps",
-    "owner": "ehang-io",
-    "repo": "nps",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-30T02:45:23Z",
-    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
-    "package": "github.com/github/github-mcp-server",
-    "owner": "github",
-    "repo": "github-mcp-server",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-29T02:29:25Z",
-    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
-    "package": "github.com/tmrts/go-patterns",
-    "owner": "tmrts",
-    "repo": "go-patterns",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-12T03:01:46Z",
-    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
-    "package": "github.com/tidwall/gjson",
-    "owner": "tidwall",
-    "repo": "gjson",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-26T02:50:44Z",
-    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
-    "package": "github.com/IceWhaleTech/CasaOS",
-    "owner": "IceWhaleTech",
-    "repo": "CasaOS",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T03:10:48Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/gofiber/fiber",
-    "owner": "gofiber",
-    "repo": "fiber",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-06T02:48:32Z",
-    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
-    "package": "github.com/nats-io/nats-server",
-    "owner": "nats-io",
-    "repo": "nats-server",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-12T19:07:32Z",
-    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
-    "package": "github.com/kubernetes-sigs/kind",
-    "owner": "kubernetes-sigs",
-    "repo": "kind",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-05T01:51:23Z",
-    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
-    "package": "github.com/GoogleCloudPlatform/microservices-demo",
-    "owner": "GoogleCloudPlatform",
-    "repo": "microservices-demo",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-27T14:45:56Z",
-    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
-    "package": "github.com/grafana/k6",
-    "owner": "grafana",
-    "repo": "k6",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-25T02:54:35Z",
-    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
-    "package": "github.com/hashicorp/vault",
-    "owner": "hashicorp",
-    "repo": "vault",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T22:03:50Z",
-    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
-    "package": "github.com/wtfutil/wtf",
-    "owner": "wtfutil",
-    "repo": "wtf",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-19T20:43:05Z",
-    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
-    "package": "github.com/junegunn/fzf",
-    "owner": "junegunn",
-    "repo": "fzf",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-07T23:26:16Z",
-    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
-    "package": "github.com/ory/hydra",
-    "owner": "ory",
-    "repo": "hydra",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-06T14:47:17Z",
-    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
-    "package": "github.com/joewalnes/websocketd",
-    "owner": "joewalnes",
-    "repo": "websocketd",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:03:19Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/pocketbase/pocketbase",
-    "owner": "pocketbase",
-    "repo": "pocketbase",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-05T22:34:58Z",
-    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
-    "package": "github.com/bettercap/bettercap",
-    "owner": "bettercap",
-    "repo": "bettercap",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-04T21:26:50Z",
-    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
-    "package": "github.com/dolthub/dolt",
-    "owner": "dolthub",
-    "repo": "dolt",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T20:34:28Z",
-    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
-    "package": "github.com/influxdata/telegraf",
-    "owner": "influxdata",
-    "repo": "telegraf",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T00:41:51Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/v2ray/v2ray-core",
-    "owner": "v2ray",
-    "repo": "v2ray-core",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-03T21:53:20Z",
-    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
-    "package": "github.com/qax-os/excelize",
-    "owner": "qax-os",
-    "repo": "excelize",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-24T03:00:55Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/mudler/LocalAI",
-    "owner": "mudler",
-    "repo": "LocalAI",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-06T14:13:01Z",
-    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
-    "package": "github.com/zincsearch/zincsearch",
-    "owner": "zincsearch",
-    "repo": "zincsearch",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T23:56:28Z",
-    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
-    "package": "github.com/opentofu/opentofu",
-    "owner": "opentofu",
-    "repo": "opentofu",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-09T18:01:45Z",
-    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
-    "package": "github.com/argoproj/argo-workflows",
-    "owner": "argoproj",
-    "repo": "argo-workflows",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-21T16:49:38Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/base/node",
-    "owner": "base",
-    "repo": "node",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T01:43:55Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/hashicorp/terraform",
-    "owner": "hashicorp",
-    "repo": "terraform",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-09T21:27:01Z",
-    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
-    "package": "github.com/hashicorp/nomad",
-    "owner": "hashicorp",
-    "repo": "nomad",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-23T01:43:59Z",
-    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
-    "package": "github.com/gogs/gogs",
-    "owner": "gogs",
-    "repo": "gogs",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-01T07:52:36Z",
-    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
-    "package": "github.com/micro/go-micro",
-    "owner": "micro",
-    "repo": "go-micro",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-01T20:16:18Z",
-    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
-    "package": "github.com/slimtoolkit/slim",
-    "owner": "slimtoolkit",
-    "repo": "slim",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-06T03:05:27Z",
-    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
-    "package": "github.com/golangci/golangci-lint",
-    "owner": "golangci",
-    "repo": "golangci-lint",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-27T03:14:28Z",
-    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
-    "package": "github.com/wailsapp/wails",
-    "owner": "wailsapp",
-    "repo": "wails",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-05T00:10:43Z",
-    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
-    "package": "github.com/gravitational/teleport",
-    "owner": "gravitational",
-    "repo": "teleport",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-25T02:05:15Z",
-    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
-    "package": "github.com/harness/harness",
-    "owner": "harness",
-    "repo": "harness",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-28T01:11:44Z",
-    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
-    "package": "github.com/hashicorp/consul",
-    "owner": "hashicorp",
-    "repo": "consul",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-06T02:21:54Z",
-    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
-    "package": "github.com/knadh/listmonk",
-    "owner": "knadh",
-    "repo": "listmonk",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-06T19:43:09Z",
-    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
-    "package": "github.com/TheAlgorithms/Go",
-    "owner": "TheAlgorithms",
-    "repo": "Go",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-22T13:37:02Z",
-    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
-    "package": "github.com/caddyserver/caddy",
-    "owner": "caddyserver",
-    "repo": "caddy",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-02T19:23:58Z",
+    "last_updated": "2026-01-02T19:39:07Z",
     "cache_built_at": "2026-01-03T03:16:01.940297627Z",
-    "package": "github.com/vitessio/vitess",
-    "owner": "vitessio",
-    "repo": "vitess",
+    "package": "github.com/redis/go-redis",
+    "owner": "redis",
+    "repo": "go-redis",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-12T17:10:22Z",
-    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
-    "package": "github.com/muesli/duf",
-    "owner": "muesli",
-    "repo": "duf",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2026-01-08T18:03:19Z",
+    "last_updated": "2026-01-08T09:57:10Z",
     "cache_built_at": "2026-01-09T03:23:17.9017167Z",
-    "package": "github.com/sqlc-dev/sqlc",
-    "owner": "sqlc-dev",
-    "repo": "sqlc",
+    "package": "github.com/kubernetes/kops",
+    "owner": "kubernetes",
+    "repo": "kops",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-31T01:04:21Z",
+    "last_updated": "2025-12-31T16:53:02Z",
+    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
+    "package": "github.com/valyala/fasthttp",
+    "owner": "valyala",
+    "repo": "fasthttp",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-11T02:02:25Z",
+    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
+    "package": "github.com/sundowndev/phoneinfoga",
+    "owner": "sundowndev",
+    "repo": "phoneinfoga",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-30T14:22:42Z",
     "cache_built_at": "2025-12-31T03:19:58.833799762Z",
-    "package": "github.com/pulumi/pulumi",
-    "owner": "pulumi",
-    "repo": "pulumi",
-    "status": "active",
-    "days_since_update": 0
-  },
-  {
-    "last_updated": "2025-12-29T01:35:27Z",
-    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
-    "package": "github.com/tailscale/tailscale",
-    "owner": "tailscale",
-    "repo": "tailscale",
+    "package": "github.com/tsenart/vegeta",
+    "owner": "tsenart",
+    "repo": "vegeta",
     "status": "active",
     "days_since_update": 0
   },
@@ -2097,38 +810,434 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-25T16:21:49Z",
-    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
-    "package": "github.com/zeromicro/go-zero",
-    "owner": "zeromicro",
-    "repo": "go-zero",
+    "last_updated": "2025-12-23T01:43:55Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/hashicorp/terraform",
+    "owner": "hashicorp",
+    "repo": "terraform",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2026-01-06T03:20:31Z",
+    "last_updated": "2025-12-28T03:26:33Z",
+    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
+    "package": "github.com/spf13/viper",
+    "owner": "spf13",
+    "repo": "viper",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-30T03:19:58Z",
+    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
+    "package": "github.com/nsqio/nsq",
+    "owner": "nsqio",
+    "repo": "nsq",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-10T23:51:08Z",
+    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
+    "package": "github.com/mailhog/MailHog",
+    "owner": "mailhog",
+    "repo": "MailHog",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:05:15Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/harness/harness",
+    "owner": "harness",
+    "repo": "harness",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-30T03:17:05Z",
+    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
+    "package": "github.com/ccxt/ccxt",
+    "owner": "ccxt",
+    "repo": "ccxt",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-27T14:45:56Z",
+    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
+    "package": "github.com/grafana/k6",
+    "owner": "grafana",
+    "repo": "k6",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:03:19Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/pocketbase/pocketbase",
+    "owner": "pocketbase",
+    "repo": "pocketbase",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-10T01:43:15Z",
+    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
+    "package": "github.com/TecharoHQ/anubis",
+    "owner": "TecharoHQ",
+    "repo": "anubis",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-29T18:03:07Z",
+    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
+    "package": "github.com/inconshreveable/ngrok",
+    "owner": "inconshreveable",
+    "repo": "ngrok",
+    "status": "archived",
+    "days_since_update": 1
+  },
+  {
+    "last_updated": "2026-01-13T00:49:26Z",
+    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
+    "package": "github.com/PuerkitoBio/goquery",
+    "owner": "PuerkitoBio",
+    "repo": "goquery",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-13T11:18:01Z",
+    "cache_built_at": "2026-01-14T03:29:10.274494205Z",
+    "package": "github.com/GoogleCloudPlatform/terraformer",
+    "owner": "GoogleCloudPlatform",
+    "repo": "terraformer",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T19:52:44Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/kubernetes/kubernetes",
+    "owner": "kubernetes",
+    "repo": "kubernetes",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-10T02:50:22Z",
+    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
+    "package": "github.com/livekit/livekit",
+    "owner": "livekit",
+    "repo": "livekit",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-05T22:34:58Z",
     "cache_built_at": "2026-01-06T03:22:20.391456332Z",
-    "package": "github.com/google/cadvisor",
+    "package": "github.com/bettercap/bettercap",
+    "owner": "bettercap",
+    "repo": "bettercap",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-02T00:56:46Z",
+    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
+    "package": "github.com/charmbracelet/gum",
+    "owner": "charmbracelet",
+    "repo": "gum",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T02:45:02Z",
+    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
+    "package": "github.com/seaweedfs/seaweedfs",
+    "owner": "seaweedfs",
+    "repo": "seaweedfs",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-12T03:10:50Z",
+    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
+    "package": "github.com/go-sql-driver/mysql",
+    "owner": "go-sql-driver",
+    "repo": "mysql",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-10T14:57:16Z",
+    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
+    "package": "github.com/hashicorp/packer",
+    "owner": "hashicorp",
+    "repo": "packer",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T02:27:56Z",
+    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
+    "package": "github.com/tinygo-org/tinygo",
+    "owner": "tinygo-org",
+    "repo": "tinygo",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-26T01:40:41Z",
+    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
+    "package": "github.com/derailed/k9s",
+    "owner": "derailed",
+    "repo": "k9s",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-26T19:20:54Z",
+    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
+    "package": "github.com/kubernetes/minikube",
+    "owner": "kubernetes",
+    "repo": "minikube",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-07T03:18:31Z",
+    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
+    "package": "github.com/ginuerzh/gost",
+    "owner": "ginuerzh",
+    "repo": "gost",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-13T23:23:50Z",
+    "cache_built_at": "2026-01-14T03:29:10.274494205Z",
+    "package": "github.com/loft-sh/devpod",
+    "owner": "loft-sh",
+    "repo": "devpod",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-14T02:13:03Z",
+    "cache_built_at": "2026-01-14T03:29:10.274494205Z",
+    "package": "github.com/google/wire",
     "owner": "google",
-    "repo": "cadvisor",
+    "repo": "wire",
+    "status": "archived",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-07T09:34:47Z",
+    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
+    "package": "github.com/julienschmidt/httprouter",
+    "owner": "julienschmidt",
+    "repo": "httprouter",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-23T22:41:13Z",
-    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
-    "package": "github.com/photoprism/photoprism",
-    "owner": "photoprism",
-    "repo": "photoprism",
+    "last_updated": "2025-12-30T01:47:49Z",
+    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
+    "package": "github.com/stretchr/testify",
+    "owner": "stretchr",
+    "repo": "testify",
     "status": "active",
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-28T23:30:41Z",
+    "last_updated": "2026-01-10T14:57:23Z",
+    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
+    "package": "github.com/hoanhan101/ultimate-go",
+    "owner": "hoanhan101",
+    "repo": "ultimate-go",
+    "status": "active",
+    "days_since_update": 2
+  },
+  {
+    "last_updated": "2025-12-29T02:29:25Z",
     "cache_built_at": "2025-12-29T03:41:23.150724877Z",
-    "package": "github.com/authelia/authelia",
-    "owner": "authelia",
-    "repo": "authelia",
+    "package": "github.com/tmrts/go-patterns",
+    "owner": "tmrts",
+    "repo": "go-patterns",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T02:24:21Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/coreybutler/nvm-windows",
+    "owner": "coreybutler",
+    "repo": "nvm-windows",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-27T01:31:13Z",
+    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
+    "package": "github.com/cockroachdb/cockroach",
+    "owner": "cockroachdb",
+    "repo": "cockroach",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T00:45:56Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/AlistGo/alist",
+    "owner": "AlistGo",
+    "repo": "alist",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-12T19:07:32Z",
+    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
+    "package": "github.com/kubernetes-sigs/kind",
+    "owner": "kubernetes-sigs",
+    "repo": "kind",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-01T05:22:40Z",
+    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
+    "package": "github.com/buger/goreplay",
+    "owner": "buger",
+    "repo": "goreplay",
+    "status": "active",
+    "days_since_update": 3
+  },
+  {
+    "last_updated": "2026-01-10T23:37:17Z",
+    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
+    "package": "github.com/GoogleContainerTools/skaffold",
+    "owner": "GoogleContainerTools",
+    "repo": "skaffold",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T02:26:46Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/jesseduffield/lazydocker",
+    "owner": "jesseduffield",
+    "repo": "lazydocker",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-29T01:37:12Z",
+    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
+    "package": "github.com/abiosoft/colima",
+    "owner": "abiosoft",
+    "repo": "colima",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-30T01:47:14Z",
+    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
+    "package": "github.com/go-kratos/kratos",
+    "owner": "go-kratos",
+    "repo": "kratos",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:17:27Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/gin-gonic/gin",
+    "owner": "gin-gonic",
+    "repo": "gin",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-14T02:12:14Z",
+    "cache_built_at": "2026-01-14T03:29:10.274494205Z",
+    "package": "github.com/direnv/direnv",
+    "owner": "direnv",
+    "repo": "direnv",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-27T01:59:26Z",
+    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
+    "package": "github.com/AdguardTeam/AdGuardHome",
+    "owner": "AdguardTeam",
+    "repo": "AdGuardHome",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-01T03:01:24Z",
+    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
+    "package": "github.com/trufflesecurity/trufflehog",
+    "owner": "trufflesecurity",
+    "repo": "trufflehog",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-29T12:07:55Z",
+    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
+    "package": "github.com/openfaas/faas",
+    "owner": "openfaas",
+    "repo": "faas",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:17:17Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/prometheus/prometheus",
+    "owner": "prometheus",
+    "repo": "prometheus",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-12T15:21:50Z",
+    "cache_built_at": "2026-01-14T03:29:10.274494205Z",
+    "package": "github.com/tomnomnom/gron",
+    "owner": "tomnomnom",
+    "repo": "gron",
+    "status": "active",
+    "days_since_update": 1
+  },
+  {
+    "last_updated": "2026-01-09T23:41:10Z",
+    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
+    "package": "github.com/dutchcoders/transfer.sh",
+    "owner": "dutchcoders",
+    "repo": "transfer.sh",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-13T01:19:21Z",
+    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
+    "package": "github.com/plandex-ai/plandex",
+    "owner": "plandex-ai",
+    "repo": "plandex",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-10T09:53:11Z",
+    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
+    "package": "github.com/greyireland/algorithm-pattern",
+    "owner": "greyireland",
+    "repo": "algorithm-pattern",
     "status": "active",
     "days_since_update": 0
   },
@@ -2142,6 +1251,708 @@
     "days_since_update": 0
   },
   {
+    "last_updated": "2025-12-22T12:29:16Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/FiloSottile/mkcert",
+    "owner": "FiloSottile",
+    "repo": "mkcert",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T02:40:20Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/milvus-io/milvus",
+    "owner": "milvus-io",
+    "repo": "milvus",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-14T02:30:48Z",
+    "cache_built_at": "2026-01-14T03:29:10.274494205Z",
+    "package": "github.com/kgretzky/evilginx2",
+    "owner": "kgretzky",
+    "repo": "evilginx2",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-04T21:26:50Z",
+    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
+    "package": "github.com/dolthub/dolt",
+    "owner": "dolthub",
+    "repo": "dolt",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-10T16:12:14Z",
+    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
+    "package": "github.com/goreleaser/goreleaser",
+    "owner": "goreleaser",
+    "repo": "goreleaser",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-07T01:09:21Z",
+    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
+    "package": "github.com/google/gvisor",
+    "owner": "google",
+    "repo": "gvisor",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-13T03:20:10Z",
+    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
+    "package": "github.com/keploy/keploy",
+    "owner": "keploy",
+    "repo": "keploy",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-03T02:02:55Z",
+    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
+    "package": "github.com/FiloSottile/age",
+    "owner": "FiloSottile",
+    "repo": "age",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-27T02:49:57Z",
+    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
+    "package": "github.com/restic/restic",
+    "owner": "restic",
+    "repo": "restic",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-29T20:11:51Z",
+    "cache_built_at": "2025-12-30T03:21:14.943178327Z",
+    "package": "github.com/kataras/iris",
+    "owner": "kataras",
+    "repo": "iris",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:55:25Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/charmbracelet/bubbletea",
+    "owner": "charmbracelet",
+    "repo": "bubbletea",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-31T17:01:31Z",
+    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
+    "package": "github.com/urfave/cli",
+    "owner": "urfave",
+    "repo": "cli",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-13T00:40:58Z",
+    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
+    "package": "github.com/cayleygraph/cayley",
+    "owner": "cayleygraph",
+    "repo": "cayley",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-30T23:39:36Z",
+    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
+    "package": "github.com/go-delve/delve",
+    "owner": "go-delve",
+    "repo": "delve",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T00:45:02Z",
+    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
+    "package": "github.com/ent/ent",
+    "owner": "ent",
+    "repo": "ent",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:54:35Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/hashicorp/vault",
+    "owner": "hashicorp",
+    "repo": "vault",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-07T23:26:16Z",
+    "cache_built_at": "2026-01-08T03:22:38.448208254Z",
+    "package": "github.com/ory/hydra",
+    "owner": "ory",
+    "repo": "hydra",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-02T03:23:00Z",
+    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
+    "package": "github.com/charmbracelet/glow",
+    "owner": "charmbracelet",
+    "repo": "glow",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T20:49:49Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/ollama/ollama",
+    "owner": "ollama",
+    "repo": "ollama",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T02:50:24Z",
+    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
+    "package": "github.com/binwiederhier/ntfy",
+    "owner": "binwiederhier",
+    "repo": "ntfy",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:37:02Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/caddyserver/caddy",
+    "owner": "caddyserver",
+    "repo": "caddy",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-12T17:10:22Z",
+    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
+    "package": "github.com/muesli/duf",
+    "owner": "muesli",
+    "repo": "duf",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T19:43:09Z",
+    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
+    "package": "github.com/TheAlgorithms/Go",
+    "owner": "TheAlgorithms",
+    "repo": "Go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T18:32:30Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/gohugoio/hugo",
+    "owner": "gohugoio",
+    "repo": "hugo",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T01:43:59Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/gogs/gogs",
+    "owner": "gogs",
+    "repo": "gogs",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-09T02:34:16Z",
+    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
+    "package": "github.com/m1k1o/neko",
+    "owner": "m1k1o",
+    "repo": "neko",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-27T01:49:03Z",
+    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
+    "package": "github.com/aquasecurity/trivy",
+    "owner": "aquasecurity",
+    "repo": "trivy",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T19:29:42Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/istio/istio",
+    "owner": "istio",
+    "repo": "istio",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-11T03:10:33Z",
+    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
+    "package": "github.com/GoogleContainerTools/kaniko",
+    "owner": "GoogleContainerTools",
+    "repo": "kaniko",
+    "status": "archived",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-11T00:04:53Z",
+    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
+    "package": "github.com/kubernetes/dashboard",
+    "owner": "kubernetes",
+    "repo": "dashboard",
+    "status": "active",
+    "days_since_update": 1
+  },
+  {
+    "last_updated": "2025-12-26T02:50:44Z",
+    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
+    "package": "github.com/IceWhaleTech/CasaOS",
+    "owner": "IceWhaleTech",
+    "repo": "CasaOS",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-04T00:06:47Z",
+    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
+    "package": "github.com/getsops/sops",
+    "owner": "getsops",
+    "repo": "sops",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T23:56:28Z",
+    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
+    "package": "github.com/opentofu/opentofu",
+    "owner": "opentofu",
+    "repo": "opentofu",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T23:30:41Z",
+    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
+    "package": "github.com/authelia/authelia",
+    "owner": "authelia",
+    "repo": "authelia",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-31T02:33:46Z",
+    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
+    "package": "github.com/gitleaks/gitleaks",
+    "owner": "gitleaks",
+    "repo": "gitleaks",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:38:54Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/traefik/traefik",
+    "owner": "traefik",
+    "repo": "traefik",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T18:06:42Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/moby/moby",
+    "owner": "moby",
+    "repo": "moby",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-02T00:29:01Z",
+    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
+    "package": "github.com/GopeedLab/gopeed",
+    "owner": "GopeedLab",
+    "repo": "gopeed",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-26T02:32:20Z",
+    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
+    "package": "github.com/v2fly/v2ray-core",
+    "owner": "v2fly",
+    "repo": "v2ray-core",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T02:46:11Z",
+    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
+    "package": "github.com/goharbor/harbor",
+    "owner": "goharbor",
+    "repo": "harbor",
+    "status": "active",
+    "days_since_update": 1
+  },
+  {
+    "last_updated": "2025-12-28T02:21:07Z",
+    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
+    "package": "github.com/helm/helm",
+    "owner": "helm",
+    "repo": "helm",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T02:37:57Z",
+    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
+    "package": "github.com/navidrome/navidrome",
+    "owner": "navidrome",
+    "repo": "navidrome",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-01T01:44:36Z",
+    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
+    "package": "github.com/cilium/cilium",
+    "owner": "cilium",
+    "repo": "cilium",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-03T23:40:18Z",
+    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
+    "package": "github.com/inancgumus/learngo",
+    "owner": "inancgumus",
+    "repo": "learngo",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-07T02:22:52Z",
+    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
+    "package": "github.com/temporalio/temporal",
+    "owner": "temporalio",
+    "repo": "temporal",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T22:03:50Z",
+    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
+    "package": "github.com/wtfutil/wtf",
+    "owner": "wtfutil",
+    "repo": "wtf",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-03T00:27:53Z",
+    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
+    "package": "github.com/netbirdio/netbird",
+    "owner": "netbirdio",
+    "repo": "netbird",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T16:21:49Z",
+    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
+    "package": "github.com/zeromicro/go-zero",
+    "owner": "zeromicro",
+    "repo": "go-zero",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-12T03:01:46Z",
+    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
+    "package": "github.com/tidwall/gjson",
+    "owner": "tidwall",
+    "repo": "gjson",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-26T03:08:02Z",
+    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
+    "package": "github.com/filebrowser/filebrowser",
+    "owner": "filebrowser",
+    "repo": "filebrowser",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-04T02:14:35Z",
+    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
+    "package": "github.com/casbin/casbin",
+    "owner": "casbin",
+    "repo": "casbin",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T16:09:50Z",
+    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
+    "package": "github.com/grafana/loki",
+    "owner": "grafana",
+    "repo": "loki",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T17:24:15Z",
+    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
+    "package": "github.com/hyperledger/fabric",
+    "owner": "hyperledger",
+    "repo": "fabric",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-10T23:59:08Z",
+    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
+    "package": "github.com/jpillora/chisel",
+    "owner": "jpillora",
+    "repo": "chisel",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T22:03:41Z",
+    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
+    "package": "github.com/snail007/goproxy",
+    "owner": "snail007",
+    "repo": "goproxy",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T01:28:53Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/unknwon/the-way-to-go_ZH_CN",
+    "owner": "unknwon",
+    "repo": "the-way-to-go_ZH_CN",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-05T00:10:43Z",
+    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
+    "package": "github.com/gravitational/teleport",
+    "owner": "gravitational",
+    "repo": "teleport",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-09T16:37:24Z",
+    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
+    "package": "github.com/pion/webrtc",
+    "owner": "pion",
+    "repo": "webrtc",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T02:39:08Z",
+    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
+    "package": "github.com/henrygd/beszel",
+    "owner": "henrygd",
+    "repo": "beszel",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T17:19:42Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/halfrost/LeetCode-Go",
+    "owner": "halfrost",
+    "repo": "LeetCode-Go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-02T01:44:26Z",
+    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
+    "package": "github.com/air-verse/air",
+    "owner": "air-verse",
+    "repo": "air",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-05T01:21:05Z",
+    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
+    "package": "github.com/yudai/gotty",
+    "owner": "yudai",
+    "repo": "gotty",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-12T03:41:23Z",
+    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
+    "package": "github.com/ffuf/ffuf",
+    "owner": "ffuf",
+    "repo": "ffuf",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-05T00:54:30Z",
+    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
+    "package": "github.com/rakyll/hey",
+    "owner": "rakyll",
+    "repo": "hey",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-12T00:35:01Z",
+    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
+    "package": "github.com/dagger/dagger",
+    "owner": "dagger",
+    "repo": "dagger",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-09T03:10:37Z",
+    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
+    "package": "github.com/Netflix/chaosmonkey",
+    "owner": "Netflix",
+    "repo": "chaosmonkey",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-19T19:55:15Z",
+    "cache_built_at": "2025-12-19T15:57:31.016293164-05:00",
+    "package": "github.com/avelino/awesome-go",
+    "owner": "avelino",
+    "repo": "awesome-go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-03T21:53:20Z",
+    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
+    "package": "github.com/qax-os/excelize",
+    "owner": "qax-os",
+    "repo": "excelize",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:53:30Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/juanfont/headscale",
+    "owner": "juanfont",
+    "repo": "headscale",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-27T03:00:20Z",
+    "cache_built_at": "2025-12-27T03:16:53.906336245Z",
+    "package": "github.com/containers/podman",
+    "owner": "containers",
+    "repo": "podman",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-05T01:51:23Z",
+    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
+    "package": "github.com/GoogleCloudPlatform/microservices-demo",
+    "owner": "GoogleCloudPlatform",
+    "repo": "microservices-demo",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-01T16:30:39Z",
+    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
+    "package": "github.com/grpc/grpc-go",
+    "owner": "grpc",
+    "repo": "grpc-go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-09T23:40:47Z",
+    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
+    "package": "github.com/VictoriaMetrics/VictoriaMetrics",
+    "owner": "VictoriaMetrics",
+    "repo": "VictoriaMetrics",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-12T03:38:09Z",
+    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
+    "package": "github.com/weaviate/weaviate",
+    "owner": "weaviate",
+    "repo": "weaviate",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-31T01:04:21Z",
+    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
+    "package": "github.com/pulumi/pulumi",
+    "owner": "pulumi",
+    "repo": "pulumi",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T01:04:04Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/go-gitea/gitea",
+    "owner": "go-gitea",
+    "repo": "gitea",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T03:05:27Z",
+    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
+    "package": "github.com/golangci/golangci-lint",
+    "owner": "golangci",
+    "repo": "golangci-lint",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-30T23:42:16Z",
+    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
+    "package": "github.com/gocolly/colly",
+    "owner": "gocolly",
+    "repo": "colly",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
     "last_updated": "2025-12-29T14:19:45Z",
     "cache_built_at": "2025-12-30T03:21:14.943178327Z",
     "package": "github.com/dapr/dapr",
@@ -2151,11 +1962,290 @@
     "days_since_update": 0
   },
   {
-    "last_updated": "2025-12-27T01:48:12Z",
+    "last_updated": "2025-12-24T01:33:20Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/pingcap/tidb",
+    "owner": "pingcap",
+    "repo": "tidb",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-26T01:07:55Z",
+    "cache_built_at": "2025-12-26T03:18:03.48057643Z",
+    "package": "github.com/labstack/echo",
+    "owner": "labstack",
+    "repo": "echo",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T21:44:30Z",
+    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
+    "package": "github.com/slackhq/nebula",
+    "owner": "slackhq",
+    "repo": "nebula",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-05T01:02:17Z",
+    "cache_built_at": "2026-01-05T03:47:16.298250343Z",
+    "package": "github.com/kubernetes/ingress-nginx",
+    "owner": "kubernetes",
+    "repo": "ingress-nginx",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:23:07Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/minio/minio",
+    "owner": "minio",
+    "repo": "minio",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-10T02:59:17Z",
+    "cache_built_at": "2026-01-10T03:17:32.524725754Z",
+    "package": "github.com/jeessy2/ddns-go",
+    "owner": "jeessy2",
+    "repo": "ddns-go",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T02:21:54Z",
+    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
+    "package": "github.com/knadh/listmonk",
+    "owner": "knadh",
+    "repo": "listmonk",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-12T00:19:23Z",
+    "cache_built_at": "2026-01-12T03:41:15.79068756Z",
+    "package": "github.com/apache/answer",
+    "owner": "apache",
+    "repo": "answer",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-02T02:36:35Z",
+    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
+    "package": "github.com/jaegertracing/jaeger",
+    "owner": "jaegertracing",
+    "repo": "jaeger",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T01:11:44Z",
+    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
+    "package": "github.com/hashicorp/consul",
+    "owner": "hashicorp",
+    "repo": "consul",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:37:17Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/ehang-io/nps",
+    "owner": "ehang-io",
+    "repo": "nps",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T18:03:19Z",
+    "cache_built_at": "2026-01-09T03:23:17.9017167Z",
+    "package": "github.com/sqlc-dev/sqlc",
+    "owner": "sqlc-dev",
+    "repo": "sqlc",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-05T13:36:41Z",
+    "cache_built_at": "2026-01-06T03:22:20.391456332Z",
+    "package": "github.com/matryer/xbar",
+    "owner": "matryer",
+    "repo": "xbar",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-31T10:42:08Z",
+    "cache_built_at": "2026-01-01T03:42:56.035327609Z",
+    "package": "github.com/quii/learn-go-with-tests",
+    "owner": "quii",
+    "repo": "learn-go-with-tests",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-13T03:14:40Z",
+    "cache_built_at": "2026-01-13T03:21:19.647602997Z",
+    "package": "github.com/mikefarah/yq",
+    "owner": "mikefarah",
+    "repo": "yq",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-06T14:47:17Z",
+    "cache_built_at": "2026-01-07T03:22:11.693715728Z",
+    "package": "github.com/joewalnes/websocketd",
+    "owner": "joewalnes",
+    "repo": "websocketd",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-29T01:55:56Z",
+    "cache_built_at": "2025-12-29T03:41:23.150724877Z",
+    "package": "github.com/cloudreve/cloudreve",
+    "owner": "cloudreve",
+    "repo": "cloudreve",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T00:34:27Z",
+    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
+    "package": "github.com/fyne-io/fyne",
+    "owner": "fyne-io",
+    "repo": "fyne",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-30T17:39:08Z",
+    "cache_built_at": "2025-12-31T03:19:58.833799762Z",
+    "package": "github.com/rancher/rancher",
+    "owner": "rancher",
+    "repo": "rancher",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-27T03:09:38Z",
     "cache_built_at": "2025-12-27T03:16:53.906336245Z",
-    "package": "github.com/glanceapp/glance",
-    "owner": "glanceapp",
-    "repo": "glance",
+    "package": "github.com/k3s-io/k3s",
+    "owner": "k3s-io",
+    "repo": "k3s",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-08T01:19:27Z",
+    "cache_built_at": "2026-01-11T03:42:24.100528487Z",
+    "package": "github.com/helm/charts",
+    "owner": "helm",
+    "repo": "charts",
+    "status": "archived",
+    "days_since_update": 3
+  },
+  {
+    "last_updated": "2026-01-14T01:08:57Z",
+    "cache_built_at": "2026-01-14T03:29:10.274494205Z",
+    "package": "github.com/gotify/server",
+    "owner": "gotify",
+    "repo": "server",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-24T03:10:48Z",
+    "cache_built_at": "2025-12-24T03:17:19.291556225Z",
+    "package": "github.com/gofiber/fiber",
+    "owner": "gofiber",
+    "repo": "fiber",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-23T00:28:12Z",
+    "cache_built_at": "2025-12-23T03:19:59.698643665Z",
+    "package": "github.com/ethereum/go-ethereum",
+    "owner": "ethereum",
+    "repo": "go-ethereum",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T01:39:59Z",
+    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
+    "package": "github.com/zyedidia/micro",
+    "owner": "zyedidia",
+    "repo": "micro",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-25T02:18:19Z",
+    "cache_built_at": "2025-12-25T03:20:14.421173935Z",
+    "package": "github.com/docker/compose",
+    "owner": "docker",
+    "repo": "compose",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-02T19:23:58Z",
+    "cache_built_at": "2026-01-03T03:16:01.940297627Z",
+    "package": "github.com/vitessio/vitess",
+    "owner": "vitessio",
+    "repo": "vitess",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-22T13:27:02Z",
+    "cache_built_at": "2025-12-22T13:44:18.091080568Z",
+    "package": "github.com/nektos/act",
+    "owner": "nektos",
+    "repo": "act",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-04T00:54:34Z",
+    "cache_built_at": "2026-01-04T03:43:14.324117266Z",
+    "package": "github.com/containerd/containerd",
+    "owner": "containerd",
+    "repo": "containerd",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-01T20:11:58Z",
+    "cache_built_at": "2026-01-02T03:23:22.577030678Z",
+    "package": "github.com/mislav/hub",
+    "owner": "mislav",
+    "repo": "hub",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2025-12-28T03:27:30Z",
+    "cache_built_at": "2025-12-28T03:30:13.478961161Z",
+    "package": "github.com/go-kit/kit",
+    "owner": "go-kit",
+    "repo": "kit",
+    "status": "active",
+    "days_since_update": 0
+  },
+  {
+    "last_updated": "2026-01-14T03:17:34Z",
+    "cache_built_at": "2026-01-14T03:29:10.274494205Z",
+    "package": "github.com/sqshq/sampler",
+    "owner": "sqshq",
+    "repo": "sampler",
     "status": "active",
     "days_since_update": 0
   }
