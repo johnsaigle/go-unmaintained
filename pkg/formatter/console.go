@@ -26,8 +26,10 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 		if result.IsUnmaintained {
 			unmaintained = append(unmaintained, result)
 		} else if result.Reason == analyzer.ReasonUnknown {
+			// Only show truly unknown packages, not actively maintained ones
 			unknown = append(unknown, result)
 		} else {
+			// Packages with ReasonActive or other known-good reasons
 			maintained = append(maintained, result)
 		}
 	}
@@ -61,6 +63,14 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 			}
 
 			fmt.Fprintf(w, "❌ %s (%s) - %s\n", result.Package, depType, result.Details)
+
+			// Show retraction warning if applicable
+			if result.IsRetracted {
+				fmt.Fprintln(w, "   ⚠️  VERSION RETRACTED")
+				if result.RetractionReason != "" {
+					fmt.Fprintf(w, "   Reason: %s\n", result.RetractionReason)
+				}
+			}
 
 			// Show repository URL for verification
 			if url := GetRepositoryURL(result); url != "" {
@@ -116,6 +126,14 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 
 			fmt.Fprintf(w, "✅ %s (%s) - %s\n", result.Package, depType, result.Details)
 
+			// Show retraction warning even for maintained packages
+			if result.IsRetracted {
+				fmt.Fprintln(w, "   ⚠️  VERSION RETRACTED")
+				if result.RetractionReason != "" {
+					fmt.Fprintf(w, "   Reason: %s\n", result.RetractionReason)
+				}
+			}
+
 			// Show URL in verbose mode for verification
 			if url := GetRepositoryURL(result); url != "" {
 				fmt.Fprintf(w, "   🔗 %s\n", url)
@@ -155,6 +173,11 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 	if summary.UnknownCount > 0 {
 		fmt.Fprintf(w, "❓ UNKNOWN STATUS: %d\n", summary.UnknownCount)
 		fmt.Fprintln(w, "   (Non-GitHub dependencies that couldn't be fully analyzed)")
+	}
+
+	if summary.RetractedCount > 0 {
+		fmt.Fprintf(w, "\n⚠️  RETRACTED VERSIONS: %d\n", summary.RetractedCount)
+		fmt.Fprintln(w, "   (Module authors marked these versions as problematic)")
 	}
 
 	maintainedCount := summary.TotalDependencies - summary.UnmaintainedCount - summary.UnknownCount

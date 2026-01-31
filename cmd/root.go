@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -226,6 +228,111 @@ func determineFormat() string {
 }
 
 func analyzeSinglePackage(pkg string) error {
-	// TODO: Implement single package analysis
-	return fmt.Errorf("single package analysis not yet implemented")
+	// Parse package@version format
+	parts := strings.SplitN(pkg, "@", 2)
+	if len(parts) != 2 {
+		return fmt.Errorf("package must be in format: package@version (e.g., github.com/user/repo@v1.2.3)")
+	}
+
+	packagePath := parts[0]
+	version := parts[1]
+
+	// Create analyzer config
+	config := analyzer.Config{
+		Token:           token,
+		MaxAge:          time.Duration(maxAge) * 24 * time.Hour,
+		CacheDuration:   time.Duration(cacheDurationHr) * time.Hour,
+		ResolverTimeout: time.Duration(resolverTimeout) * time.Second,
+		Concurrency:     concurrency,
+		Verbose:         verbose,
+		CheckOutdated:   checkOutdated,
+		NoCache:         noCache,
+		ResolveUnknown:  resolveUnknown,
+		AsyncMode:       !syncMode,
+		ShowProgress:    false,
+		ShowDepPath:     tree,
+	}
+
+	// Create analyzer
+	a, err := analyzer.NewAnalyzer(config)
+	if err != nil {
+		return fmt.Errorf("failed to create analyzer: %w", err)
+	}
+
+	ctx := context.Background()
+
+	// Create a dependency from the package
+	dep := parser.Dependency{
+		Path:    packagePath,
+		Version: version,
+	}
+
+	// Analyze the package
+	result, err := a.AnalyzeDependency(ctx, dep)
+	if err != nil {
+		return fmt.Errorf("failed to analyze package: %w", err)
+	}
+
+	// Check for retractions
+	retractionInfo, err := a.CheckRetraction(ctx, packagePath, version)
+	if err != nil {
+		// Don't fail on retraction check errors, just warn
+		if !noWarnings {
+			fmt.Fprintf(os.Stderr, "Warning: Failed to check retractions: %v\n", err)
+		}
+	} else if retractionInfo != nil {
+		result.IsRetracted = retractionInfo.IsRetracted
+		result.RetractionReason = retractionInfo.Reason
+	}
+
+	// Format output
+	format := determineFormat()
+
+	if format == "json" {
+		// Output JSON
+		encoder := json.NewEncoder(os.Stdout)
+		encoder.SetIndent("", "  ")
+		return encoder.Encode(result)
+	}
+
+	// Console output
+	fmt.Printf("📦 Package: %s@%s\n\n", packagePath, version)
+
+	if result.IsRetracted {
+		fmt.Printf("⚠️  RETRACTED VERSION\n")
+		if result.RetractionReason != "" {
+			fmt.Printf("   Reason: %s\n", result.RetractionReason)
+		}
+		fmt.Println()
+	}
+
+	if result.IsUnmaintained {
+		fmt.Printf("❌ UNMAINTAINED\n")
+		fmt.Printf("   Reason: %s\n", result.Reason)
+		if result.Details != "" {
+			fmt.Printf("   Details: %s\n", result.Details)
+		}
+	} else {
+		fmt.Printf("✅ MAINTAINED\n")
+		if result.Details != "" {
+			fmt.Printf("   %s\n", result.Details)
+		}
+	}
+
+	if result.DaysSinceUpdate > 0 {
+		fmt.Printf("   Last updated: %d days ago\n", result.DaysSinceUpdate)
+	}
+
+	if checkOutdated && result.LatestVersion != "" && result.LatestVersion != version {
+		fmt.Printf("\n📌 Latest version: %s\n", result.LatestVersion)
+	}
+
+	fmt.Println()
+
+	// Set exit code if unmaintained or retracted (unless --no-exit-code)
+	if !noExitCode && (result.IsUnmaintained || result.IsRetracted) {
+		os.Exit(1)
+	}
+
+	return nil
 }

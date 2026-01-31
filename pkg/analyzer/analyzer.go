@@ -26,6 +26,7 @@ const (
 	ReasonStaleInactive UnmaintainedReason = "stale_dependencies_inactive_repo"
 	ReasonOutdated      UnmaintainedReason = "outdated_version"
 	ReasonUnknown       UnmaintainedReason = "unknown_source"
+	ReasonActive        UnmaintainedReason = "active_maintained"
 )
 
 // indexedDep represents a dependency with its index for concurrent processing
@@ -36,16 +37,18 @@ type indexedDep struct {
 
 // Result represents the analysis result for a single dependency
 type Result struct {
-	RepoInfo        *github.RepoInfo
-	Package         string
-	Reason          UnmaintainedReason
-	Details         string
-	CurrentVersion  string
-	LatestVersion   string
-	DependencyPath  []string
-	DaysSinceUpdate int
-	IsUnmaintained  bool
-	IsDirect        bool
+	RepoInfo         *github.RepoInfo
+	Package          string
+	Reason           UnmaintainedReason
+	Details          string
+	CurrentVersion   string
+	LatestVersion    string
+	DependencyPath   []string
+	DaysSinceUpdate  int
+	IsUnmaintained   bool
+	IsDirect         bool
+	IsRetracted      bool
+	RetractionReason string
 }
 
 // Config holds configuration for the analyzer
@@ -314,12 +317,15 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 				return result, nil
 			}
 
+			// Package is active and maintained
+			result.Reason = ReasonActive
 			result.Details = fmt.Sprintf("Active Go extended package, last updated %d days ago", result.DaysSinceUpdate)
 			return result, nil
 		}
 
 		// Check if it's a trusted module that should always be considered active
 		if parser.IsTrustedGoModule(dep.Path) {
+			result.Reason = ReasonActive
 			result.Details = getTrustedModuleStatus(dep.Path)
 			return result, nil
 		}
@@ -361,6 +367,8 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 				return result, nil
 			}
 
+			// Repository is active
+			result.Reason = ReasonActive
 			result.Details = fmt.Sprintf("Active %s repository, last updated %d days ago", hostName, result.DaysSinceUpdate)
 			return result, nil
 		}
@@ -371,6 +379,7 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 			if resolved != nil {
 				switch resolved.Status {
 				case resolver.StatusActive:
+					result.Reason = ReasonActive
 					result.Details = fmt.Sprintf("Active non-GitHub dependency (%s): %s", resolved.HostingProvider, resolved.Details)
 				case resolver.StatusNotFound:
 					result.IsUnmaintained = true
@@ -473,6 +482,8 @@ func (a *Analyzer) AnalyzeDependency(ctx context.Context, dep parser.Dependency)
 		}
 	}
 
+	// Repository is active and maintained
+	result.Reason = ReasonActive
 	result.Details = fmt.Sprintf("Active repository, last updated %d days ago", result.DaysSinceUpdate)
 	if result.LatestVersion != "" {
 		result.Details += fmt.Sprintf(" (version: %s, latest: %s)", dep.Version, result.LatestVersion)
@@ -514,6 +525,7 @@ type SummaryStats struct {
 	StaleInactiveCount   int
 	OutdatedCount        int
 	UnknownCount         int
+	RetractedCount       int
 }
 
 // GetSummary returns summary statistics from results
@@ -546,6 +558,11 @@ func GetSummary(results []Result) SummaryStats {
 		} else if result.Reason == ReasonUnknown {
 			// Track unknown dependencies separately
 			stats.UnknownCount++
+		}
+
+		// Track retracted versions separately (can be maintained or unmaintained)
+		if result.IsRetracted {
+			stats.RetractedCount++
 		}
 	}
 
@@ -602,8 +619,17 @@ func (a *Analyzer) resultFromPopularEntry(entry *popular.Entry, dep parser.Depen
 		result.Details = fmt.Sprintf("Repository not found%s", cacheAgeInfo)
 	case popular.StatusActive:
 		result.IsUnmaintained = false
+		result.Reason = ReasonActive
 		result.Details = fmt.Sprintf("Active repository, last updated %d days ago%s", daysSinceUpdate, cacheAgeInfo)
 	}
 
 	return result
+}
+
+// CheckRetraction checks if a module version is retracted
+func (a *Analyzer) CheckRetraction(ctx context.Context, modulePath, version string) (*resolver.RetractionInfo, error) {
+	if a.resolver == nil {
+		return nil, fmt.Errorf("resolver not initialized")
+	}
+	return a.resolver.CheckRetraction(ctx, modulePath, version)
 }
