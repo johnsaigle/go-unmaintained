@@ -11,19 +11,29 @@ on:
     - cron: '0 9 * * 1'
   workflow_dispatch:  # Allow manual triggering
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
-  issues: write
-  pull-requests: write
 
 jobs:
   check-self:
     name: Check Own Dependencies
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required for creating/updating issues on scheduled runs
+      issues: write
+      # Required for commenting on pull requests with dependency analysis
+      pull-requests: write
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -83,13 +93,17 @@ jobs:
       - name: Comment on PR (if PR)
         if: github.event_name == 'pull_request' && steps.check.outputs.unmaintained-count > 0
         uses: actions/github-script@v7
+        env:
+          UNMAINTAINED_COUNT: ${{ steps.check.outputs.unmaintained-count }}
+          DIRECT_COUNT: ${{ steps.check.outputs.direct-count }}
+          INDIRECT_COUNT: ${{ steps.check.outputs.indirect-count }}
         with:
           script: |
             const fs = require('fs');
             const results = JSON.parse(fs.readFileSync('./results.json', 'utf8'));
-            const unmaintainedCount = ${{ steps.check.outputs.unmaintained-count }};
-            const directCount = ${{ steps.check.outputs.direct-count }};
-            const indirectCount = ${{ steps.check.outputs.indirect-count }};
+            const unmaintainedCount = parseInt(process.env.UNMAINTAINED_COUNT);
+            const directCount = parseInt(process.env.DIRECT_COUNT);
+            const indirectCount = parseInt(process.env.INDIRECT_COUNT);
             
             let comment = '## 🔍 Self-Check: Unmaintained Dependencies\n\n';
             comment += `This PR affects a project that has **${unmaintainedCount}** unmaintained dependencies:\n`;
@@ -137,14 +151,19 @@ jobs:
       - name: Create/Update issue (if scheduled and problems found)
         if: github.event_name == 'schedule' && steps.check.outputs.unmaintained-count > 0
         uses: actions/github-script@v7
+        env:
+          UNMAINTAINED_COUNT: ${{ steps.check.outputs.unmaintained-count }}
+          DIRECT_COUNT: ${{ steps.check.outputs.direct-count }}
+          INDIRECT_COUNT: ${{ steps.check.outputs.indirect-count }}
+          TOTAL_COUNT: ${{ steps.check.outputs.total-count }}
         with:
           script: |
             const fs = require('fs');
             const results = JSON.parse(fs.readFileSync('./results.json', 'utf8'));
-            const unmaintainedCount = ${{ steps.check.outputs.unmaintained-count }};
-            const directCount = ${{ steps.check.outputs.direct-count }};
-            const indirectCount = ${{ steps.check.outputs.indirect-count }};
-            const totalCount = ${{ steps.check.outputs.total-count }};
+            const unmaintainedCount = parseInt(process.env.UNMAINTAINED_COUNT);
+            const directCount = parseInt(process.env.DIRECT_COUNT);
+            const indirectCount = parseInt(process.env.INDIRECT_COUNT);
+            const totalCount = parseInt(process.env.TOTAL_COUNT);
             
             // Check for existing issue
             const issues = await github.rest.issues.listForRepo({
@@ -251,17 +270,22 @@ jobs:
       
       - name: Add status badge info
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          TOTAL_COUNT: ${{ steps.check.outputs.total-count }}
+          UNMAINTAINED_COUNT: ${{ steps.check.outputs.unmaintained-count }}
         run: |
           echo "📊 Self-Check Results:"
-          echo "  Total: ${{ steps.check.outputs.total-count }}"
-          echo "  Unmaintained: ${{ steps.check.outputs.unmaintained-count }}"
+          echo "  Total: ${TOTAL_COUNT}"
+          echo "  Unmaintained: ${UNMAINTAINED_COUNT}"
           echo ""
-          echo "Badge URL: https://img.shields.io/badge/dependencies-${{ steps.check.outputs.unmaintained-count }}%20unmaintained-orange"
+          echo "Badge URL: https://img.shields.io/badge/dependencies-${UNMAINTAINED_COUNT}%20unmaintained-orange"
       
       - name: Fail if critical issues (direct archived)
         if: steps.check.outputs.direct-count > 0
+        env:
+          DIRECT_COUNT: ${{ steps.check.outputs.direct-count }}
         run: |
-          echo "::warning::Found ${{ steps.check.outputs.direct-count }} direct unmaintained dependencies"
+          echo "::warning::Found ${DIRECT_COUNT} direct unmaintained dependencies"
           # Don't fail the workflow - just warn
           # Uncomment below to enforce strict checks:
           # exit 1

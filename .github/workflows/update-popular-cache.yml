@@ -14,17 +14,27 @@ on:
         default: '10'
         type: string
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
 jobs:
   update-cache:
+    name: Update Cache
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Workflow needs write permission (note: PAT secret must also have write access)
+      # Required to commit and push popular packages cache updates
+      contents: write
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
+          persist-credentials: false
       
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -37,8 +47,8 @@ jobs:
       - name: Build popular packages cache (incremental)
         env:
           PAT: ${{ secrets.PAT }}
+          NEW_ENTRIES: ${{ github.event.inputs.new-entries || '10' }}
         run: |
-          NEW_ENTRIES="${{ github.event.inputs.new-entries || '10' }}"
           echo "Building cache incrementally with ${NEW_ENTRIES} new entries..."
           ./cache-builder \
             --new-entries ${NEW_ENTRIES} \
@@ -58,24 +68,28 @@ jobs:
       
       - name: Commit and push changes
         if: steps.check_changes.outputs.changed == 'true'
+        env:
+          NEW_ENTRIES: ${{ github.event.inputs.new-entries || '10' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add pkg/popular/data/popular-packages.json
           git commit -m "chore: update popular packages cache (incremental)
 
-          - Added ${{ github.event.inputs.new-entries || '10' }} new/refreshed entries
+          - Added ${NEW_ENTRIES} new/refreshed entries
           - Built on $(date -u '+%Y-%m-%d %H:%M:%S UTC')
           - Automated nightly via GitHub Actions"
           git push
       
       - name: Create summary
         if: steps.check_changes.outputs.changed == 'true'
+        env:
+          NEW_ENTRIES: ${{ github.event.inputs.new-entries || '10' }}
         run: |
           TOTAL_ENTRIES=$(jq 'length' pkg/popular/data/popular-packages.json)
           echo "## Cache Updated Successfully ✓" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **New entries requested**: ${{ github.event.inputs.new-entries || '10' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **New entries requested**: ${NEW_ENTRIES}" >> $GITHUB_STEP_SUMMARY
           echo "- **Total entries in cache**: ${TOTAL_ENTRIES}" >> $GITHUB_STEP_SUMMARY
           echo "- **Timestamp**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
           echo "- **File**: pkg/popular/data/popular-packages.json" >> $GITHUB_STEP_SUMMARY
