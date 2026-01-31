@@ -44,6 +44,23 @@ using heuristics.
 
 It analyzes go.mod files and their dependencies to detect packages that may pose 
 security or reliability risks due to lack of maintenance.`,
+		Example: `  # Scan current directory (requires PAT environment variable)
+  PAT=ghp_xxxx go-unmaintained
+
+  # Scan a specific project directory
+  PAT=ghp_xxxx go-unmaintained --target /path/to/project
+
+  # Show detailed output with dependency tree
+  PAT=ghp_xxxx go-unmaintained --verbose --tree
+
+  # Output in JSON format
+  PAT=ghp_xxxx go-unmaintained --format json
+
+  # Use in CI/CD with GitHub Actions annotations
+  go-unmaintained --token ${{ secrets.GITHUB_TOKEN }} --format github-actions
+
+  # Check for outdated versions and show warnings
+  go-unmaintained --check-outdated --verbose`,
 		RunE: runAnalysis,
 	}
 )
