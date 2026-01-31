@@ -40,17 +40,10 @@ var (
 		Use:   "go-unmaintained",
 		Short: "Find unmaintained packages in Go projects",
 		Long: `go-unmaintained is a CLI tool that automatically identifies unmaintained Go packages 
-using heuristics, similar to cargo-unmaintained for the Rust ecosystem.
+using heuristics.
 
 It analyzes go.mod files and their dependencies to detect packages that may pose 
-security or reliability risks due to lack of maintenance.
-
-Features:
-• Multi-platform support (GitHub, GitLab, Bitbucket)
-• Smart caching for performance
-• Concurrent analysis by default for speed
-• Intelligent rate limiting
-• Clear categorization of results`,
+security or reliability risks due to lack of maintenance.`,
 		RunE: runAnalysis,
 	}
 )
@@ -75,7 +68,6 @@ func init() {
 
 	// Output options
 	rootCmd.Flags().StringVar(&outputFormat, "format", "console", "Output format: console, json, github-actions, golangci-lint")
-	rootCmd.Flags().BoolVar(&jsonOutput, "json", false, "Output JSON format (deprecated: use --format=json)")
 	rootCmd.Flags().BoolVar(&githubActions, "github-actions", false, "Output GitHub Actions annotations format (deprecated: use --format=github-actions)")
 	rootCmd.Flags().BoolVar(&verbose, "verbose", false, "Show detailed information")
 	rootCmd.Flags().BoolVar(&tree, "tree", false, "Show dependency tree paths")
