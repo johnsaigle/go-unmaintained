@@ -572,29 +572,37 @@ func getTrustedModuleStatus(modulePath string) string {
 
 // resultFromPopularEntry converts a popular cache entry to an analysis result
 func (a *Analyzer) resultFromPopularEntry(entry *popular.Entry, dep parser.Dependency) Result {
+	daysSinceUpdate := entry.DaysSinceUpdate()
+	daysSinceCacheBuild := entry.DaysSinceCacheBuild()
+
 	result := Result{
 		Package:         dep.Path,
 		CurrentVersion:  dep.Version,
 		IsDirect:        !dep.Indirect,
-		DaysSinceUpdate: entry.DaysSinceUpdate,
+		DaysSinceUpdate: daysSinceUpdate,
+	}
+
+	cacheAgeInfo := ""
+	if daysSinceCacheBuild > 0 {
+		cacheAgeInfo = fmt.Sprintf(" (cache built %d days ago)", daysSinceCacheBuild)
 	}
 
 	switch entry.Status {
 	case popular.StatusArchived:
 		result.IsUnmaintained = true
 		result.Reason = ReasonArchived
-		result.Details = "Repository is archived (from popular cache)"
+		result.Details = fmt.Sprintf("Repository is archived%s", cacheAgeInfo)
 	case popular.StatusInactive:
 		result.IsUnmaintained = true
 		result.Reason = ReasonStaleInactive
-		result.Details = fmt.Sprintf("Repository inactive for %d days (from popular cache)", entry.DaysSinceUpdate)
+		result.Details = fmt.Sprintf("Repository inactive for %d days%s", daysSinceUpdate, cacheAgeInfo)
 	case popular.StatusNotFound:
 		result.IsUnmaintained = true
 		result.Reason = ReasonNotFound
-		result.Details = "Repository not found (from popular cache)"
+		result.Details = fmt.Sprintf("Repository not found%s", cacheAgeInfo)
 	case popular.StatusActive:
 		result.IsUnmaintained = false
-		result.Details = fmt.Sprintf("Active repository, last updated %d days ago (from popular cache)", entry.DaysSinceUpdate)
+		result.Details = fmt.Sprintf("Active repository, last updated %d days ago%s", daysSinceUpdate, cacheAgeInfo)
 	}
 
 	return result

@@ -260,19 +260,17 @@ func analyzeRepository(ctx context.Context, ghClient *ghclient.Client, owner, re
 		status = popular.StatusActive
 	}
 
-	daysSinceUpdate := repoInfo.DaysSinceLastActivity()
 	lastUpdated := repoInfo.UpdatedAt
 	if repoInfo.LastCommitAt != nil && repoInfo.LastCommitAt.After(repoInfo.UpdatedAt) {
 		lastUpdated = *repoInfo.LastCommitAt
 	}
 
 	return popular.Entry{
-		Package:         fmt.Sprintf("github.com/%s/%s", owner, repoName),
-		Owner:           owner,
-		Repo:            repoName,
-		Status:          status,
-		DaysSinceUpdate: daysSinceUpdate,
-		LastUpdated:     lastUpdated,
-		CacheBuiltAt:    cacheBuiltAt,
+		Package:      fmt.Sprintf("github.com/%s/%s", owner, repoName),
+		Owner:        owner,
+		Repo:         repoName,
+		Status:       status,
+		LastUpdated:  lastUpdated,
+		CacheBuiltAt: cacheBuiltAt,
 	}
 }

@@ -14,13 +14,12 @@ const (
 
 // Entry represents a cached popular package entry
 type Entry struct {
-	LastUpdated     time.Time `json:"last_updated"`
-	CacheBuiltAt    time.Time `json:"cache_built_at"`
-	Package         string    `json:"package"`
-	Owner           string    `json:"owner"`
-	Repo            string    `json:"repo"`
-	Status          Status    `json:"status"`
-	DaysSinceUpdate int       `json:"days_since_update"`
+	LastUpdated  time.Time `json:"last_updated"`
+	CacheBuiltAt time.Time `json:"cache_built_at"`
+	Package      string    `json:"package"`
+	Owner        string    `json:"owner"`
+	Repo         string    `json:"repo"`
+	Status       Status    `json:"status"`
 }
 
 // IsUnmaintained returns true if the package is considered unmaintained
@@ -28,4 +27,14 @@ func (e *Entry) IsUnmaintained() bool {
 	return e.Status == StatusArchived ||
 		e.Status == StatusInactive ||
 		e.Status == StatusNotFound
+}
+
+// DaysSinceUpdate returns the number of days since the package was last updated
+func (e *Entry) DaysSinceUpdate() int {
+	return int(time.Since(e.LastUpdated).Hours() / 24)
+}
+
+// DaysSinceCacheBuild returns the number of days since the cache was built
+func (e *Entry) DaysSinceCacheBuild() int {
+	return int(time.Since(e.CacheBuiltAt).Hours() / 24)
 }
