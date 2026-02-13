@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/johnsaigle/go-unmaintained/pkg/types"
 	"golang.org/x/mod/modfile"
 	"golang.org/x/mod/module"
 )
@@ -150,59 +151,22 @@ func ParseModulePath(path string) *ModuleInfo {
 	return info
 }
 
-// isWellKnownGoModule checks if the module is a well-known Go module
+// isWellKnownGoModule checks if the module is a well-known Go module.
+// Delegates to types.IsWellKnownModule for the canonical implementation.
 func isWellKnownGoModule(path string) bool {
-	wellKnownPrefixes := []string{
-		"golang.org/x/",
-		"google.golang.org/",
-		"cloud.google.com/",
-		"go.uber.org/",
-		"go.opentelemetry.io/",
-		"gopkg.in/",
-		"k8s.io/",
-		"sigs.k8s.io/",
-	}
-
-	for _, prefix := range wellKnownPrefixes {
-		if strings.HasPrefix(path, prefix) {
-			return true
-		}
-	}
-
-	return false
+	return types.IsWellKnownModule(path)
 }
 
-// IsTrustedGoModule checks if the module is from a trusted, actively maintained source
+// IsTrustedGoModule checks if the module is from a trusted, actively maintained source.
+// Delegates to types.IsTrustedModule for the canonical implementation.
 func IsTrustedGoModule(path string) bool {
-	trustedPrefixes := []string{
-		"golang.org/x/",      // Official Go extended packages
-		"google.golang.org/", // Google-maintained packages
-		"cloud.google.com/",  // Google Cloud packages
-		"k8s.io/",            // Kubernetes packages
-		"sigs.k8s.io/",       // Kubernetes SIG packages
-		"go.uber.org/",       // Uber Go packages (well-maintained)
-	}
-
-	for _, prefix := range trustedPrefixes {
-		if strings.HasPrefix(path, prefix) {
-			return true
-		}
-	}
-
-	return false
+	return types.IsTrustedModule(path)
 }
 
-// GetGitHubMapping returns the GitHub repository for golang.org/x modules
+// GetGitHubMapping returns the GitHub repository for modules that map to GitHub.
+// Delegates to types.GetGitHubMapping for the canonical implementation.
 func GetGitHubMapping(path string) (owner, repo string, ok bool) {
-	if strings.HasPrefix(path, "golang.org/x/") {
-		repoName := strings.TrimPrefix(path, "golang.org/x/")
-		// Handle sub-packages like golang.org/x/crypto/ssh
-		if idx := strings.Index(repoName, "/"); idx != -1 {
-			repoName = repoName[:idx]
-		}
-		return "golang", repoName, true
-	}
-	return "", "", false
+	return types.GetGitHubMapping(path)
 }
 
 // GetDependencyPath returns the dependency path for a given package using go mod why

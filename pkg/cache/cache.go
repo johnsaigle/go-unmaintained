@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/johnsaigle/go-unmaintained/pkg/github"
+	"github.com/johnsaigle/go-unmaintained/pkg/types"
 )
 
 const (
@@ -20,7 +20,7 @@ const (
 
 // CacheEntry represents a cached repository analysis result
 type CacheEntry struct {
-	RepoInfo  *github.RepoInfo `json:"repo_info"`
+	RepoInfo  *types.RepoInfo `json:"repo_info"`
 	Timestamp time.Time        `json:"timestamp"`
 	Version   string           `json:"latest_version,omitempty"`
 }
@@ -61,7 +61,7 @@ func NewCache(disabled bool, duration time.Duration) (*Cache, error) {
 }
 
 // GetRepoInfo retrieves cached repository information
-func (c *Cache) GetRepoInfo(owner, repo string) (*github.RepoInfo, string, bool) {
+func (c *Cache) GetRepoInfo(owner, repo string) (*types.RepoInfo, string, bool) {
 	if c.disabled {
 		return nil, "", false
 	}
@@ -91,7 +91,7 @@ func (c *Cache) GetRepoInfo(owner, repo string) (*github.RepoInfo, string, bool)
 }
 
 // SetRepoInfo stores repository information in cache
-func (c *Cache) SetRepoInfo(owner, repo string, repoInfo *github.RepoInfo, latestVersion string) error {
+func (c *Cache) SetRepoInfo(owner, repo string, repoInfo *types.RepoInfo, latestVersion string) error {
 	if c.disabled {
 		return nil
 	}

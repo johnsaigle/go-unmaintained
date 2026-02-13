@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/johnsaigle/go-unmaintained/pkg/parser"
+	"github.com/johnsaigle/go-unmaintained/pkg/types"
 )
 
 // ResolverResult contains information about a resolved module
@@ -176,106 +176,54 @@ func (r *Resolver) tryVanityURL(ctx context.Context, modulePath string) *Resolve
 	return nil
 }
 
-// tryWellKnownPatterns attempts to resolve modules using well-known patterns
+// tryWellKnownPatterns attempts to resolve modules using well-known patterns.
+// Delegates to the centralized types.WellKnownModules registry.
 func (r *Resolver) tryWellKnownPatterns(modulePath string, moduleInfo *parser.ModuleInfo) *ResolverResult {
-	result := &ResolverResult{
-		ModulePath:      modulePath,
-		HostingProvider: moduleInfo.Host,
-		Status:          StatusUnknown,
-	}
-
-	// Handle well-known Go module patterns
-	switch {
-	case strings.HasPrefix(modulePath, "golang.org/x/"):
-		result.HostingProvider = "golang.org"
-		result.ActualURL = fmt.Sprintf("https://github.com/golang/%s", strings.TrimPrefix(modulePath, "golang.org/x/"))
-		result.Status = StatusActive
-		result.Details = "Official Go extended package"
-
-	case strings.HasPrefix(modulePath, "google.golang.org/"):
-		result.HostingProvider = "google.golang.org"
-		result.Status = StatusActive
-		result.Details = "Google Go package"
-
-	case strings.HasPrefix(modulePath, "cloud.google.com/"):
-		result.HostingProvider = "cloud.google.com"
-		result.Status = StatusActive
-		result.Details = "Google Cloud package"
-
-	case strings.HasPrefix(modulePath, "go.uber.org/"):
-		result.HostingProvider = "go.uber.org"
-		result.Status = StatusActive
-		result.Details = "Uber Go package"
-
-	case strings.HasPrefix(modulePath, "gopkg.in/"):
-		result.HostingProvider = "gopkg.in"
-		result.Status = StatusActive
-		result.Details = "gopkg.in package"
-
-	case strings.HasPrefix(modulePath, "k8s.io/"), strings.HasPrefix(modulePath, "sigs.k8s.io/"):
-		result.HostingProvider = "k8s.io"
-		result.Status = StatusActive
-		result.Details = "Kubernetes package"
-
-	default:
-		// Try to construct potential GitHub URLs for common patterns
+	m := types.GetWellKnownModule(modulePath)
+	if m == nil {
+		result := &ResolverResult{
+			ModulePath:      modulePath,
+			HostingProvider: moduleInfo.Host,
+			Status:          StatusUnknown,
+		}
 		if moduleInfo.Owner != "" && moduleInfo.Repo != "" {
 			result.Details = "Unknown hosting provider, may be self-hosted"
 		} else {
 			result.Details = "Could not determine hosting provider"
+		}
+		return result
+	}
+
+	result := &ResolverResult{
+		ModulePath:      modulePath,
+		HostingProvider: m.HostingProvider,
+		Status:          StatusActive,
+		Details:         m.StatusMessage,
+	}
+
+	// Handle GitHub mappings
+	if m.MapsToGitHub {
+		owner, repo, ok := types.GetGitHubMapping(modulePath)
+		if ok {
+			result.ActualURL = fmt.Sprintf("https://github.com/%s/%s", owner, repo)
 		}
 	}
 
 	return result
 }
 
-// GetWellKnownModuleInfo returns information about well-known Go modules
+// GetWellKnownModuleInfo returns information about well-known Go modules.
+// Delegates to the centralized types.WellKnownModules registry.
 func GetWellKnownModuleInfo(modulePath string) *ResolverResult {
-	wellKnownModules := map[string]ResolverResult{
-		"golang.org": {
-			HostingProvider: "golang.org",
-			Status:          StatusActive,
-			Details:         "Official Go package",
-		},
-		"google.golang.org": {
-			HostingProvider: "google.golang.org",
-			Status:          StatusActive,
-			Details:         "Google-maintained Go package",
-		},
-		"cloud.google.com": {
-			HostingProvider: "cloud.google.com",
-			Status:          StatusActive,
-			Details:         "Google Cloud Go package",
-		},
-		"go.uber.org": {
-			HostingProvider: "go.uber.org",
-			Status:          StatusActive,
-			Details:         "Uber-maintained Go package",
-		},
-		"gopkg.in": {
-			HostingProvider: "gopkg.in",
-			Status:          StatusActive,
-			Details:         "Versioned package proxy",
-		},
-		"k8s.io": {
-			HostingProvider: "k8s.io",
-			Status:          StatusActive,
-			Details:         "Kubernetes package",
-		},
-		"sigs.k8s.io": {
-			HostingProvider: "sigs.k8s.io",
-			Status:          StatusActive,
-			Details:         "Kubernetes SIG package",
-		},
+	m := types.GetWellKnownModule(modulePath)
+	if m == nil {
+		return nil
 	}
 
-	for prefix, info := range wellKnownModules {
-		if strings.HasPrefix(modulePath, prefix) {
-			result := info
-			result.ModulePath = modulePath
-			return &result
-		}
+	return &ResolverResult{
+		ModulePath:      modulePath,
+		HostingProvider: m.HostingProvider,
+		Status:          StatusActive,
+		Details:         m.StatusMessage,
 	}
-
-	return nil
 }

@@ -41,6 +41,11 @@ jobs:
           go-version: '>=1.21.0'
           cache: true
       
+      - name: Download popular packages cache
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
+        run: make download-cache
+      
       - name: Build from source
         run: |
           echo "Building go-unmaintained from source..."

@@ -5,6 +5,9 @@ BINARY_NAME=go-unmaintained
 MAIN_PACKAGE=.
 BUILD_DIR=./bin
 GO_FILES=$(shell find . -name "*.go" -type f -not -path "./vendor/*" -not -path "./.git/*")
+CACHE_FILE=./pkg/popular/data/popular-packages.json
+CACHE_RELEASE_TAG=cache-data
+REPO=johnsaigle/go-unmaintained
 
 # Default target
 .PHONY: help
@@ -14,14 +17,14 @@ help: ## Show this help message
 
 # Build targets
 .PHONY: build
-build: ## Build the binary
+build: ensure-cache ## Build the binary
 	@echo "Building $(BINARY_NAME)..."
 	@mkdir -p $(BUILD_DIR)
 	@go build -ldflags="-s -w" -o $(BUILD_DIR)/$(BINARY_NAME) $(MAIN_PACKAGE)
 	@echo "Binary built at $(BUILD_DIR)/$(BINARY_NAME)"
 
 .PHONY: build-dev
-build-dev: ## Build the binary for development (with debug info)
+build-dev: ensure-cache ## Build the binary for development (with debug info)
 	@echo "Building $(BINARY_NAME) for development..."
 	@mkdir -p $(BUILD_DIR)
 	@go build -o $(BUILD_DIR)/$(BINARY_NAME) $(MAIN_PACKAGE)
@@ -174,7 +177,44 @@ version: ## Show version information
 	@echo "Git commit: $$(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')"
 	@echo "Build date: $$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
-# Popular cache targets
+# Popular cache management
+.PHONY: ensure-cache
+ensure-cache: ## Ensure cache file exists (creates empty seed if missing, e.g. after git clean)
+	@mkdir -p $(dir $(CACHE_FILE))
+	@if [ ! -f $(CACHE_FILE) ]; then \
+		echo "[]" > $(CACHE_FILE); \
+		echo "Created empty cache seed at $(CACHE_FILE)"; \
+	fi
+
+.PHONY: download-cache
+download-cache: ## Download latest popular packages cache from GitHub release
+	@echo "Downloading popular packages cache from release $(CACHE_RELEASE_TAG)..."
+	@mkdir -p $(dir $(CACHE_FILE))
+	@if gh release download $(CACHE_RELEASE_TAG) --repo $(REPO) --pattern "popular-packages.json" --output $(CACHE_FILE) --clobber 2>/dev/null; then \
+		echo "✓ Cache downloaded ($$(wc -c < $(CACHE_FILE)) bytes)"; \
+	else \
+		echo "⚠ Could not download cache (release may not exist yet). Using empty seed."; \
+		echo "[]" > $(CACHE_FILE); \
+	fi
+
+.PHONY: upload-cache
+upload-cache: ## Upload popular packages cache as GitHub release artifact (CI only)
+	@if [ ! -f $(CACHE_FILE) ] || [ "$$(cat $(CACHE_FILE))" = "[]" ]; then \
+		echo "Error: No cache data to upload"; \
+		exit 1; \
+	fi
+	@echo "Uploading cache to release $(CACHE_RELEASE_TAG)..."
+	@if ! gh release view $(CACHE_RELEASE_TAG) --repo $(REPO) >/dev/null 2>&1; then \
+		echo "Creating release $(CACHE_RELEASE_TAG)..."; \
+		gh release create $(CACHE_RELEASE_TAG) --repo $(REPO) \
+			--title "Popular Packages Cache" \
+			--notes "Auto-updated popular packages cache for go:embed. This release is updated nightly by CI." \
+			--latest=false; \
+	fi
+	@gh release upload $(CACHE_RELEASE_TAG) $(CACHE_FILE)#popular-packages.json --repo $(REPO) --clobber
+	@echo "✓ Cache uploaded to release $(CACHE_RELEASE_TAG)"
+
+# Popular cache build targets
 .PHONY: build-cache
 build-cache: ## Build popular packages cache incrementally (requires PAT env var)
 	@if [ -z "$$PAT" ]; then \

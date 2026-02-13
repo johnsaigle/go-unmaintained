@@ -8,12 +8,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/johnsaigle/go-unmaintained/pkg/github"
+	"github.com/johnsaigle/go-unmaintained/pkg/types"
 )
 
 // Provider represents a hosting provider interface
 type Provider interface {
-	GetRepositoryInfo(ctx context.Context, owner, repo string) (*github.RepoInfo, error)
+	GetRepositoryInfo(ctx context.Context, owner, repo string) (*types.RepoInfo, error)
 	GetName() string
 	SupportsHost(host string) bool
 }
@@ -34,7 +34,7 @@ func NewMultiProvider() *MultiProvider {
 }
 
 // GetRepositoryInfo attempts to get repository info from the appropriate provider
-func (mp *MultiProvider) GetRepositoryInfo(ctx context.Context, host, owner, repo string) (*github.RepoInfo, error) {
+func (mp *MultiProvider) GetRepositoryInfo(ctx context.Context, host, owner, repo string) (*types.RepoInfo, error) {
 	for _, provider := range mp.providers {
 		if provider.SupportsHost(host) {
 			return provider.GetRepositoryInfo(ctx, owner, repo)
@@ -81,7 +81,7 @@ func (gp *GitLabProvider) SupportsHost(host string) bool {
 }
 
 // GetRepositoryInfo fetches repository information from GitLab
-func (gp *GitLabProvider) GetRepositoryInfo(ctx context.Context, owner, repo string) (*github.RepoInfo, error) {
+func (gp *GitLabProvider) GetRepositoryInfo(ctx context.Context, owner, repo string) (*types.RepoInfo, error) {
 	// GitLab API endpoint for projects
 	projectPath := fmt.Sprintf("%s/%s", owner, repo)
 	url := fmt.Sprintf("https://gitlab.com/api/v4/projects/%s", strings.ReplaceAll(projectPath, "/", "%2F"))
@@ -98,7 +98,7 @@ func (gp *GitLabProvider) GetRepositoryInfo(ctx context.Context, owner, repo str
 	defer resp.Body.Close()
 
 	if resp.StatusCode == 404 {
-		return &github.RepoInfo{Exists: false}, nil
+		return &types.RepoInfo{Exists: false}, nil
 	}
 
 	if resp.StatusCode != 200 {
@@ -111,7 +111,7 @@ func (gp *GitLabProvider) GetRepositoryInfo(ctx context.Context, owner, repo str
 	}
 
 	// Convert to common RepoInfo format
-	repoInfo := &github.RepoInfo{
+	repoInfo := &types.RepoInfo{
 		Exists:        true,
 		IsArchived:    project.Archived,
 		Description:   project.Description,
@@ -173,7 +173,7 @@ func (bp *BitbucketProvider) SupportsHost(host string) bool {
 }
 
 // GetRepositoryInfo fetches repository information from Bitbucket
-func (bp *BitbucketProvider) GetRepositoryInfo(ctx context.Context, owner, repo string) (*github.RepoInfo, error) {
+func (bp *BitbucketProvider) GetRepositoryInfo(ctx context.Context, owner, repo string) (*types.RepoInfo, error) {
 	// Bitbucket API endpoint for repositories
 	url := fmt.Sprintf("https://api.bitbucket.org/2.0/repositories/%s/%s", owner, repo)
 
@@ -189,7 +189,7 @@ func (bp *BitbucketProvider) GetRepositoryInfo(ctx context.Context, owner, repo 
 	defer resp.Body.Close()
 
 	if resp.StatusCode == 404 {
-		return &github.RepoInfo{Exists: false}, nil
+		return &types.RepoInfo{Exists: false}, nil
 	}
 
 	if resp.StatusCode != 200 {
@@ -202,7 +202,7 @@ func (bp *BitbucketProvider) GetRepositoryInfo(ctx context.Context, owner, repo 
 	}
 
 	// Convert to common RepoInfo format
-	repoInfo := &github.RepoInfo{
+	repoInfo := &types.RepoInfo{
 		Exists:        true,
 		IsArchived:    false, // Bitbucket doesn't have archived status in this endpoint
 		Description:   repository.Description,

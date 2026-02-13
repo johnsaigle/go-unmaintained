@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/go-github/github"
+	"github.com/johnsaigle/go-unmaintained/pkg/types"
 	"golang.org/x/mod/semver"
 	"golang.org/x/oauth2"
 )
@@ -19,17 +20,9 @@ type Client struct {
 	token  string
 }
 
-// RepoInfo holds repository information
-type RepoInfo struct {
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
-	LastCommitAt  *time.Time
-	Description   string
-	DefaultBranch string
-	URL           string
-	IsArchived    bool
-	Exists        bool
-}
+// RepoInfo is an alias for types.RepoInfo for backward compatibility.
+// Deprecated: Use types.RepoInfo directly.
+type RepoInfo = types.RepoInfo
 
 // NewClient creates a new authenticated GitHub client
 func NewClient(token string) (*Client, error) {
@@ -151,35 +144,6 @@ func (c *Client) GetRepositoryInfo(ctx context.Context, owner, repo string) (*Re
 	}
 
 	return info, nil
-}
-
-// IsRepositoryActive checks if a repository has been active within the given duration
-func (info *RepoInfo) IsRepositoryActive(maxAge time.Duration) bool {
-	if !info.Exists {
-		return false
-	}
-
-	// Use the latest of UpdatedAt or LastCommitAt
-	latestActivity := info.UpdatedAt
-	if info.LastCommitAt != nil && info.LastCommitAt.After(info.UpdatedAt) {
-		latestActivity = *info.LastCommitAt
-	}
-
-	return time.Since(latestActivity) <= maxAge
-}
-
-// DaysSinceLastActivity returns the number of days since the last repository activity
-func (info *RepoInfo) DaysSinceLastActivity() int {
-	if !info.Exists {
-		return -1
-	}
-
-	latestActivity := info.UpdatedAt
-	if info.LastCommitAt != nil && info.LastCommitAt.After(info.UpdatedAt) {
-		latestActivity = *info.LastCommitAt
-	}
-
-	return int(time.Since(latestActivity).Hours() / 24)
 }
 
 // GetLatestVersion gets the latest semantic version tag for a repository

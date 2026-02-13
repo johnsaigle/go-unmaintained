@@ -26,20 +26,33 @@ jobs:
     name: Update Cache
     runs-on: ubuntu-latest
     permissions:
-      # Required to commit and push popular packages cache updates
+      # Required to create/update releases and upload artifacts
       contents: write
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PAT }}
           persist-credentials: false
       
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.25'
+      
+      - name: Download existing cache
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
+        run: |
+          echo "Downloading existing cache (if available)..."
+          mkdir -p pkg/popular/data
+          if gh release download cache-data --pattern "popular-packages.json" --output pkg/popular/data/popular-packages.json --clobber 2>/dev/null; then
+            ENTRIES=$(jq 'length' pkg/popular/data/popular-packages.json)
+            echo "Downloaded existing cache with ${ENTRIES} entries"
+          else
+            echo "No existing cache release found, starting fresh"
+            echo "[]" > pkg/popular/data/popular-packages.json
+          fi
       
       - name: Build cache builder
         run: go build -o cache-builder ./cmd/cache-builder
@@ -55,51 +68,59 @@ jobs:
             --output ./pkg/popular/data/popular-packages.json \
             --token $PAT
       
-      - name: Check for changes
-        id: check_changes
-        run: |
-          if git diff --quiet pkg/popular/data/popular-packages.json; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-            echo "No changes to cache file"
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-            echo "Cache file has been updated"
-          fi
-      
-      - name: Commit and push changes
-        if: steps.check_changes.outputs.changed == 'true'
+      - name: Upload cache as release artifact
         env:
-          NEW_ENTRIES: ${{ github.event.inputs.new-entries || '10' }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add pkg/popular/data/popular-packages.json
-          git commit -m "chore: update popular packages cache (incremental)
-
-          - Added ${NEW_ENTRIES} new/refreshed entries
-          - Built on $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          - Automated nightly via GitHub Actions"
-          git push
-      
-      - name: Create summary
-        if: steps.check_changes.outputs.changed == 'true'
-        env:
+          GH_TOKEN: ${{ secrets.PAT }}
           NEW_ENTRIES: ${{ github.event.inputs.new-entries || '10' }}
         run: |
           TOTAL_ENTRIES=$(jq 'length' pkg/popular/data/popular-packages.json)
-          echo "## Cache Updated Successfully ✓" >> $GITHUB_STEP_SUMMARY
+          echo "Uploading cache with ${TOTAL_ENTRIES} entries..."
+          
+          # Create release if it doesn't exist
+          if ! gh release view cache-data >/dev/null 2>&1; then
+            echo "Creating cache-data release..."
+            gh release create cache-data \
+              --title "Popular Packages Cache" \
+              --notes "Auto-updated popular packages cache for go:embed.
+          
+          This release is updated nightly by CI. The cache file is downloaded
+          at build time and embedded into the binary.
+          
+          **Do not delete this release** - it is required for builds to include
+          the popular packages cache." \
+              --latest=false
+          fi
+          
+          # Upload the cache file (overwrite existing)
+          gh release upload cache-data \
+            pkg/popular/data/popular-packages.json \
+            --clobber
+          
+          # Update release notes with timestamp
+          gh release edit cache-data \
+            --notes "Auto-updated popular packages cache for go:embed.
+          
+          **Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Entries:** ${TOTAL_ENTRIES}
+          **Last batch:** ${NEW_ENTRIES} new/refreshed entries
+          
+          This release is updated nightly by CI. Download with:
+          \`\`\`bash
+          make download-cache
+          \`\`\`"
+          
+          echo "✓ Cache uploaded to release cache-data"
+      
+      - name: Create summary
+        run: |
+          TOTAL_ENTRIES=$(jq 'length' pkg/popular/data/popular-packages.json)
+          NEW_ENTRIES="${{ github.event.inputs.new-entries || '10' }}"
+          echo "## Cache Updated Successfully" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **New entries requested**: ${NEW_ENTRIES}" >> $GITHUB_STEP_SUMMARY
           echo "- **Total entries in cache**: ${TOTAL_ENTRIES}" >> $GITHUB_STEP_SUMMARY
           echo "- **Timestamp**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "- **File**: pkg/popular/data/popular-packages.json" >> $GITHUB_STEP_SUMMARY
+          echo "- **Storage**: GitHub Release artifact (\`cache-data\`)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "The cache has been committed and pushed to the repository." >> $GITHUB_STEP_SUMMARY
-          echo "Incremental build: only new or stale (>90 days) entries were fetched." >> $GITHUB_STEP_SUMMARY
-      
-      - name: No changes summary
-        if: steps.check_changes.outputs.changed == 'false'
-        run: |
-          echo "## No Changes Detected" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "The cache is already up to date. No commit was made." >> $GITHUB_STEP_SUMMARY
+          echo "The cache has been uploaded as a release artifact." >> $GITHUB_STEP_SUMMARY
+          echo "Download for local development: \`make download-cache\`" >> $GITHUB_STEP_SUMMARY

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -285,49 +284,31 @@ func analyzeSinglePackage(pkg string) error {
 		result.RetractionReason = retractionInfo.Reason
 	}
 
-	// Format output
+	// Format output using the formatter package
 	format := determineFormat()
-
-	if format == "json" {
-		// Output JSON
-		encoder := json.NewEncoder(os.Stdout)
-		encoder.SetIndent("", "  ")
-		return encoder.Encode(result)
+	fmtOpts := formatter.Options{
+		Verbose:    verbose,
+		ShowPaths:  tree,
+		FailFast:   false,
+		NoExitCode: noExitCode,
 	}
 
-	// Console output
-	fmt.Printf("📦 Package: %s@%s\n\n", packagePath, version)
-
-	if result.IsRetracted {
-		fmt.Printf("⚠️  RETRACTED VERSION\n")
-		if result.RetractionReason != "" {
-			fmt.Printf("   Reason: %s\n", result.RetractionReason)
-		}
-		fmt.Println()
+	fmtr, err := formatter.New(format, fmtOpts)
+	if err != nil {
+		return fmt.Errorf("failed to create formatter: %w", err)
 	}
 
-	if result.IsUnmaintained {
-		fmt.Printf("❌ UNMAINTAINED\n")
-		fmt.Printf("   Reason: %s\n", result.Reason)
-		if result.Details != "" {
-			fmt.Printf("   Details: %s\n", result.Details)
-		}
-	} else {
-		fmt.Printf("✅ MAINTAINED\n")
-		if result.Details != "" {
-			fmt.Printf("   %s\n", result.Details)
-		}
+	// Create a single-result summary
+	summary := analyzer.GetSummary([]analyzer.Result{result})
+
+	// Add package header for console format
+	if format == "console" {
+		fmt.Printf("📦 Package: %s@%s\n\n", packagePath, version)
 	}
 
-	if result.DaysSinceUpdate > 0 {
-		fmt.Printf("   Last updated: %d days ago\n", result.DaysSinceUpdate)
+	if err := fmtr.Format(os.Stdout, []analyzer.Result{result}, summary); err != nil {
+		return fmt.Errorf("failed to format output: %w", err)
 	}
-
-	if checkOutdated && result.LatestVersion != "" && result.LatestVersion != version {
-		fmt.Printf("\n📌 Latest version: %s\n", result.LatestVersion)
-	}
-
-	fmt.Println()
 
 	// Set exit code if unmaintained or retracted (unless --no-exit-code)
 	if !noExitCode && (result.IsUnmaintained || result.IsRetracted) {

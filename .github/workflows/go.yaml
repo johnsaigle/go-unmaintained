@@ -30,6 +30,9 @@ jobs:
           go-version-file: go.mod
           cache: false  # golangci-lint-action does its own caching
       
+      - name: Ensure cache file exists
+        run: make ensure-cache
+      
       - uses: golangci/golangci-lint-action@0a35821d5c230e903fcfe077583637dea1b27b47 # v9.0.0
 
   test:
@@ -46,5 +49,8 @@ jobs:
         with:
           go-version-file: go.mod
           # cache: true is default, caches go modules
+      
+      - name: Ensure cache file exists
+        run: make ensure-cache
       
       - run: go test -v -race ./...
