@@ -31,12 +31,12 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
-          persist-credentials: false
+          token: ${{ secrets.PAT }}
       
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@f111f3307d8850f501ac008e886eec1fd6912cdd # v5
         with:
           go-version: '1.25'
       
@@ -112,9 +112,10 @@ jobs:
           echo "✓ Cache uploaded to release cache-data"
       
       - name: Create summary
+        env:
+          NEW_ENTRIES: ${{ github.event.inputs.new-entries || '10' }}
         run: |
           TOTAL_ENTRIES=$(jq 'length' pkg/popular/data/popular-packages.json)
-          NEW_ENTRIES="${{ github.event.inputs.new-entries || '10' }}"
           echo "## Cache Updated Successfully" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **New entries requested**: ${NEW_ENTRIES}" >> $GITHUB_STEP_SUMMARY
