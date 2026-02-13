@@ -301,7 +301,7 @@ require (
 
 replace github.com/user/repo => github.com/fork/repo v1.2.4
 `
-	err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte(goModContent), 0644)
+	err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte(goModContent), 0600)
 	if err != nil {
 		t.Fatalf("failed to write go.mod: %v", err)
 	}
@@ -372,7 +372,7 @@ func TestParseGoMod_MissingFile(t *testing.T) {
 
 func TestParseGoMod_InvalidFile(t *testing.T) {
 	dir := t.TempDir()
-	err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte("this is not valid"), 0644)
+	err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte("this is not valid"), 0600)
 	if err != nil {
 		t.Fatalf("failed to write go.mod: %v", err)
 	}

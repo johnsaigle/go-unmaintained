@@ -141,11 +141,11 @@ func TestResultFromPopularEntry(t *testing.T) {
 	now := time.Now()
 
 	tests := []struct {
-		name             string
 		entry            *popular.Entry
 		dep              parser.Dependency
-		wantUnmaintained bool
+		name             string
 		wantReason       UnmaintainedReason
+		wantUnmaintained bool
 	}{
 		{
 			name: "active package",

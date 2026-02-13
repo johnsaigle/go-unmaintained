@@ -21,6 +21,7 @@ type Client struct {
 }
 
 // RepoInfo is an alias for types.RepoInfo for backward compatibility.
+//
 // Deprecated: Use types.RepoInfo directly.
 type RepoInfo = types.RepoInfo
 

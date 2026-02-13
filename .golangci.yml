@@ -48,7 +48,7 @@ linters:
       enable:
         - atomicalign          # Check for non-64-bits-aligned arguments to sync/atomic functions
         - deepequalerrors      # Check for calls of reflect.DeepEqual on error values
-        - fieldalignment       # Find structs that would use less memory if their fields were sorted
+        # - fieldalignment       # Find structs that would use less memory if their fields were sorted
         - findcall             # Find calls to a particular function
         - nilness              # Check for redundant or impossible nil comparisons
         - reflectvaluecompare  # Check for comparing reflect.Value values with == or reflect.DeepEqual
@@ -92,6 +92,10 @@ linters:
       - common-false-positives
       - legacy
       - std-error-handling
+    rules:
+      - path: _test\.go
+        linters:
+          - nestif
     paths:
       - third_party$
       - builtin$

@@ -45,7 +45,10 @@ func TestGitLabProvider_GetRepositoryInfo_Success(t *testing.T) {
 			LastActivityAt: now.Add(-5 * 24 * time.Hour),
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(project)
+		if err := json.NewEncoder(w).Encode(project); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 	}))
 	defer server.Close()
 
@@ -78,7 +81,7 @@ func TestGitLabProvider_GetRepositoryInfo_Success(t *testing.T) {
 	_ = ctx // silence unused
 }
 
-func TestGitLabProvider_GetRepositoryInfo_NotFound(t *testing.T) {
+func TestGitLabProvider_GetRepositoryInfo_NotFound(_ *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	}))

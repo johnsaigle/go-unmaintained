@@ -3,12 +3,12 @@ package types
 // WellKnownModule represents information about a well-known Go module.
 type WellKnownModule struct {
 	Prefix          string
-	Trusted         bool
 	HostingProvider string
 	StatusMessage   string
-	MapsToGitHub    bool
 	GitHubOwner     string
 	GitHubRepoPath  string // Template for constructing GitHub repo path from module path
+	Trusted         bool
+	MapsToGitHub    bool
 }
 
 // WellKnownModules is the canonical registry of well-known Go modules.

@@ -114,6 +114,7 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 	}
 
 	// Show maintained packages only in verbose mode
+	//nolint:nestif // Verbose output requires nested conditionals for detailed formatting
 	if f.opts.Verbose && len(maintained) > 0 {
 		fmt.Fprintf(w, "\n✅ MAINTAINED PACKAGES (%d found):\n", len(maintained))
 		fmt.Fprintln(w, "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")

@@ -8,11 +8,11 @@ import (
 
 func TestGetWellKnownModuleInfo(t *testing.T) {
 	tests := []struct {
-		name       string
 		modulePath string
-		wantNil    bool
-		wantStatus ModuleStatus
+		name       string
 		wantHost   string
+		wantStatus ModuleStatus
+		wantNil    bool
 	}{
 		{
 			name:       "golang.org module",

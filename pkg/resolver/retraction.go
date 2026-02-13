@@ -15,9 +15,9 @@ import (
 
 // RetractionInfo holds information about a retracted version
 type RetractionInfo struct {
-	IsRetracted bool
-	Reason      string
 	Ranges      []RetractionRange
+	Reason      string
+	IsRetracted bool
 }
 
 // RetractionRange represents a single retraction directive

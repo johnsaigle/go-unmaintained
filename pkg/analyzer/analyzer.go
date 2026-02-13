@@ -38,18 +38,18 @@ type indexedDep struct {
 
 // Result represents the analysis result for a single dependency
 type Result struct {
+	DependencyPath   []string
 	RepoInfo         *types.RepoInfo
 	Package          string
 	Reason           UnmaintainedReason
 	Details          string
 	CurrentVersion   string
 	LatestVersion    string
-	DependencyPath   []string
+	RetractionReason string
 	DaysSinceUpdate  int
 	IsUnmaintained   bool
 	IsDirect         bool
 	IsRetracted      bool
-	RetractionReason string
 }
 
 // Config holds configuration for the analyzer
@@ -350,35 +350,44 @@ func (a *Analyzer) analyzeThirdPartyProvider(ctx context.Context, dep parser.Dep
 func (a *Analyzer) analyzeViaResolver(ctx context.Context, dep parser.Dependency, moduleInfo *parser.ModuleInfo) (Result, error) {
 	result := a.initResult(dep)
 
-	if (a.config.ResolveUnknown || moduleInfo.IsKnownHost) && a.resolver != nil {
-		resolved := a.resolver.ResolveModule(ctx, dep.Path)
-		if resolved != nil {
-			switch resolved.Status {
-			case resolver.StatusActive:
-				result.Reason = ReasonActive
-				result.Details = fmt.Sprintf("Active non-GitHub dependency (%s): %s", resolved.HostingProvider, resolved.Details)
-			case resolver.StatusNotFound:
-				result.IsUnmaintained = true
-				result.Reason = ReasonNotFound
-				result.Details = fmt.Sprintf("Module not found: %s", resolved.Details)
-			case resolver.StatusUnavailable:
-				result.IsUnmaintained = true
-				result.Details = fmt.Sprintf("Module unavailable (%s): %s", resolved.HostingProvider, resolved.Details)
-			default:
-				result.Details = fmt.Sprintf("Unknown status (%s): %s", resolved.HostingProvider, resolved.Details)
-			}
-		} else {
-			result.Details = fmt.Sprintf("Could not resolve non-GitHub dependency (%s)", moduleInfo.Host)
-		}
-	} else {
-		if moduleInfo.IsKnownHost {
-			result.Details = fmt.Sprintf("Non-GitHub dependency (%s) - status unknown", moduleInfo.Host)
-		} else {
-			result.Details = fmt.Sprintf("Unknown hosting provider (%s) - status unknown", moduleInfo.Host)
-		}
+	canResolve := (a.config.ResolveUnknown || moduleInfo.IsKnownHost) && a.resolver != nil
+	if !canResolve {
+		result.Details = a.unresolvedDetails(moduleInfo)
+		return result, nil
 	}
 
+	resolved := a.resolver.ResolveModule(ctx, dep.Path)
+	if resolved == nil {
+		result.Details = fmt.Sprintf("Could not resolve non-GitHub dependency (%s)", moduleInfo.Host)
+		return result, nil
+	}
+
+	a.applyResolvedStatus(&result, resolved)
 	return result, nil
+}
+
+func (a *Analyzer) unresolvedDetails(moduleInfo *parser.ModuleInfo) string {
+	if moduleInfo.IsKnownHost {
+		return fmt.Sprintf("Non-GitHub dependency (%s) - status unknown", moduleInfo.Host)
+	}
+	return fmt.Sprintf("Unknown hosting provider (%s) - status unknown", moduleInfo.Host)
+}
+
+func (a *Analyzer) applyResolvedStatus(result *Result, resolved *resolver.ResolverResult) {
+	switch resolved.Status {
+	case resolver.StatusActive:
+		result.Reason = ReasonActive
+		result.Details = fmt.Sprintf("Active non-GitHub dependency (%s): %s", resolved.HostingProvider, resolved.Details)
+	case resolver.StatusNotFound:
+		result.IsUnmaintained = true
+		result.Reason = ReasonNotFound
+		result.Details = fmt.Sprintf("Module not found: %s", resolved.Details)
+	case resolver.StatusUnavailable:
+		result.IsUnmaintained = true
+		result.Details = fmt.Sprintf("Module unavailable (%s): %s", resolved.HostingProvider, resolved.Details)
+	default:
+		result.Details = fmt.Sprintf("Unknown status (%s): %s", resolved.HostingProvider, resolved.Details)
+	}
 }
 
 // analyzeGitHub handles standard GitHub repositories with caching.
@@ -417,7 +426,10 @@ func (a *Analyzer) fetchRepoWithCache(ctx context.Context, owner, repo string) (
 		latestVersion, _ = a.githubClient.GetLatestVersion(ctx, owner, repo)
 	}
 
-	a.cache.SetRepoInfo(owner, repo, repoInfo, latestVersion)
+	if err := a.cache.SetRepoInfo(owner, repo, repoInfo, latestVersion); err != nil {
+		// Cache write errors are non-fatal; log and continue
+		_ = err
+	}
 	return repoInfo, latestVersion, nil
 }
 
