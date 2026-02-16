@@ -61,7 +61,7 @@ jobs:
           set +e  # Don't exit on error
           
           echo "Running self-check with JSON output..."
-          ./bin/go-unmaintained --json --no-exit-code > results.json
+          ./bin/go-unmaintained --format json --no-exit-code > results.json
           
           # Parse results
           UNMAINTAINED=$(jq -r '.summary.UnmaintainedCount // 0' results.json)

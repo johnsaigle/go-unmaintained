@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v82/github"
 	ghclient "github.com/johnsaigle/go-unmaintained/pkg/github"
 	"github.com/johnsaigle/go-unmaintained/pkg/popular"
 	"golang.org/x/oauth2"
@@ -158,14 +158,12 @@ func buildCacheIncremental(token, outputPath string, newEntries, maxAge, cacheSt
 			return nil, apiCallsMade, fmt.Errorf("failed to search repositories (page %d): %w", page, err)
 		}
 
-		for i := range result.Repositories {
-			allRepos = append(allRepos, &result.Repositories[i])
-		}
+		allRepos = append(allRepos, result.Repositories...)
 		fmt.Printf("  Fetched page %d/%d (%d repos so far)\n", page, pages, len(allRepos))
 
 		// Check rate limit
-		if resp.Remaining < 100 {
-			fmt.Printf("  Warning: Only %d API calls remaining\n", resp.Remaining)
+		if resp.Rate.Remaining < 100 {
+			fmt.Printf("  Warning: Only %d API calls remaining\n", resp.Rate.Remaining)
 		}
 
 		if len(allRepos) >= maxReposToFetch {

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v82/github"
 	"github.com/johnsaigle/go-unmaintained/pkg/types"
 	"golang.org/x/mod/semver"
 	"golang.org/x/oauth2"
@@ -140,7 +140,7 @@ func (c *Client) GetRepositoryInfo(ctx context.Context, owner, repo string) (*Re
 		// Don't fail the entire request for commit info, just skip it
 		_ = resp // Silence unused warning
 	} else if len(commits) > 0 {
-		commitDate := commits[0].GetCommit().GetCommitter().GetDate()
+		commitDate := commits[0].GetCommit().GetCommitter().GetDate().Time
 		info.LastCommitAt = &commitDate
 	}
 
