@@ -62,7 +62,7 @@ runs:
   using: 'composite'
   steps:
     - name: Set up Go
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
       with:
         go-version: '>=1.21.0'
         cache: false
@@ -78,19 +78,25 @@ runs:
       shell: bash
       env:
         PAT: ${{ inputs.github-token }}
+        TARGET_PATH: ${{ inputs.target-path }}
+        MAX_AGE: ${{ inputs.max-age }}
+        CONCURRENCY: ${{ inputs.concurrency }}
+        CHECK_OUTDATED: ${{ inputs.check-outdated }}
+        VERBOSE: ${{ inputs.verbose }}
+        FAIL_ON_FOUND: ${{ inputs.fail-on-found }}
       run: |
         set +e  # Don't exit on error, we'll handle it
         
         # Build command flags
-        FLAGS="--target ${{ inputs.target-path }}"
-        FLAGS="$FLAGS --max-age ${{ inputs.max-age }}"
-        FLAGS="$FLAGS --concurrency ${{ inputs.concurrency }}"
+        FLAGS="--target $TARGET_PATH"
+        FLAGS="$FLAGS --max-age $MAX_AGE"
+        FLAGS="$FLAGS --concurrency $CONCURRENCY"
         
-        if [ "${{ inputs.check-outdated }}" = "true" ]; then
+        if [ "$CHECK_OUTDATED" = "true" ]; then
           FLAGS="$FLAGS --check-outdated"
         fi
         
-        if [ "${{ inputs.verbose }}" = "true" ]; then
+        if [ "$VERBOSE" = "true" ]; then
           FLAGS="$FLAGS --verbose"
         fi
         
@@ -124,7 +130,7 @@ runs:
         echo "Detailed analysis:"
         echo "===================="
         
-        if [ "${{ inputs.fail-on-found }}" = "false" ]; then
+        if [ "$FAIL_ON_FOUND" = "false" ]; then
           FLAGS="$FLAGS --no-exit-code"
         fi
         
@@ -132,7 +138,7 @@ runs:
         EXIT_CODE=$?
         
         # Exit with appropriate code
-        if [ "${{ inputs.fail-on-found }}" = "true" ] && [ $EXIT_CODE -ne 0 ]; then
+        if [ "$FAIL_ON_FOUND" = "true" ] && [ $EXIT_CODE -ne 0 ]; then
           echo "::error::Found $UNMAINTAINED unmaintained dependencies"
           exit 1
         fi
@@ -140,7 +146,7 @@ runs:
         exit 0
     
     - name: Upload results artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       if: always()
       with:
         name: unmaintained-dependencies-report
