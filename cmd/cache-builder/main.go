@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/google/go-github/v82/github"
+	"github.com/google/go-github/v83/github"
 	ghclient "github.com/johnsaigle/go-unmaintained/pkg/github"
 	"github.com/johnsaigle/go-unmaintained/pkg/popular"
 	"golang.org/x/oauth2"
