@@ -15,7 +15,9 @@ import (
 )
 
 var (
-	newEntries     = flag.Int("new-entries", 10, "Number of new API requests to make (will fetch more repos from GitHub to find this many new/stale entries)")
+	newEntries     = flag.Int("new-entries", 10, "Maximum number of newly ranked repositories to add")
+	refreshEntries = flag.Int("refresh-entries", 10, "Maximum number of stale cached repositories to refresh")
+	maxEntries     = flag.Int("max-entries", 500, "Maximum number of ranked repositories to retain (maximum 1000)")
 	output         = flag.String("output", "pkg/popular/data/popular-packages.json", "Output file path")
 	token          = flag.String("token", "", "GitHub token (required)")
 	maxAge         = flag.Int("max-age", 365, "Age in days to consider a repo inactive")
@@ -33,21 +35,43 @@ func main() {
 			os.Exit(1)
 		}
 	}
+	if *newEntries < 0 || *refreshEntries < 0 {
+		fmt.Fprintln(os.Stderr, "Error: update limits cannot be negative")
+		os.Exit(1)
+	}
+	if *maxEntries < 1 || *maxEntries > 1000 {
+		fmt.Fprintln(os.Stderr, "Error: --max-entries must be between 1 and 1000")
+		os.Exit(1)
+	}
+	if *maxAge < 1 || *cacheStaleDays < 1 {
+		fmt.Fprintln(os.Stderr, "Error: age limits must be at least one day")
+		os.Exit(1)
+	}
 
 	fmt.Printf("Building popular packages cache (incremental mode)...\n")
-	fmt.Printf("  New entries to fetch: %d\n", *newEntries)
+	fmt.Printf("  New entries to add: %d\n", *newEntries)
+	fmt.Printf("  Stale entries to refresh: %d\n", *refreshEntries)
+	fmt.Printf("  Maximum cache entries: %d\n", *maxEntries)
 	fmt.Printf("  Output: %s\n", *output)
 	fmt.Printf("  Inactive threshold: %d days\n", *maxAge)
 	fmt.Printf("  Cache staleness: %d days\n", *cacheStaleDays)
 	fmt.Println()
 
-	entries, apiCallsMade, err := buildCacheIncremental(*token, *output, *newEntries, *maxAge, *cacheStaleDays)
+	entries, repositoriesAnalyzed, err := buildCacheIncremental(
+		*token,
+		*output,
+		*newEntries,
+		*refreshEntries,
+		*maxEntries,
+		*maxAge,
+		*cacheStaleDays,
+	)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error building cache: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Printf("Total entries in cache: %d (made %d API calls)\n", len(entries), apiCallsMade)
+	fmt.Printf("Total entries in cache: %d (analyzed %d repositories)\n", len(entries), repositoriesAnalyzed)
 
 	// Write to file
 	data, err := json.MarshalIndent(entries, "", "  ")
@@ -61,12 +85,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("✓ Cache written to %s\n", *output)
+	fmt.Printf("Cache written to %s\n", *output)
 
 	// Print statistics
 	stats := calculateStats(entries)
 	fmt.Println()
 	fmt.Println("Statistics:")
+	if len(entries) == 0 {
+		fmt.Println("  Cache is empty")
+		return
+	}
 	fmt.Printf("  Active:       %d (%.1f%%)\n", stats.active, float64(stats.active)/float64(len(entries))*100)
 	fmt.Printf("  Archived:     %d (%.1f%%)\n", stats.archived, float64(stats.archived)/float64(len(entries))*100)
 	fmt.Printf("  Inactive:     %d (%.1f%%)\n", stats.inactive, float64(stats.inactive)/float64(len(entries))*100)
@@ -97,17 +125,38 @@ func calculateStats(entries []popular.Entry) stats {
 	return s
 }
 
-func buildCacheIncremental(token, outputPath string, newEntries, maxAge, cacheStaleDays int) ([]popular.Entry, int, error) {
+type rankedRepository struct {
+	packagePath string
+	owner       string
+	repo        string
+}
+
+type updateAction int
+
+const (
+	keepEntry updateAction = iota
+	addEntry
+	refreshEntry
+	skipEntry
+)
+
+type cachePlanItem struct {
+	repository rankedRepository
+	existing   popular.Entry
+	action     updateAction
+}
+
+func buildCacheIncremental(token, outputPath string, newEntries, refreshEntries, maxEntries, maxAge, cacheStaleDays int) ([]popular.Entry, int, error) {
 	ctx := context.Background()
 	now := time.Now()
 
 	// Load existing cache if it exists
-	existingCache := make(map[string]*popular.Entry)
+	existingCache := make(map[string]popular.Entry)
 	if data, err := os.ReadFile(outputPath); err == nil && len(data) > 0 {
 		var entries []popular.Entry
 		if err := json.Unmarshal(data, &entries); err == nil {
 			for i := range entries {
-				existingCache[entries[i].Package] = &entries[i]
+				existingCache[entries[i].Package] = entries[i]
 			}
 			fmt.Printf("Loaded existing cache with %d entries\n", len(existingCache))
 		}
@@ -126,24 +175,13 @@ func buildCacheIncremental(token, outputPath string, newEntries, maxAge, cacheSt
 		return nil, 0, fmt.Errorf("failed to create GitHub client: %w", err)
 	}
 
-	// Track how many API calls we've made
-	apiCallsMade := 0
-	apiCallsNeeded := newEntries
-
-	// We'll fetch repos in batches and stop when we've made enough API calls
-	// Start with fetching more repos than we need to account for fresh entries
-	maxReposToFetch := len(existingCache) + (newEntries * 3) // Fetch 3x to ensure we get enough new/stale ones
-	if maxReposToFetch < 100 {
-		maxReposToFetch = 100
-	}
-
-	fmt.Printf("Fetching up to %d repos from GitHub to find %d new/stale entries...\n", maxReposToFetch, newEntries)
+	fmt.Printf("Fetching the top %d Go repositories from GitHub...\n", maxEntries)
 
 	var allRepos []*github.Repository
 	perPage := 100
-	pages := (maxReposToFetch + perPage - 1) / perPage
+	pages := (maxEntries + perPage - 1) / perPage
 
-	for page := 1; page <= pages && apiCallsMade < apiCallsNeeded; page++ {
+	for page := 1; page <= pages; page++ {
 		opts := &github.SearchOptions{
 			Sort:  "stars",
 			Order: "desc",
@@ -155,7 +193,7 @@ func buildCacheIncremental(token, outputPath string, newEntries, maxAge, cacheSt
 
 		result, resp, err := client.Search.Repositories(ctx, "language:go", opts)
 		if err != nil {
-			return nil, apiCallsMade, fmt.Errorf("failed to search repositories (page %d): %w", page, err)
+			return nil, 0, fmt.Errorf("failed to search repositories (page %d): %w", page, err)
 		}
 
 		allRepos = append(allRepos, result.Repositories...)
@@ -166,70 +204,81 @@ func buildCacheIncremental(token, outputPath string, newEntries, maxAge, cacheSt
 			fmt.Printf("  Warning: Only %d API calls remaining\n", resp.Rate.Remaining)
 		}
 
-		if len(allRepos) >= maxReposToFetch {
+		if len(allRepos) >= maxEntries || len(result.Repositories) == 0 {
 			break
 		}
 
 		time.Sleep(500 * time.Millisecond)
 	}
 
-	fmt.Printf("\nProcessing %d repositories...\n", len(allRepos))
-
-	// Process repos and build final cache
-	finalCache := make(map[string]*popular.Entry)
-
-	// First, add all existing entries to final cache
-	for pkg, entry := range existingCache {
-		finalCache[pkg] = entry
+	if len(allRepos) > maxEntries {
+		allRepos = allRepos[:maxEntries]
 	}
 
-	// Now process each repo from GitHub
+	rankedRepos := make([]rankedRepository, 0, len(allRepos))
 	for _, repo := range allRepos {
-		if apiCallsMade >= apiCallsNeeded {
-			fmt.Printf("  Reached API call limit (%d), stopping\n", apiCallsNeeded)
-			break
-		}
-
 		owner := repo.GetOwner().GetLogin()
 		repoName := repo.GetName()
-		pkg := fmt.Sprintf("github.com/%s/%s", owner, repoName)
+		rankedRepos = append(rankedRepos, rankedRepository{
+			packagePath: fmt.Sprintf("github.com/%s/%s", owner, repoName),
+			owner:       owner,
+			repo:        repoName,
+		})
+	}
 
-		// Check if entry exists in cache
-		existing, exists := existingCache[pkg]
+	plans := buildUpdatePlan(rankedRepos, existingCache, now, newEntries, refreshEntries, cacheStaleDays)
+	entries := make([]popular.Entry, 0, len(plans))
+	repositoriesAnalyzed := 0
 
-		if exists {
-			// Entry exists - check if it's stale
-			cacheAge := now.Sub(existing.CacheBuiltAt)
-			if cacheAge.Hours() < float64(cacheStaleDays*24) {
-				// Fresh entry - skip API call
-				fmt.Printf("  ✓ %s (cached %d days ago, fresh)\n", pkg, int(cacheAge.Hours()/24))
-				continue
-			} else {
-				// Stale entry - refresh it
-				fmt.Printf("  ↻ %s (cached %d days ago, refreshing)\n", pkg, int(cacheAge.Hours()/24))
-				entry := analyzeRepository(ctx, ghClient, owner, repoName, maxAge, now)
-				finalCache[pkg] = &entry
-				apiCallsMade++
-			}
-		} else {
-			// New entry - fetch it
-			fmt.Printf("  + %s (new)\n", pkg)
-			entry := analyzeRepository(ctx, ghClient, owner, repoName, maxAge, now)
-			finalCache[pkg] = &entry
-			apiCallsMade++
+	fmt.Printf("\nProcessing %d ranked repositories...\n", len(plans))
+	for _, plan := range plans {
+		switch plan.action {
+		case keepEntry:
+			entries = append(entries, plan.existing)
+		case addEntry:
+			fmt.Printf("  + %s (new)\n", plan.repository.packagePath)
+			entries = append(entries, analyzeRepository(ctx, ghClient, plan.repository.owner, plan.repository.repo, maxAge, now))
+			repositoriesAnalyzed++
+			time.Sleep(200 * time.Millisecond)
+		case refreshEntry:
+			cacheAge := now.Sub(plan.existing.CacheBuiltAt)
+			fmt.Printf("  refresh %s (cached %d days ago)\n", plan.repository.packagePath, int(cacheAge.Hours()/24))
+			entries = append(entries, analyzeRepository(ctx, ghClient, plan.repository.owner, plan.repository.repo, maxAge, now))
+			repositoriesAnalyzed++
+			time.Sleep(200 * time.Millisecond)
+		case skipEntry:
+			// The addition budget is intentionally bounded; a later run will add it.
+		}
+	}
+
+	return entries, repositoriesAnalyzed, nil
+}
+
+func buildUpdatePlan(rankedRepos []rankedRepository, existingCache map[string]popular.Entry, now time.Time, newLimit, refreshLimit, cacheStaleDays int) []cachePlanItem {
+	plans := make([]cachePlanItem, 0, len(rankedRepos))
+	newCount := 0
+	refreshCount := 0
+	staleAfter := time.Duration(cacheStaleDays) * 24 * time.Hour
+
+	for _, repository := range rankedRepos {
+		existing, exists := existingCache[repository.packagePath]
+		plan := cachePlanItem{repository: repository, existing: existing, action: keepEntry}
+
+		switch {
+		case !exists && newCount < newLimit:
+			plan.action = addEntry
+			newCount++
+		case !exists:
+			plan.action = skipEntry
+		case now.Sub(existing.CacheBuiltAt) >= staleAfter && refreshCount < refreshLimit:
+			plan.action = refreshEntry
+			refreshCount++
 		}
 
-		// Small delay between requests
-		time.Sleep(200 * time.Millisecond)
+		plans = append(plans, plan)
 	}
 
-	// Convert map to slice
-	entries := make([]popular.Entry, 0, len(finalCache))
-	for _, entry := range finalCache {
-		entries = append(entries, *entry)
-	}
-
-	return entries, apiCallsMade, nil
+	return plans
 }
 
 func analyzeRepository(ctx context.Context, ghClient *ghclient.Client, owner, repoName string, maxAge int, cacheBuiltAt time.Time) popular.Entry {

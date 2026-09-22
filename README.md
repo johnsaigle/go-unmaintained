@@ -271,6 +271,27 @@ go-unmaintained --no-cache
 
 Cache location: `~/.cache/go-unmaintained/` (or system-appropriate cache directory)
 
+### Maintaining the Popular Packages Cache
+
+The embedded popular-package cache is a bounded rolling snapshot of the most-starred Go repositories. Each update can add newly ranked repositories and independently refresh stale entries; repositories that fall outside the top 500 are removed.
+
+```bash
+export PAT=your_token_here
+make download-cache
+make build-cache
+make upload-cache
+```
+
+The limits can be adjusted for a local run:
+
+```bash
+make build-cache \
+  CACHE_NEW_ENTRIES=20 \
+  CACHE_REFRESH_ENTRIES=20 \
+  CACHE_MAX_ENTRIES=500 \
+  CACHE_STALE_DAYS=90
+```
+
 ### Rate Limiting
 
 - **Authenticated requests**: 5,000 GitHub API requests/hour

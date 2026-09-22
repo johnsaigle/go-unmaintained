@@ -1,1 +1,882 @@
-[]
+[
+  {
+    "last_updated": "2026-09-22T11:35:49Z",
+    "cache_built_at": "2026-09-22T07:46:11.310437911-04:00",
+    "package": "github.com/avelino/awesome-go",
+    "owner": "avelino",
+    "repo": "awesome-go",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:44:16Z",
+    "cache_built_at": "2026-09-22T07:46:11.310437911-04:00",
+    "package": "github.com/ollama/ollama",
+    "owner": "ollama",
+    "repo": "ollama",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:36:24Z",
+    "cache_built_at": "2026-09-22T07:46:11.310437911-04:00",
+    "package": "github.com/golang/go",
+    "owner": "golang",
+    "repo": "go",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:32:51Z",
+    "cache_built_at": "2026-09-22T07:46:11.310437911-04:00",
+    "package": "github.com/kubernetes/kubernetes",
+    "owner": "kubernetes",
+    "repo": "kubernetes",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:51:04Z",
+    "cache_built_at": "2026-09-22T07:46:11.310437911-04:00",
+    "package": "github.com/microsoft/TypeScript",
+    "owner": "microsoft",
+    "repo": "TypeScript",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:50:34Z",
+    "cache_built_at": "2026-09-22T07:46:11.310437911-04:00",
+    "package": "github.com/fatedier/frp",
+    "owner": "fatedier",
+    "repo": "frp",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:31:08Z",
+    "cache_built_at": "2026-09-22T07:46:11.310437911-04:00",
+    "package": "github.com/JuliusBrussee/caveman",
+    "owner": "JuliusBrussee",
+    "repo": "caveman",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:42:40Z",
+    "cache_built_at": "2026-09-22T07:46:11.310437911-04:00",
+    "package": "github.com/infiniflow/ragflow",
+    "owner": "infiniflow",
+    "repo": "ragflow",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:55:55Z",
+    "cache_built_at": "2026-09-22T07:46:11.310437911-04:00",
+    "package": "github.com/gohugoio/hugo",
+    "owner": "gohugoio",
+    "repo": "hugo",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T06:13:59Z",
+    "cache_built_at": "2026-09-22T07:46:11.310437911-04:00",
+    "package": "github.com/gin-gonic/gin",
+    "owner": "gin-gonic",
+    "repo": "gin",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:45:35Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/syncthing/syncthing",
+    "owner": "syncthing",
+    "repo": "syncthing",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:56:43Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/junegunn/fzf",
+    "owner": "junegunn",
+    "repo": "fzf",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:37:59Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/jesseduffield/lazygit",
+    "owner": "jesseduffield",
+    "repo": "lazygit",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:32:53Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/netdata/netdata",
+    "owner": "netdata",
+    "repo": "netdata",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:45:53Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/caddyserver/caddy",
+    "owner": "caddyserver",
+    "repo": "caddy",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:34:21Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/moby/moby",
+    "owner": "moby",
+    "repo": "moby",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:27:19Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/nektos/act",
+    "owner": "nektos",
+    "repo": "act",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:49:10Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/prometheus/prometheus",
+    "owner": "prometheus",
+    "repo": "prometheus",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:17:20Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/traefik/traefik",
+    "owner": "traefik",
+    "repo": "traefik",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:47:47Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/usememos/memos",
+    "owner": "usememos",
+    "repo": "memos",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-21T17:14:11Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/minio/minio",
+    "owner": "minio",
+    "repo": "minio",
+    "status": "archived"
+  },
+  {
+    "last_updated": "2026-09-22T11:24:45Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/pocketbase/pocketbase",
+    "owner": "pocketbase",
+    "repo": "pocketbase",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:53:30Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/rclone/rclone",
+    "owner": "rclone",
+    "repo": "rclone",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:44:24Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/FiloSottile/mkcert",
+    "owner": "FiloSottile",
+    "repo": "mkcert",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:25:56Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/go-gitea/gitea",
+    "owner": "go-gitea",
+    "repo": "gitea",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:40:47Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/wagoodman/dive",
+    "owner": "wagoodman",
+    "repo": "dive",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:40:14Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/jesseduffield/lazydocker",
+    "owner": "jesseduffield",
+    "repo": "lazydocker",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:50:34Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/router-for-me/CLIProxyAPI",
+    "owner": "router-for-me",
+    "repo": "CLIProxyAPI",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:42:52Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/etcd-io/etcd",
+    "owner": "etcd-io",
+    "repo": "etcd",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:45:57Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/ethereum/go-ethereum",
+    "owner": "ethereum",
+    "repo": "go-ethereum",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:50:26Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/multica-ai/multica",
+    "owner": "multica-ai",
+    "repo": "multica",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:48:03Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/AlistGo/alist",
+    "owner": "AlistGo",
+    "repo": "alist",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:30:46Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/hashicorp/terraform",
+    "owner": "hashicorp",
+    "repo": "terraform",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:37:42Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/mudler/LocalAI",
+    "owner": "mudler",
+    "repo": "LocalAI",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:51:42Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/QuantumNous/new-api",
+    "owner": "QuantumNous",
+    "repo": "new-api",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:33:16Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/gogs/gogs",
+    "owner": "gogs",
+    "repo": "gogs",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:13:07Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/v2ray/v2ray-core",
+    "owner": "v2ray",
+    "repo": "v2ray-core",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:48:33Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/MHSanaei/3x-ui",
+    "owner": "MHSanaei",
+    "repo": "3x-ui",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:58:39Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/cli/cli",
+    "owner": "cli",
+    "repo": "cli",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:50:07Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/milvus-io/milvus",
+    "owner": "milvus-io",
+    "repo": "milvus",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:16:02Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/charmbracelet/bubbletea",
+    "owner": "charmbracelet",
+    "repo": "bubbletea",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:18:57Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/spf13/cobra",
+    "owner": "spf13",
+    "repo": "cobra",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:34:19Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/danielmiessler/Fabric",
+    "owner": "danielmiessler",
+    "repo": "Fabric",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:39:35Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/juanfont/headscale",
+    "owner": "juanfont",
+    "repo": "headscale",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T07:13:20Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/astaxie/build-web-application-with-golang",
+    "owner": "astaxie",
+    "repo": "build-web-application-with-golang",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:50:16Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/Wei-Shaw/sub2api",
+    "owner": "Wei-Shaw",
+    "repo": "sub2api",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:42:40Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/XTLS/Xray-core",
+    "owner": "XTLS",
+    "repo": "Xray-core",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:35:03Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/pingcap/tidb",
+    "owner": "pingcap",
+    "repo": "tidb",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:05:11Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/schollz/croc",
+    "owner": "schollz",
+    "repo": "croc",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:21:03Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/photoprism/photoprism",
+    "owner": "photoprism",
+    "repo": "photoprism",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:24:27Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/gofiber/fiber",
+    "owner": "gofiber",
+    "repo": "fiber",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:57:43Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/evanw/esbuild",
+    "owner": "evanw",
+    "repo": "esbuild",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:34:57Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/go-gorm/gorm",
+    "owner": "go-gorm",
+    "repo": "gorm",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:48:31Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/alibaba/open-code-review",
+    "owner": "alibaba",
+    "repo": "open-code-review",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:09:38Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/harness/harness",
+    "owner": "harness",
+    "repo": "harness",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:33:28Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/istio/istio",
+    "owner": "istio",
+    "repo": "istio",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:33:00Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/SagerNet/sing-box",
+    "owner": "SagerNet",
+    "repo": "sing-box",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:44:08Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/docker/compose",
+    "owner": "docker",
+    "repo": "compose",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:43:45Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/aquasecurity/trivy",
+    "owner": "aquasecurity",
+    "repo": "trivy",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:09:02Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/IceWhaleTech/CasaOS",
+    "owner": "IceWhaleTech",
+    "repo": "CasaOS",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:26:07Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/glanceapp/glance",
+    "owner": "glanceapp",
+    "repo": "glance",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:34:17Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/1Panel-dev/1Panel",
+    "owner": "1Panel-dev",
+    "repo": "1Panel",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:54:36Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/tailscale/tailscale",
+    "owner": "tailscale",
+    "repo": "tailscale",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:21:12Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/wailsapp/wails",
+    "owner": "wailsapp",
+    "repo": "wails",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:14:52Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/hashicorp/vault",
+    "owner": "hashicorp",
+    "repo": "vault",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:48:50Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/restic/restic",
+    "owner": "restic",
+    "repo": "restic",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:09:32Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/filebrowser/filebrowser",
+    "owner": "filebrowser",
+    "repo": "filebrowser",
+    "status": "archived"
+  },
+  {
+    "last_updated": "2026-09-22T11:30:09Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/esengine/DeepSeek-Reasonix",
+    "owner": "esengine",
+    "repo": "DeepSeek-Reasonix",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:53:02Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/unknwon/the-way-to-go_ZH_CN",
+    "owner": "unknwon",
+    "repo": "the-way-to-go_ZH_CN",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:05:52Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/seaweedfs/seaweedfs",
+    "owner": "seaweedfs",
+    "repo": "seaweedfs",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:09:30Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/derailed/k9s",
+    "owner": "derailed",
+    "repo": "k9s",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:29:31Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/v2fly/v2ray-core",
+    "owner": "v2fly",
+    "repo": "v2ray-core",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:26:04Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/binwiederhier/ntfy",
+    "owner": "binwiederhier",
+    "repo": "ntfy",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T07:08:11Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/ehang-io/nps",
+    "owner": "ehang-io",
+    "repo": "nps",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T07:50:55Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/k3s-io/k3s",
+    "owner": "k3s-io",
+    "repo": "k3s",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T01:14:27Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/halfrost/LeetCode-Go",
+    "owner": "halfrost",
+    "repo": "LeetCode-Go",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:20:28Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/zeromicro/go-zero",
+    "owner": "zeromicro",
+    "repo": "go-zero",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:56:10Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/github/github-mcp-server",
+    "owner": "github",
+    "repo": "github-mcp-server",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:51:20Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/podman-container-tools/podman",
+    "owner": "podman-container-tools",
+    "repo": "podman",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:23:12Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/labstack/echo",
+    "owner": "labstack",
+    "repo": "echo",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:58:23Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/cockroachdb/cockroach",
+    "owner": "cockroachdb",
+    "repo": "cockroach",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T07:18:20Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/beego/beego",
+    "owner": "beego",
+    "repo": "beego",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:43:52Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/dokku/dokku",
+    "owner": "dokku",
+    "repo": "dokku",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:53:09Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/kubernetes/minikube",
+    "owner": "kubernetes",
+    "repo": "minikube",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:36:49Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/iawia002/lux",
+    "owner": "iawia002",
+    "repo": "lux",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:18:31Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/grafana/k6",
+    "owner": "grafana",
+    "repo": "k6",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:49:45Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/projectdiscovery/nuclei",
+    "owner": "projectdiscovery",
+    "repo": "nuclei",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:18:52Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/abiosoft/colima",
+    "owner": "abiosoft",
+    "repo": "colima",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T03:54:36Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/chubin/wttr.in",
+    "owner": "chubin",
+    "repo": "wttr.in",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:04:33Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/spf13/viper",
+    "owner": "spf13",
+    "repo": "viper",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:09:46Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/helm/helm",
+    "owner": "helm",
+    "repo": "helm",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:37:57Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/opentofu/opentofu",
+    "owner": "opentofu",
+    "repo": "opentofu",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:17:20Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/hashicorp/consul",
+    "owner": "hashicorp",
+    "repo": "consul",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:41:51Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/sipeed/picoclaw",
+    "owner": "sipeed",
+    "repo": "picoclaw",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:59:56Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/micro-editor/micro",
+    "owner": "micro-editor",
+    "repo": "micro",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:44:15Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/netbirdio/netbird",
+    "owner": "netbirdio",
+    "repo": "netbird",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:56:17Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/goharbor/harbor",
+    "owner": "goharbor",
+    "repo": "harbor",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:19:59Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/gitleaks/gitleaks",
+    "owner": "gitleaks",
+    "repo": "gitleaks",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T10:37:07Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/XIU2/CloudflareSpeedTest",
+    "owner": "XIU2",
+    "repo": "CloudflareSpeedTest",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:49:46Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/authelia/authelia",
+    "owner": "authelia",
+    "repo": "authelia",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:27:15Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/grafana/loki",
+    "owner": "grafana",
+    "repo": "loki",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:48:43Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/Tencent/WeKnora",
+    "owner": "Tencent",
+    "repo": "WeKnora",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:41:30Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/cloudreve/cloudreve",
+    "owner": "cloudreve",
+    "repo": "cloudreve",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T08:50:41Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/fyne-io/fyne",
+    "owner": "fyne-io",
+    "repo": "fyne",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:39:19Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/tmrts/go-patterns",
+    "owner": "tmrts",
+    "repo": "go-patterns",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:14:10Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/charmbracelet/crush",
+    "owner": "charmbracelet",
+    "repo": "crush",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T09:44:04Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/trufflesecurity/trufflehog",
+    "owner": "trufflesecurity",
+    "repo": "trufflehog",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:34:09Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/charmbracelet/glow",
+    "owner": "charmbracelet",
+    "repo": "glow",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-22T11:37:59Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/Wox-launcher/Wox",
+    "owner": "Wox-launcher",
+    "repo": "Wox",
+    "status": "active"
+  },
+  {
+    "last_updated": "2026-09-21T11:08:55Z",
+    "cache_built_at": "2026-09-22T07:50:27.322740793-04:00",
+    "package": "github.com/go-kit/kit",
+    "owner": "go-kit",
+    "repo": "kit",
+    "status": "active"
+  }
+]

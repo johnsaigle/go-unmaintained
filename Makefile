@@ -8,6 +8,10 @@ GO_FILES=$(shell find . -name "*.go" -type f -not -path "./vendor/*" -not -path 
 CACHE_FILE=./pkg/popular/data/popular-packages.json
 CACHE_RELEASE_TAG=cache-data
 REPO=johnsaigle/go-unmaintained
+CACHE_NEW_ENTRIES?=10
+CACHE_REFRESH_ENTRIES?=10
+CACHE_MAX_ENTRIES?=500
+CACHE_STALE_DAYS?=90
 
 # Default target
 .PHONY: help
@@ -198,7 +202,7 @@ download-cache: ## Download latest popular packages cache from GitHub release
 	fi
 
 .PHONY: upload-cache
-upload-cache: ## Upload popular packages cache as GitHub release artifact (CI only)
+upload-cache: ## Upload popular packages cache as GitHub release artifact
 	@if [ ! -f $(CACHE_FILE) ] || [ "$$(cat $(CACHE_FILE))" = "[]" ]; then \
 		echo "Error: No cache data to upload"; \
 		exit 1; \
@@ -221,8 +225,13 @@ build-cache: ## Build popular packages cache incrementally (requires PAT env var
 		echo "Error: PAT environment variable is required"; \
 		exit 1; \
 	fi
-	@echo "Building popular packages cache (incremental: 10 new entries)..."
-	@go run ./cmd/cache-builder --new-entries 10 --output ./pkg/popular/data/popular-packages.json --token $$PAT
+	@echo "Building bounded popular packages cache..."
+	@go run ./cmd/cache-builder \
+		--new-entries $(CACHE_NEW_ENTRIES) \
+		--refresh-entries $(CACHE_REFRESH_ENTRIES) \
+		--max-entries $(CACHE_MAX_ENTRIES) \
+		--cache-stale-days $(CACHE_STALE_DAYS) \
+		--output $(CACHE_FILE)
 	@echo "✓ Cache built successfully"
 
 .PHONY: build-cache-bootstrap
@@ -232,7 +241,7 @@ build-cache-bootstrap: ## Bootstrap cache with many entries (requires PAT env va
 		exit 1; \
 	fi
 	@echo "Bootstrapping popular packages cache (100 new entries)..."
-	@go run ./cmd/cache-builder --new-entries 100 --output ./pkg/popular/data/popular-packages.json --token $$PAT
+	@$(MAKE) build-cache CACHE_NEW_ENTRIES=100
 	@echo "✓ Cache built successfully"
 
 .PHONY: build-cache-small
@@ -242,7 +251,7 @@ build-cache-small: ## Build cache with a few entries for testing (requires PAT e
 		exit 1; \
 	fi
 	@echo "Building small popular packages cache (5 new entries)..."
-	@go run ./cmd/cache-builder --new-entries 5 --output ./pkg/popular/data/popular-packages.json --token $$PAT
+	@$(MAKE) build-cache CACHE_NEW_ENTRIES=5 CACHE_REFRESH_ENTRIES=5
 	@echo "✓ Cache built successfully"
 
 # Quick development workflow
