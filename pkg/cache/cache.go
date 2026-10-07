@@ -21,8 +21,8 @@ const (
 // CacheEntry represents a cached repository analysis result
 type CacheEntry struct {
 	RepoInfo  *types.RepoInfo `json:"repo_info"`
-	Timestamp time.Time        `json:"timestamp"`
-	Version   string           `json:"latest_version,omitempty"`
+	Timestamp time.Time       `json:"timestamp"`
+	Version   string          `json:"latest_version,omitempty"`
 }
 
 // Cache manages persistent caching of repository information

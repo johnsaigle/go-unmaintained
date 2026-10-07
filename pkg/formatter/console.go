@@ -13,10 +13,13 @@ import (
 // ConsoleFormatter formats output for human-readable console display
 type ConsoleFormatter struct {
 	opts Options
+	c    Colorizer
 }
 
 // Format writes results in human-readable console format
 func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summary analyzer.SummaryStats) error {
+	f.c = Colorizer{Enabled: f.opts.Color}
+
 	// Separate results into categories
 	var unmaintained []analyzer.Result
 	var unknown []analyzer.Result
@@ -47,147 +50,201 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 		return scoreI < scoreJ
 	})
 
-	fmt.Fprintln(w, "Dependency Analysis Results:")
-	fmt.Fprintln(w, "============================")
+	fmt.Fprintln(w, f.c.Bold("Dependency Analysis Results"))
+	fmt.Fprintln(w, f.c.Dim(strings.Repeat("═", 27)))
 
-	// Show unmaintained packages first (most important)
-	//nolint:nestif // Formatting logic requires nested conditionals for different display scenarios
-	if len(unmaintained) > 0 {
-		fmt.Fprintf(w, "\n🚨 UNMAINTAINED PACKAGES (%d found):\n", len(unmaintained))
-		fmt.Fprintln(w, "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-		for _, result := range unmaintained {
-			// Show dependency type
-			depType := "indirect"
-			if result.IsDirect {
-				depType = "direct"
-			}
+	// Split by dependency type: direct dependencies can be fixed in go.mod,
+	// while indirect ones require updating the parent package. Showing them
+	// under separate headings makes remediation obvious.
+	var direct, indirect []analyzer.Result
+	for _, result := range unmaintained {
+		if result.IsDirect {
+			direct = append(direct, result)
+		} else {
+			indirect = append(indirect, result)
+		}
+	}
 
-			fmt.Fprintf(w, "❌ %s (%s) - %s\n", result.Package, depType, result.Details)
+	sections := []struct {
+		title string
+		hint  string
+		items []analyzer.Result
+	}{
+		{
+			title: "UNMAINTAINED — DIRECT DEPENDENCIES (%d)",
+			hint:  "Listed in your go.mod; upgrade or replace these directly.",
+			items: direct,
+		},
+		{
+			title: "UNMAINTAINED — INDIRECT DEPENDENCIES (%d)",
+			hint:  "Pulled in by your dependencies; fix the parent package.",
+			items: indirect,
+		},
+	}
 
-			// Show retraction warning if applicable
-			if result.IsRetracted {
-				fmt.Fprintln(w, "   ⚠️  VERSION RETRACTED")
-				if result.RetractionReason != "" {
-					fmt.Fprintf(w, "   Reason: %s\n", result.RetractionReason)
-				}
-			}
+	shown := 0
+	for _, section := range sections {
+		if len(section.items) == 0 {
+			continue
+		}
+		// FailFast shows only the first (most severe) unmaintained package
+		if f.opts.FailFast && shown > 0 {
+			break
+		}
 
-			// Show repository URL for verification
-			if url := GetRepositoryURL(result); url != "" {
-				fmt.Fprintf(w, "   🔗 %s\n", url)
-			}
+		fmt.Fprintln(w)
+		fmt.Fprintln(w, f.c.Red(fmt.Sprintf(section.title, len(section.items))))
+		fmt.Fprintln(w, f.c.Dim(strings.Repeat("─", 44)))
+		fmt.Fprintln(w, f.c.Dim(section.hint))
 
-			// Show last activity information with context
-			if result.RepoInfo != nil {
-				if result.RepoInfo.LastCommitAt != nil {
-					daysSinceCommit := int(time.Since(*result.RepoInfo.LastCommitAt).Hours() / 24)
-					fmt.Fprintf(w, "   Last commit: %d days ago\n", daysSinceCommit)
-				} else if result.DaysSinceUpdate > 0 {
-					// Fall back to UpdatedAt if no commit info available
-					fmt.Fprintf(w, "   Last activity: %d days ago\n", result.DaysSinceUpdate)
-				}
-
-				// For archived repos, note that they're archived
-				if result.RepoInfo.IsArchived {
-					fmt.Fprintln(w, "   ⚠️  Repository archived (no new commits possible)")
-				}
-			}
-
-			// Show dependency path for indirect dependencies
-			if f.opts.ShowPaths && !result.IsDirect && len(result.DependencyPath) > 0 {
-				fmt.Fprintf(w, "   📍 Dependency path: %s\n", strings.Join(result.DependencyPath, " → "))
-			}
-
-			if f.opts.FailFast {
+		for _, result := range section.items {
+			if f.opts.FailFast && shown > 0 {
 				break
 			}
+			f.writeUnmaintained(w, result)
+			shown++
 		}
 	}
 
 	// Show unknown status packages (informational)
 	if len(unknown) > 0 {
-		fmt.Fprintf(w, "\n❓ UNKNOWN STATUS PACKAGES (%d found):\n", len(unknown))
-		fmt.Fprintln(w, "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+		fmt.Fprintln(w)
+		fmt.Fprintln(w, f.c.Yellow(fmt.Sprintf("UNKNOWN STATUS (%d)", len(unknown))))
+		fmt.Fprintln(w, f.c.Dim(strings.Repeat("─", 44)))
 		for _, result := range unknown {
-			fmt.Fprintf(w, "❓ %s - %s\n", result.Package, result.Details)
+			fmt.Fprintf(w, "\n  %s — %s\n", f.c.Yellow("? "+result.Package), result.Details)
 		}
 	}
 
 	// Show maintained packages only in verbose mode
-	//nolint:nestif // Verbose output requires nested conditionals for detailed formatting
 	if f.opts.Verbose && len(maintained) > 0 {
-		fmt.Fprintf(w, "\n✅ MAINTAINED PACKAGES (%d found):\n", len(maintained))
-		fmt.Fprintln(w, "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+		fmt.Fprintln(w)
+		fmt.Fprintln(w, f.c.Green(fmt.Sprintf("MAINTAINED PACKAGES (%d)", len(maintained))))
+		fmt.Fprintln(w, f.c.Dim(strings.Repeat("─", 44)))
 		for _, result := range maintained {
-			// Show dependency type in verbose mode
-			depType := "indirect"
-			if result.IsDirect {
-				depType = "direct"
-			}
-
-			fmt.Fprintf(w, "✅ %s (%s) - %s\n", result.Package, depType, result.Details)
+			fmt.Fprintf(w, "\n  %s — %s\n", f.c.Green("✓ "+result.Package), result.Details)
 
 			// Show retraction warning even for maintained packages
 			if result.IsRetracted {
-				fmt.Fprintln(w, "   ⚠️  VERSION RETRACTED")
+				fmt.Fprintln(w, "     "+f.c.Yellow("VERSION RETRACTED"))
 				if result.RetractionReason != "" {
-					fmt.Fprintf(w, "   Reason: %s\n", result.RetractionReason)
+					fmt.Fprintf(w, "     Reason: %s\n", result.RetractionReason)
 				}
 			}
 
-			// Show URL in verbose mode for verification
-			if url := GetRepositoryURL(result); url != "" {
-				fmt.Fprintf(w, "   🔗 %s\n", url)
-			}
+			f.writeRepoLine(w, result)
 		}
 	}
 
 	// Print summary
-	fmt.Fprint(w, "\n"+strings.Repeat("═", 50)+"\n")
-	fmt.Fprintln(w, "📊 ANALYSIS SUMMARY")
-	fmt.Fprint(w, strings.Repeat("═", 50)+"\n")
-	fmt.Fprintf(w, "Total dependencies analyzed: %d\n\n", summary.TotalDependencies)
+	fmt.Fprint(w, "\n"+f.c.Dim(strings.Repeat("═", 50))+"\n")
+	fmt.Fprintln(w, f.c.Bold("ANALYSIS SUMMARY"))
+	fmt.Fprint(w, f.c.Dim(strings.Repeat("═", 50))+"\n")
+	fmt.Fprintf(w, "Total dependencies analyzed: %d\n", summary.TotalDependencies)
 
-	//nolint:nestif // Summary formatting requires nested conditionals for different counts
 	if summary.UnmaintainedCount > 0 {
-		fmt.Fprintf(w, "🚨 UNMAINTAINED PACKAGES: %d", summary.UnmaintainedCount)
-		if summary.DirectUnmaintained > 0 || summary.IndirectUnmaintained > 0 {
-			fmt.Fprintf(w, " (%d direct, %d indirect)", summary.DirectUnmaintained, summary.IndirectUnmaintained)
-		}
-		fmt.Fprintln(w)
-
-		if summary.ArchivedCount > 0 {
-			fmt.Fprintf(w, "   📦 Archived repositories: %d\n", summary.ArchivedCount)
-		}
-		if summary.NotFoundCount > 0 {
-			fmt.Fprintf(w, "   🚫 Not found/deleted: %d\n", summary.NotFoundCount)
-		}
-		if summary.StaleInactiveCount > 0 {
-			fmt.Fprintf(w, "   💤 Stale/Inactive: %d\n", summary.StaleInactiveCount)
-		}
-		if summary.OutdatedCount > 0 {
-			fmt.Fprintf(w, "   📅 Outdated versions: %d\n", summary.OutdatedCount)
-		}
-		fmt.Fprintln(w)
+		writeUnmaintainedSummary(w, summary, f.c)
 	}
 
 	if summary.UnknownCount > 0 {
-		fmt.Fprintf(w, "❓ UNKNOWN STATUS: %d\n", summary.UnknownCount)
-		fmt.Fprintln(w, "   (Non-GitHub dependencies that couldn't be fully analyzed)")
+		fmt.Fprintf(w, "\n%s\n", f.c.Yellow(fmt.Sprintf("Unknown status: %d", summary.UnknownCount)))
+		fmt.Fprintln(w, f.c.Dim("   (Non-GitHub dependencies that couldn't be fully analyzed)"))
 	}
 
 	if summary.RetractedCount > 0 {
-		fmt.Fprintf(w, "\n⚠️  RETRACTED VERSIONS: %d\n", summary.RetractedCount)
-		fmt.Fprintln(w, "   (Module authors marked these versions as problematic)")
+		fmt.Fprintf(w, "\n%s\n", f.c.Yellow(fmt.Sprintf("Retracted versions: %d", summary.RetractedCount)))
+		fmt.Fprintln(w, f.c.Dim("   (Module authors marked these versions as problematic)"))
 	}
 
 	maintainedCount := summary.TotalDependencies - summary.UnmaintainedCount - summary.UnknownCount
 	if maintainedCount > 0 {
-		fmt.Fprintf(w, "✅ MAINTAINED PACKAGES: %d\n", maintainedCount)
-		fmt.Fprintln(w, "   (Active repositories with recent updates)")
+		fmt.Fprintf(w, "\n%s\n", f.c.Green(fmt.Sprintf("Maintained: %d", maintainedCount)))
+		fmt.Fprintln(w, f.c.Dim("   (Active repositories with recent updates)"))
 	}
 
 	return nil
+}
+
+// writeUnmaintainedSummary writes the unmaintained breakdown of the summary
+func writeUnmaintainedSummary(w io.Writer, summary analyzer.SummaryStats, c Colorizer) {
+	count := fmt.Sprintf("Unmaintained: %d", summary.UnmaintainedCount)
+	if summary.DirectUnmaintained > 0 || summary.IndirectUnmaintained > 0 {
+		count += fmt.Sprintf(" (%d direct, %d indirect)", summary.DirectUnmaintained, summary.IndirectUnmaintained)
+	}
+	fmt.Fprintf(w, "\n%s\n", c.Red(count))
+
+	if summary.ArchivedCount > 0 {
+		fmt.Fprintf(w, "   Archived repositories: %d\n", summary.ArchivedCount)
+	}
+	if summary.NotFoundCount > 0 {
+		fmt.Fprintf(w, "   Not found/deleted: %d\n", summary.NotFoundCount)
+	}
+	if summary.StaleInactiveCount > 0 {
+		fmt.Fprintf(w, "   Stale/inactive: %d\n", summary.StaleInactiveCount)
+	}
+	if summary.OutdatedCount > 0 {
+		fmt.Fprintf(w, "   Outdated versions: %d\n", summary.OutdatedCount)
+	}
+}
+
+// writeUnmaintained writes a single unmaintained result with its details
+func (f *ConsoleFormatter) writeUnmaintained(w io.Writer, result analyzer.Result) {
+	fmt.Fprintf(w, "\n  %s — %s\n", f.c.Red("✗ "+result.Package), result.Details)
+
+	// Show retraction warning if applicable
+	if result.IsRetracted {
+		fmt.Fprintln(w, "     "+f.c.Yellow("VERSION RETRACTED"))
+		if result.RetractionReason != "" {
+			fmt.Fprintf(w, "     Reason: %s\n", result.RetractionReason)
+		}
+	}
+
+	f.writeRepoLine(w, result)
+
+	// Show last activity information with context. "No commits" and "last
+	// activity" are deliberately labeled differently: a commit is a push to
+	// the default branch, while activity also covers releases, issues, and
+	// other repository events.
+	if result.RepoInfo != nil {
+		if result.RepoInfo.LastCommitAt != nil {
+			daysSinceCommit := int(time.Since(*result.RepoInfo.LastCommitAt).Hours() / 24)
+			fmt.Fprintf(w, "     No commits in %d days\n", daysSinceCommit)
+		} else if result.DaysSinceUpdate > 0 {
+			fmt.Fprintf(w, "     Last activity: %d days ago (includes non-commit events)\n", result.DaysSinceUpdate)
+		}
+
+		// For archived repos, note that they're archived
+		if result.RepoInfo.IsArchived {
+			fmt.Fprintln(w, "     "+f.c.Red("Archived: no new commits are possible"))
+		}
+	}
+
+	// Show dependency path for indirect dependencies
+	if f.opts.ShowPaths && !result.IsDirect && len(result.DependencyPath) > 0 {
+		fmt.Fprintf(w, "     Required by: %s\n", f.c.Dim(strings.Join(result.DependencyPath, " → ")))
+	}
+}
+
+// writeRepoLine writes the repository reference as a short slug with the full
+// URL in parentheses, e.g. "Repo: owner/repo (https://github.com/owner/repo)"
+func (f *ConsoleFormatter) writeRepoLine(w io.Writer, result analyzer.Result) {
+	url := GetRepositoryURL(result)
+	if url == "" {
+		return
+	}
+	fmt.Fprintf(w, "     Repo: %s (%s)\n", f.c.Dim(repoSlug(url)), url)
+}
+
+// repoSlug extracts a short "owner/repo" slug from a repository URL
+func repoSlug(url string) string {
+	trimmed := strings.TrimPrefix(url, "https://")
+	trimmed = strings.TrimPrefix(trimmed, "http://")
+	trimmed = strings.TrimSuffix(trimmed, "/")
+	parts := strings.Split(trimmed, "/")
+	if len(parts) >= 2 {
+		return parts[len(parts)-2] + "/" + parts[len(parts)-1]
+	}
+	return trimmed
 }
 
 // ShouldExit returns the exit code based on results

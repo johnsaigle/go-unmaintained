@@ -3,6 +3,7 @@ package formatter
 import (
 	"bytes"
 	"encoding/json"
+	"os"
 	"strings"
 	"testing"
 
@@ -90,9 +91,12 @@ func TestConsoleFormatter_Format(t *testing.T) {
 
 	output := buf.String()
 
-	// Must contain unmaintained section
-	if !strings.Contains(output, "UNMAINTAINED PACKAGES") {
-		t.Error("output should contain UNMAINTAINED PACKAGES header")
+	// Must contain direct and indirect unmaintained sections
+	if !strings.Contains(output, "UNMAINTAINED — DIRECT DEPENDENCIES") {
+		t.Error("output should contain UNMAINTAINED — DIRECT DEPENDENCIES header")
+	}
+	if !strings.Contains(output, "UNMAINTAINED — INDIRECT DEPENDENCIES") {
+		t.Error("output should contain UNMAINTAINED — INDIRECT DEPENDENCIES header")
 	}
 
 	// Must contain the archived package
@@ -111,8 +115,13 @@ func TestConsoleFormatter_Format(t *testing.T) {
 	}
 
 	// Should show dependency path for indirect deps
-	if !strings.Contains(output, "Dependency path") {
+	if !strings.Contains(output, "Required by:") {
 		t.Error("output should contain dependency path for indirect deps")
+	}
+
+	// Should show repo slug with URL in parens
+	if !strings.Contains(output, "Repo: archived/repo (https://github.com/archived/repo)") {
+		t.Error("output should contain repo slug with URL in parens")
 	}
 
 	// Summary section
@@ -300,6 +309,84 @@ func TestDefaultShouldExit(t *testing.T) {
 	if code := DefaultShouldExit(nil, false); code != 0 {
 		t.Errorf("DefaultShouldExit(nil, false) = %d, want 0", code)
 	}
+}
+
+func TestConsoleFormatter_Color(t *testing.T) {
+	fmtr, _ := New("console", Options{Color: true})
+	var buf bytes.Buffer
+
+	err := fmtr.Format(&buf, testResults(), testSummary())
+	if err != nil {
+		t.Fatalf("Format() error: %v", err)
+	}
+
+	output := buf.String()
+
+	// Colored output should contain ANSI escape codes
+	if !strings.Contains(output, "\x1b[") {
+		t.Error("colored output should contain ANSI escape codes")
+	}
+
+	// Unmaintained entries should be red
+	if !strings.Contains(output, "\x1b[31m✗ github.com/archived/repo") {
+		t.Error("unmaintained entries should be marked red")
+	}
+
+	// No emojis should appear in output
+	for _, r := range output {
+		if r > 0xFFFF {
+			t.Errorf("output should not contain emojis, found %q", string(r))
+		}
+	}
+}
+
+func TestConsoleFormatter_NoColor(t *testing.T) {
+	fmtr, _ := New("console", Options{Color: false})
+	var buf bytes.Buffer
+
+	err := fmtr.Format(&buf, testResults(), testSummary())
+	if err != nil {
+		t.Fatalf("Format() error: %v", err)
+	}
+
+	if strings.Contains(buf.String(), "\x1b[") {
+		t.Error("output should not contain ANSI escape codes when color is disabled")
+	}
+}
+
+func TestResolveColor(t *testing.T) {
+	t.Run("always", func(t *testing.T) {
+		if !ResolveColor("always", nil) {
+			t.Error("always should enable color even with nil file")
+		}
+	})
+	t.Run("never", func(t *testing.T) {
+		if ResolveColor("never", os.Stdout) {
+			t.Error("never should disable color")
+		}
+	})
+	t.Run("case insensitive", func(t *testing.T) {
+		if ResolveColor("NEVER", os.Stdout) {
+			t.Error("NEVER should disable color")
+		}
+	})
+	t.Run("auto respects NO_COLOR", func(t *testing.T) {
+		t.Setenv("NO_COLOR", "1")
+		if ResolveColor("auto", os.Stdout) {
+			t.Error("auto should disable color when NO_COLOR is set")
+		}
+	})
+	t.Run("auto with non-terminal", func(t *testing.T) {
+		// A pipe is not a character device, so color should be disabled
+		f, err := os.CreateTemp(t.TempDir(), "pipe")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer f.Close()
+		if ResolveColor("auto", f) {
+			t.Error("auto should disable color for non-terminal files")
+		}
+	})
 }
 
 func TestGetRepositoryURL(t *testing.T) {

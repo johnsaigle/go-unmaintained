@@ -22,6 +22,8 @@ jobs:
   check-self:
     name: Check Own Dependencies
     runs-on: ubuntu-latest
+    # Dedicated environment for PAT secret access (zizmor: secrets-outside-env)
+    environment: self-check
     permissions:
       contents: read
       # Required for creating/updating issues on scheduled runs

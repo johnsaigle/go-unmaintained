@@ -131,8 +131,9 @@ func analyzeProject(projectPath string) error {
 
 	// Always show startup message for non-machine-readable formats
 	if format == "console" && !jsonOutput {
-		fmt.Printf("📦 Project: %s\n", mod.Path)
-		fmt.Printf("🔍 Analyzing %d dependencies", len(mod.Dependencies))
+		c := formatter.Colorizer{Enabled: formatter.ResolveColor(colorOutput, os.Stdout)}
+		fmt.Printf("Project: %s\n", c.Bold(mod.Path))
+		fmt.Printf("Analyzing %d dependencies", len(mod.Dependencies))
 
 		// Show mode indicator
 		if !syncMode {
@@ -196,6 +197,7 @@ func analyzeProject(projectPath string) error {
 		ShowPaths:  tree,
 		FailFast:   failFast,
 		NoExitCode: noExitCode,
+		Color:      formatter.ResolveColor(colorOutput, os.Stdout),
 	}
 
 	fmtr, err := formatter.New(format, fmtOpts)
@@ -291,6 +293,7 @@ func analyzeSinglePackage(pkg string) error {
 		ShowPaths:  tree,
 		FailFast:   false,
 		NoExitCode: noExitCode,
+		Color:      formatter.ResolveColor(colorOutput, os.Stdout),
 	}
 
 	fmtr, err := formatter.New(format, fmtOpts)
@@ -303,7 +306,8 @@ func analyzeSinglePackage(pkg string) error {
 
 	// Add package header for console format
 	if format == "console" {
-		fmt.Printf("📦 Package: %s@%s\n\n", packagePath, version)
+		c := formatter.Colorizer{Enabled: formatter.ResolveColor(colorOutput, os.Stdout)}
+		fmt.Printf("Package: %s\n\n", c.Bold(packagePath+"@"+version))
 	}
 
 	if err := fmtr.Format(os.Stdout, []analyzer.Result{result}, summary); err != nil {

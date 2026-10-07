@@ -145,44 +145,57 @@ See `go-unmaintained --help` for all options.
 📦 Project: github.com/example/myapp
 🔍 Analyzing 25 dependencies (concurrent: 5 workers)...
 
-Dependency Analysis Results:
-============================
+Dependency Analysis Results
+═══════════════════════════
 
-🚨 UNMAINTAINED PACKAGES (4 found):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-❌ github.com/abandoned/old-lib (direct) - Repository is archived
-   🔗 https://github.com/abandoned/old-lib
-   Last commit: 1024 days ago
-   ⚠️  Repository archived (no new commits possible)
-❌ github.com/missing/gone (direct) - Repository not found
-   🔗 https://github.com/missing/gone
-❌ github.com/stale/inactive (indirect) - Repository inactive for 500 days
-   🔗 https://github.com/stale/inactive
-   Last commit: 500 days ago
-   📍 Dependency path: myapp → dep-a → stale/inactive
-❌ github.com/old/version (direct) - Using outdated version v1.2.0 (latest: v2.1.0)
-   🔗 https://github.com/old/version
+UNMAINTAINED — DIRECT DEPENDENCIES (3)
+────────────────────────────────────────────
+Listed in your go.mod; upgrade or replace these directly.
 
-❓ UNKNOWN STATUS PACKAGES (1 found):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-❓ golang.org/x/tools - Active non-GitHub dependency (golang.org): Official Go extended package
+  ✗ github.com/abandoned/old-lib — Repository is archived
+     Repo: abandoned/old-lib (https://github.com/abandoned/old-lib)
+     No commits in 1024 days
+     Archived: no new commits are possible
+
+  ✗ github.com/missing/gone — Repository not found
+     Repo: missing/gone (https://github.com/missing/gone)
+
+  ✗ github.com/old/version — Using outdated version v1.2.0 (latest: v2.1.0)
+     Repo: old/version (https://github.com/old/version)
+
+UNMAINTAINED — INDIRECT DEPENDENCIES (1)
+────────────────────────────────────────────
+Pulled in by your dependencies; fix the parent package.
+
+  ✗ github.com/stale/inactive — Repository inactive for 500 days
+     Repo: stale/inactive (https://github.com/stale/inactive)
+     No commits in 500 days
+     Required by: myapp → dep-a → github.com/stale/inactive
+
+UNKNOWN STATUS (1)
+────────────────────────────────────────────
+
+  ? golang.org/x/tools — Active non-GitHub dependency (golang.org): Official Go extended package
 
 ══════════════════════════════════════════════════
-📊 ANALYSIS SUMMARY
+ANALYSIS SUMMARY
 ══════════════════════════════════════════════════
 Total dependencies analyzed: 25
 
-🚨 UNMAINTAINED PACKAGES: 4 (3 direct, 1 indirect)
-   📦 Archived repositories: 1
-   🚫 Not found/deleted: 1
-   💤 Stale/Inactive: 1
-   📅 Outdated versions: 1
+Unmaintained: 4 (3 direct, 1 indirect)
+   Archived repositories: 1
+   Not found/deleted: 1
+   Stale/inactive: 1
+   Outdated versions: 1
 
-❓ UNKNOWN STATUS: 1
+Unknown status: 1
    (Non-GitHub dependencies that couldn't be fully analyzed)
-✅ MAINTAINED PACKAGES: 20
+
+Maintained: 20
    (Active repositories with recent updates)
 ```
+
+Output is colorized when writing to a terminal (red for unmaintained, yellow for unknown, green for maintained). Control with `--color=always|auto|never`; `auto` (the default) also respects the `NO_COLOR` environment variable.
 
 ## Detection Heuristics
 

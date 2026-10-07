@@ -25,6 +25,8 @@ jobs:
   update-cache:
     name: Update Cache
     runs-on: ubuntu-latest
+    # Dedicated environment for PAT secret access (zizmor: secrets-outside-env)
+    environment: cache-release
     permissions:
       # Required to create/update releases and upload artifacts
       contents: write

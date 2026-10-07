@@ -24,6 +24,7 @@ type Options struct {
 	ShowPaths  bool
 	FailFast   bool
 	NoExitCode bool
+	Color      bool
 }
 
 // New creates a formatter based on the format string
