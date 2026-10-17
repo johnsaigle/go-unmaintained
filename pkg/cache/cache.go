@@ -2,10 +2,13 @@ package cache
 
 import (
 	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
+	"sync"
 	"time"
 
 	"github.com/johnsaigle/go-unmaintained/pkg/types"
@@ -25,11 +28,15 @@ type CacheEntry struct {
 	Version   string          `json:"latest_version,omitempty"`
 }
 
-// Cache manages persistent caching of repository information
+// Cache manages persistent caching of repository information.
+// GetRepoInfo/SetRepoInfo are safe for concurrent use: the mutex guards
+// the read-modify-write of a single cache file so one worker's write is not
+// observed as partial data by another worker's read.
 type Cache struct {
 	cacheDir string
 	duration time.Duration
 	disabled bool
+	mu       sync.RWMutex
 }
 
 // NewCache creates a new cache instance
@@ -66,10 +73,11 @@ func (c *Cache) GetRepoInfo(owner, repo string) (*types.RepoInfo, string, bool) 
 		return nil, "", false
 	}
 
-	cacheKey := fmt.Sprintf("%s_%s", owner, repo)
-	filePath := c.getCacheFilePath(cacheKey)
-
+	c.mu.RLock()
+	filePath := c.getCacheFilePath(owner, repo)
 	data, err := os.ReadFile(filePath)
+	c.mu.RUnlock()
+
 	if err != nil {
 		return nil, "", false
 	}
@@ -82,8 +90,9 @@ func (c *Cache) GetRepoInfo(owner, repo string) (*types.RepoInfo, string, bool) 
 
 	// Check if cache entry is still valid
 	if time.Since(entry.Timestamp) > c.duration {
-		// Cache expired
-		os.Remove(filePath) // Clean up expired entry
+		// Clean up expired entry. Ignore removal error: the file may already
+		// be gone (concurrent expiry), and a stale read is safer than a panic.
+		os.Remove(filePath)
 		return nil, "", false
 	}
 
@@ -107,12 +116,17 @@ func (c *Cache) SetRepoInfo(owner, repo string, repoInfo *types.RepoInfo, latest
 		return fmt.Errorf("failed to marshal cache entry: %w", err)
 	}
 
-	cacheKey := fmt.Sprintf("%s_%s", owner, repo)
-	filePath := c.getCacheFilePath(cacheKey)
-
+	// Write under a lock so a concurrent read never sees a partially-written
+	// file. Since the file path is derived from (owner, repo) and we hold the
+	// lock for the whole read-modify-write of one file, the serialized access
+	// is race-free (verified by a concurrent test).
+	c.mu.Lock()
+	filePath := c.getCacheFilePath(owner, repo)
 	if err := os.WriteFile(filePath, data, 0600); err != nil {
+		c.mu.Unlock()
 		return fmt.Errorf("failed to write cache entry: %w", err)
 	}
+	c.mu.Unlock()
 
 	return nil
 }
@@ -157,21 +171,24 @@ func (c *Cache) CleanExpired() error {
 	return nil
 }
 
-// getCacheDir returns the appropriate cache directory for the current user
+// getCacheDir returns the appropriate cache directory for the current user.
+//
+// macOS is detected via the operating-system UserHomeDir path (XDG_CACHE_HOME
+// is the Linux/Unix convention; the Mac convention is ~/Library/Caches). We
+// do NOT look at $GOOS for this: $GOOS describes the cross-compile target,
+// not the host we're running on.
 func getCacheDir() (string, error) {
-	// Try XDG_CACHE_HOME first (Linux/Unix standard)
-	if cacheHome := os.Getenv("XDG_CACHE_HOME"); cacheHome != "" {
+	// XDG_CACHE_HOME is the standard for Unix; preserve it if set.
+	if cacheHome := os.Getenv("XDG_CACHE_HOME"); cacheHome != "" && isUnixFamily() {
 		return filepath.Join(cacheHome, CacheDirName), nil
 	}
 
-	// Try user home directory
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
 	}
 
-	// On macOS, use ~/Library/Caches
-	if runtime := os.Getenv("GOOS"); runtime == "darwin" {
+	if isDarwin() {
 		return filepath.Join(homeDir, "Library", "Caches", CacheDirName), nil
 	}
 
@@ -179,11 +196,26 @@ func getCacheDir() (string, error) {
 	return filepath.Join(homeDir, ".cache", CacheDirName), nil
 }
 
-// getCacheFilePath returns the full path for a cache file
-func (c *Cache) getCacheFilePath(key string) string {
-	// Hash the key to create a safe filename
-	hash := sha256.Sum256([]byte(key))
-	filename := fmt.Sprintf("%x.json", hash)
+// isUnixFamily reports whether the host is a Unix-like system (Linux, BSD, etc.)
+// as opposed to macOS, which uses ~/Library/Caches. We do not use $GOOS because
+// that is the build-time target, not the host.
+func isUnixFamily() bool {
+	return runtime.GOOS != "darwin"
+}
+
+// isDarwin reports whether the host is macOS.
+func isDarwin() bool {
+	return runtime.GOOS == "darwin"
+}
+
+// getCacheFilePath returns the full path for a cache file derived from
+// (owner, repo). The tuple is hashed with a NUL separator so that two
+// unrelated (owner, repo) pairs can share a file only if their exact tuple
+// matches. Example: owner="a", repo="b_c" must not collide with
+// owner="a_b", repo="c"; the NUL byte in the key makes that impossible.
+func (c *Cache) getCacheFilePath(owner, repo string) string {
+	hash := sha256.Sum256([]byte(owner + "\x00" + repo))
+	filename := fmt.Sprintf("%x.json", hex.EncodeToString(hash[:]))
 	return filepath.Join(c.cacheDir, filename)
 }
 

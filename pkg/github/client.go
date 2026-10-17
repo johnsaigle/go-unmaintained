@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
+	"net/url"
 	"sort"
 	"strings"
 	"time"
@@ -16,8 +18,9 @@ import (
 
 // Client wraps the GitHub API client with authentication
 type Client struct {
-	client *github.Client
-	token  string
+	client  *github.Client
+	token   string
+	baseURL string
 }
 
 // RepoInfo is an alias for types.RepoInfo for backward compatibility.
@@ -37,8 +40,9 @@ func NewClient(token string) (*Client, error) {
 	tc := oauth2.NewClient(context.Background(), ts)
 
 	client := &Client{
-		client: github.NewClient(tc),
-		token:  token,
+		client:  github.NewClient(tc),
+		token:   token,
+		baseURL: "https://api.github.com",
 	}
 
 	// Validate the token before returning the client
@@ -50,6 +54,21 @@ func NewClient(token string) (*Client, error) {
 	}
 
 	return client, nil
+}
+
+// NewClientForTest creates a client whose go-github client is bound to the
+// given baseURL. It skips token validation so unit tests can drive
+// GetRepositoryInfo/GetLatestVersion against an httptest server.
+func NewClientForTest(baseURL string) *Client {
+	gc := github.NewClient(&http.Client{})
+	if u, err := url.Parse(baseURL); err == nil {
+		// go-github requires a trailing slash on the base URL.
+		if !strings.HasSuffix(u.String(), "/") {
+			u.Path += "/"
+		}
+		gc.BaseURL = u
+	}
+	return &Client{client: gc, baseURL: baseURL}
 }
 
 // ValidateToken checks if the GitHub token is valid and has necessary permissions

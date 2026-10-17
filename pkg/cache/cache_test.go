@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"sync"
 	"testing"
 	"time"
 
@@ -195,6 +196,35 @@ func TestCache_GetStats(t *testing.T) {
 	}
 }
 
+func TestCache_ConcurrentReadWrite(t *testing.T) {
+	t.Setenv("XDG_CACHE_HOME", t.TempDir())
+
+	c, err := NewCache(false, 1*time.Hour)
+	if err != nil {
+		t.Fatalf("NewCache() error: %v", err)
+	}
+
+	const goroutines = 32
+	const iterations = 50
+	var wg sync.WaitGroup
+	for g := 0; g < goroutines; g++ {
+		wg.Add(1)
+		go func(g int) {
+			defer wg.Done()
+			// Each goroutine alternates writes and reads on the same key.
+			for i := 0; i < iterations; i++ {
+				// Even iterations: write. Odd iterations: read.
+				if (g+i)%2 == 0 {
+					_ = c.SetRepoInfo("user", "repo", &types.RepoInfo{Exists: true}, "v1.0.0")
+				} else {
+					_, _, _ = c.GetRepoInfo("user", "repo")
+				}
+			}
+		}(g)
+	}
+	wg.Wait()
+}
+
 func TestGetCacheFilePath_Deterministic(t *testing.T) {
 	t.Setenv("XDG_CACHE_HOME", t.TempDir())
 
@@ -203,14 +233,22 @@ func TestGetCacheFilePath_Deterministic(t *testing.T) {
 		t.Fatalf("NewCache() error: %v", err)
 	}
 
-	path1 := c.getCacheFilePath("user_repo")
-	path2 := c.getCacheFilePath("user_repo")
+	path1 := c.getCacheFilePath("user", "repo")
+	path2 := c.getCacheFilePath("user", "repo")
 	if path1 != path2 {
-		t.Error("getCacheFilePath should be deterministic for same key")
+		t.Error("getCacheFilePath should be deterministic for the same (owner, repo)")
 	}
 
-	path3 := c.getCacheFilePath("different_key")
+	// A different pair must not collide
+	path3 := c.getCacheFilePath("different", "pair")
 	if path1 == path3 {
-		t.Error("getCacheFilePath should produce different paths for different keys")
+		t.Error("getCacheFilePath should produce different paths for different (owner, repo)")
+	}
+
+	// The two distinct pairs (a, b_c) and (a_b, c) must not collide
+	pathA := c.getCacheFilePath("a", "b_c")
+	pathB := c.getCacheFilePath("a_b", "c")
+	if pathA == pathB {
+		t.Error("(a, b_c) and (a_b, c) must not share a cache file")
 	}
 }

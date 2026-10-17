@@ -26,13 +26,18 @@ func (f *ConsoleFormatter) Format(w io.Writer, results []analyzer.Result, summar
 	var maintained []analyzer.Result
 
 	for _, result := range results {
-		if result.IsUnmaintained {
+		switch {
+		case result.IsUnmaintained:
 			unmaintained = append(unmaintained, result)
-		} else if result.Reason == analyzer.ReasonUnknown {
-			// Only show truly unknown packages, not actively maintained ones
+		case result.Reason == analyzer.ReasonAnalysisError:
+			// We couldn't analyze this path (network failure, rate limit,
+			// invalid module). It is not "active" and not "unknown" — put it in
+			// the unknown bucket with a distinct reason so the user can see we
+			// did not actually verify the dependency.
 			unknown = append(unknown, result)
-		} else {
-			// Packages with ReasonActive or other known-good reasons
+		case result.Reason == analyzer.ReasonUnknown:
+			unknown = append(unknown, result)
+		default:
 			maintained = append(maintained, result)
 		}
 	}

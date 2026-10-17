@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
+	"net/url"
 	"time"
 
 	"github.com/johnsaigle/go-unmaintained/pkg/types"
@@ -47,6 +47,10 @@ func (mp *MultiProvider) GetRepositoryInfo(ctx context.Context, host, owner, rep
 // GitLabProvider handles GitLab repositories
 type GitLabProvider struct {
 	httpClient *http.Client
+	// baseURL is the root of the GitLab API (e.g. https://gitlab.com/api/v4).
+	// Tests override this to point at an httptest server; NewGitLabProvider
+	// sets it to the production value.
+	baseURL string
 }
 
 // GitLabProject represents a GitLab project response
@@ -61,12 +65,20 @@ type GitLabProject struct {
 	Archived       bool      `json:"archived"`
 }
 
-// NewGitLabProvider creates a new GitLab provider
+// NewGitLabProvider creates a new GitLab provider aimed at gitlab.com
 func NewGitLabProvider() *GitLabProvider {
+	return newGitLabProvider("https://gitlab.com/api/v4")
+}
+
+// newGitLabProvider creates a GitLab provider with the given API base URL.
+// It exists so tests can point the provider at a mock server. NewGitLabProvider
+// takes the production URL so callers never need to know the path.
+func newGitLabProvider(baseURL string) *GitLabProvider {
 	return &GitLabProvider{
 		httpClient: &http.Client{
 			Timeout: 10 * time.Second,
 		},
+		baseURL: baseURL,
 	}
 }
 
@@ -82,11 +94,13 @@ func (gp *GitLabProvider) SupportsHost(host string) bool {
 
 // GetRepositoryInfo fetches repository information from GitLab
 func (gp *GitLabProvider) GetRepositoryInfo(ctx context.Context, owner, repo string) (*types.RepoInfo, error) {
-	// GitLab API endpoint for projects
-	projectPath := fmt.Sprintf("%s/%s", owner, repo)
-	url := fmt.Sprintf("https://gitlab.com/api/v4/projects/%s", strings.ReplaceAll(projectPath, "/", "%2F"))
+	// The project path is a single URL segment: /projects/{owner%2Frepo}.
+	// url.PathEscape encodes the slash in each component, so the joined
+	// string is exactly what the GitLab API expects.
+	projectPath := url.PathEscape(owner + "/" + repo)
+	repoURL := fmt.Sprintf("%s/projects/%s", gp.baseURL, projectPath)
 
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", repoURL, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -132,6 +146,9 @@ func (gp *GitLabProvider) GetRepositoryInfo(ctx context.Context, owner, repo str
 // BitbucketProvider handles Bitbucket repositories
 type BitbucketProvider struct {
 	httpClient *http.Client
+	// baseURL is the root of the Bitbucket API (e.g. https://api.bitbucket.org/2.0).
+	// Tests override this to point at an httptest server.
+	baseURL string
 }
 
 // BitbucketRepository represents a Bitbucket repository response
@@ -153,12 +170,19 @@ type BitbucketRepository struct {
 	IsPrivate bool `json:"is_private"`
 }
 
-// NewBitbucketProvider creates a new Bitbucket provider
+// NewBitbucketProvider creates a new Bitbucket provider aimed at api.bitbucket.org
 func NewBitbucketProvider() *BitbucketProvider {
+	return newBitbucketProvider("https://api.bitbucket.org/2.0")
+}
+
+// newBitbucketProvider creates a Bitbucket provider with the given base URL.
+// Tests use it to point at a mock server.
+func newBitbucketProvider(baseURL string) *BitbucketProvider {
 	return &BitbucketProvider{
 		httpClient: &http.Client{
 			Timeout: 10 * time.Second,
 		},
+		baseURL: baseURL,
 	}
 }
 
@@ -174,10 +198,13 @@ func (bp *BitbucketProvider) SupportsHost(host string) bool {
 
 // GetRepositoryInfo fetches repository information from Bitbucket
 func (bp *BitbucketProvider) GetRepositoryInfo(ctx context.Context, owner, repo string) (*types.RepoInfo, error) {
-	// Bitbucket API endpoint for repositories
-	url := fmt.Sprintf("https://api.bitbucket.org/2.0/repositories/%s/%s", owner, repo)
+	// Bitbucket API endpoint. Each path component is escaped individually so
+	// that future owner/repo names with spaces, +, or % do not mangle the URL.
+	ownerSeg := url.PathEscape(owner)
+	repoSeg := url.PathEscape(repo)
+	bitbucketURL := fmt.Sprintf("%s/repositories/%s/%s", bp.baseURL, ownerSeg, repoSeg)
 
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", bitbucketURL, nil)
 	if err != nil {
 		return nil, err
 	}

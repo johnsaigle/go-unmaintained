@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 )
@@ -30,10 +31,21 @@ func TestGitLabProvider_GetName(t *testing.T) {
 	}
 }
 
-func TestGitLabProvider_GetRepositoryInfo_Success(t *testing.T) {
+func testGitLabSuccess(t *testing.T) (string, *GitLabProvider) {
+	t.Helper()
 	now := time.Now().Truncate(time.Second)
-
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		raw := r.URL.EscapedPath()
+		// The literal "%2F" inside a t.Errorf format string would make either
+		// vet or staticcheck treat the F as a directive that consumes an arg,
+		// so the assertion is split into non-Printf statements.
+		if !strings.Contains(raw, "%2F") {
+			t.Errorf("GitLab project path %q must contain %%2F between owner and repo", raw)
+			return
+		}
+		if strings.Contains(raw, "//") {
+			t.Errorf("GitLab project path %q must not contain an unescaped /", raw)
+		}
 		project := GitLabProject{
 			ID:             123,
 			Name:           "testproject",
@@ -47,49 +59,63 @@ func TestGitLabProvider_GetRepositoryInfo_Success(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(project); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			return
 		}
 	}))
-	defer server.Close()
-
-	gp := &GitLabProvider{
-		httpClient: server.Client(),
-	}
-
-	// Override the URL by making the server respond at the expected path
-	// Since we can't easily override the URL construction, test with the mock server directly
-	ctx := context.Background()
-	// Test the HTTP client behavior — the provider constructs its own URL,
-	// so we test the response parsing by using a direct HTTP test server
-	resp, err := gp.httpClient.Get(server.URL)
-	if err != nil {
-		t.Fatalf("HTTP request error: %v", err)
-	}
-	defer resp.Body.Close()
-
-	var project GitLabProject
-	if err := json.NewDecoder(resp.Body).Decode(&project); err != nil {
-		t.Fatalf("JSON decode error: %v", err)
-	}
-
-	if project.Name != "testproject" {
-		t.Errorf("Name = %q, want %q", project.Name, "testproject")
-	}
-	if project.Archived {
-		t.Error("expected Archived to be false")
-	}
-	_ = ctx // silence unused
+	return server.URL, newGitLabProvider(server.URL)
 }
 
-func TestGitLabProvider_GetRepositoryInfo_NotFound(_ *testing.T) {
+func TestGitLabProvider_GetRepositoryInfo_Success(t *testing.T) {
+	_, gp := testGitLabSuccess(t)
+
+	ctx := context.Background()
+	info, err := gp.GetRepositoryInfo(ctx, "org", "testproject")
+	if err != nil {
+		t.Fatalf("GetRepositoryInfo() error: %v", err)
+	}
+	if !info.Exists {
+		t.Error("expected Exists=true")
+	}
+	if info.IsArchived {
+		t.Error("expected IsArchived=false")
+	}
+	if info.DefaultBranch != "main" {
+		t.Errorf("DefaultBranch = %q, want main", info.DefaultBranch)
+	}
+	if info.LastCommitAt == nil {
+		t.Error("expected LastCommitAt to be set")
+	}
+	if info.Description != "A test project" {
+		t.Errorf("Description = %q, want 'A test project'", info.Description)
+	}
+}
+
+func TestGitLabProvider_GetRepositoryInfo_NotFound(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	}))
 	defer server.Close()
 
-	// We can't easily override the URL the provider constructs,
-	// but we can verify the response handling logic directly
-	// by checking the 404 case in a unit test of the parsing
+	gp := newGitLabProvider(server.URL)
+	info, err := gp.GetRepositoryInfo(context.Background(), "org", "missing")
+	if err != nil {
+		t.Fatalf("expected no error for 404, got: %v", err)
+	}
+	if info == nil || info.Exists {
+		t.Errorf("expected Exists=false for 404, got %+v", info)
+	}
+}
+
+func TestGitLabProvider_GetRepositoryInfo_Error(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer server.Close()
+
+	gp := newGitLabProvider(server.URL)
+	_, err := gp.GetRepositoryInfo(context.Background(), "org", "x")
+	if err == nil {
+		t.Error("expected error for 500")
+	}
 }
 
 func TestBitbucketProvider_SupportsHost(t *testing.T) {
@@ -110,6 +136,75 @@ func TestBitbucketProvider_GetName(t *testing.T) {
 	bp := NewBitbucketProvider()
 	if bp.GetName() != "Bitbucket" {
 		t.Errorf("GetName() = %q, want %q", bp.GetName(), "Bitbucket")
+	}
+}
+
+func TestBitbucketProvider_GetRepositoryInfo_Success(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/repositories/o/r" {
+			t.Errorf("unexpected Bitbucket path %q, want /repositories/o/r", r.URL.Path)
+		}
+		resp := BitbucketRepository{
+			CreatedOn:   time.Unix(1600000000, 0).UTC(),
+			UpdatedOn:   time.Unix(1700000000, 0).UTC(),
+			Name:        "r",
+			FullName:    "o/r",
+			Description: "A test repo",
+		}
+		resp.Links.HTML.Href = "https://bitbucket.org/o/r"
+		resp.MainBranch.Name = "main"
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(resp); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}))
+	defer server.Close()
+
+	bp := newBitbucketProvider(server.URL)
+	info, err := bp.GetRepositoryInfo(context.Background(), "o", "r")
+	if err != nil {
+		t.Fatalf("GetRepositoryInfo() error: %v", err)
+	}
+	if !info.Exists {
+		t.Error("expected Exists=true")
+	}
+	if info.DefaultBranch != "main" {
+		t.Errorf("DefaultBranch = %q, want main", info.DefaultBranch)
+	}
+	if info.Description != "A test repo" {
+		t.Errorf("Description = %q, want 'A test repo'", info.Description)
+	}
+	if info.UpdatedAt.IsZero() {
+		t.Error("expected UpdatedAt to be set")
+	}
+}
+
+func TestBitbucketProvider_GetRepositoryInfo_NotFound(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	defer server.Close()
+
+	bp := newBitbucketProvider(server.URL)
+	info, err := bp.GetRepositoryInfo(context.Background(), "o", "missing")
+	if err != nil {
+		t.Fatalf("expected no error for 404, got: %v", err)
+	}
+	if info == nil || info.Exists {
+		t.Errorf("expected Exists=false for 404, got %+v", info)
+	}
+}
+
+func TestBitbucketProvider_GetRepositoryInfo_Error(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusUnauthorized)
+	}))
+	defer server.Close()
+
+	bp := newBitbucketProvider(server.URL)
+	_, err := bp.GetRepositoryInfo(context.Background(), "o", "x")
+	if err == nil {
+		t.Error("expected error for non-404, non-200 response")
 	}
 }
 

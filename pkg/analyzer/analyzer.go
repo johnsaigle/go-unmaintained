@@ -28,6 +28,13 @@ const (
 	ReasonOutdated      UnmaintainedReason = "outdated_version"
 	ReasonUnknown       UnmaintainedReason = "unknown_source"
 	ReasonActive        UnmaintainedReason = "active_maintained"
+	// ReasonAnalysisError indicates a dependency could not be analyzed.
+	// It is intentionally distinct from ReasonUnknown (which means "we don't
+	// know the state") and ReasonActive (which means "we confirmed it is
+	// active"). A Carol/Inspection failure must not masquerade as "maintained"
+	// because that would report "no problem found" in the exact case where we
+	// could not check.
+	ReasonAnalysisError UnmaintainedReason = "analysis_error"
 )
 
 // indexedDep represents a dependency with its index for concurrent processing
@@ -96,13 +103,14 @@ func NewAnalyzer(config Config) (*Analyzer, error) {
 		// Non-fatal error, silently ignore
 	}
 
-	// Initialize resolver - always available for well-known modules
-	// Use longer timeout when not explicitly resolving unknown modules
-	resolverTimeout := config.ResolverTimeout
-	if !config.ResolveUnknown && resolverTimeout == 0 {
-		resolverTimeout = 5 * time.Second // Shorter timeout for auto-resolution
-	}
-	moduleResolver := resolver.NewResolver(resolverTimeout)
+	// Initialize resolver - always available for well-known modules.
+	// The timeout is taken verbatim from the config so behavior does not depend
+	// on which entry point is reached. When unset (zero), NewResolver applies its
+	// own 10-second default, which is the same ceiling a user gets when running
+	// the resolver path explicitly. We deliberately do NOT shrink this to 5s
+	// because that would only bury a real "can't resolve" result with a timeout
+	// the user didn't ask for.
+	moduleResolver := resolver.NewResolver(config.ResolverTimeout)
 
 	// Initialize multi-provider for GitLab, Bitbucket, etc.
 	multiProvider := providers.NewMultiProvider()
@@ -131,11 +139,17 @@ func (a *Analyzer) analyzeModuleSequential(ctx context.Context, mod *parser.Modu
 	for _, dep := range mod.Dependencies {
 		result, err := a.AnalyzeDependency(ctx, dep)
 		if err != nil {
-			// Log error but continue with other dependencies
+			// An error here means "we could not analyze this dependency"
+			// (network failure, rate limit, invalid path). We must NOT mark it
+			// as active: reporting "no problem" in the exact case where we
+			// couldn't check is the most dangerous outcome. The reason is
+			// analysis_error; the formatter summarizes it as "could not
+			// analyze".
 			result = Result{
 				Package:        dep.Path,
 				IsUnmaintained: false,
-				Details:        fmt.Sprintf("Analysis error: %v", err),
+				Reason:         ReasonAnalysisError,
+				Details:        fmt.Sprintf("Could not analyze: %v", err),
 			}
 		}
 
@@ -227,10 +241,13 @@ func (a *Analyzer) processBatch(ctx context.Context, deps []indexedDep, results 
 
 			result, err := a.AnalyzeDependency(ctx, indexedDep.dep)
 			if err != nil {
+				// Same policy as the sequential path: an error is a distinct
+				// reason (analysis_error), not "active".
 				result = Result{
 					Package:        indexedDep.dep.Path,
 					IsUnmaintained: false,
-					Details:        fmt.Sprintf("Analysis error: %v", err),
+					Reason:         ReasonAnalysisError,
+					Details:        fmt.Sprintf("Could not analyze: %v", err),
 				}
 			}
 
@@ -422,7 +439,11 @@ func (a *Analyzer) fetchRepoWithCache(ctx context.Context, owner, repo string) (
 	}
 
 	latestVersion := ""
-	if a.config.CheckOutdated && repoInfo.Exists && !repoInfo.IsArchived {
+	if a.config.CheckOutdated && repoInfo.Exists {
+		// We check the latest version even when the repo is archived. Consumers
+		// who see a dep pinned to an old version want to know whether the
+		// upstream ever released something newer. (Could be cached as a
+		// follow-up, but the current real-time call is correct.)
 		latestVersion, _ = a.githubClient.GetLatestVersion(ctx, owner, repo)
 	}
 
@@ -538,6 +559,7 @@ type SummaryStats struct {
 	StaleInactiveCount   int
 	OutdatedCount        int
 	UnknownCount         int
+	AnalysisErrorCount   int // Dependencies we could not analyze (network/401/etc.)
 	RetractedCount       int
 }
 
@@ -568,9 +590,16 @@ func GetSummary(results []Result) SummaryStats {
 			case ReasonOutdated:
 				stats.OutdatedCount++
 			}
-		} else if result.Reason == ReasonUnknown {
-			// Track unknown dependencies separately
-			stats.UnknownCount++
+		} else {
+			// Non-unmaintained buckets. Distinguish "could not analyze"
+			// from "unknown source" so the summary does not conflate a real
+			// failure with "we don't know".
+			switch result.Reason {
+			case ReasonAnalysisError:
+				stats.AnalysisErrorCount++
+			case ReasonUnknown:
+				stats.UnknownCount++
+			}
 		}
 
 		// Track retracted versions separately (can be maintained or unmaintained)
