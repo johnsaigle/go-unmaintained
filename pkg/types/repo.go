@@ -21,6 +21,9 @@ func (info *RepoInfo) IsRepositoryActive(maxAge time.Duration) bool {
 	if !info.Exists {
 		return false
 	}
+	if info.IsArchived {
+		return false
+	}
 
 	latestActivity := info.UpdatedAt
 	if info.LastCommitAt != nil && info.LastCommitAt.After(info.UpdatedAt) {
