@@ -283,6 +283,24 @@ func TestParseModulePathLegacy(t *testing.T) {
 	}
 }
 
+func TestModuleSubpath(t *testing.T) {
+	cases := []struct {
+		path string
+		want string
+	}{
+		{"github.com/user/repo", ""},
+		{"github.com/user/repo/sub", "sub"},
+		{"github.com/user/repo/a/b", "a/b"},
+		{"golang.org/x/crypto", ""},
+		{"golang.org/x/tools/gopls", "gopls"},
+	}
+	for _, c := range cases {
+		if got := ModuleSubpath(c.path); got != c.want {
+			t.Errorf("ModuleSubpath(%q) = %q, want %q", c.path, got, c.want)
+		}
+	}
+}
+
 func TestParseGoMod(t *testing.T) {
 	// Create a temp directory with a valid go.mod
 	dir := t.TempDir()

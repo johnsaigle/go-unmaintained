@@ -184,6 +184,9 @@ func writeUnmaintainedSummary(w io.Writer, summary analyzer.SummaryStats, c Colo
 	if summary.NotFoundCount > 0 {
 		fmt.Fprintf(w, "   Not found/deleted: %d\n", summary.NotFoundCount)
 	}
+	if summary.NotMemberCount > 0 {
+		fmt.Fprintf(w, "   Not in repository (renamed/removed): %d\n", summary.NotMemberCount)
+	}
 	if summary.StaleInactiveCount > 0 {
 		fmt.Fprintf(w, "   Stale/inactive: %d\n", summary.StaleInactiveCount)
 	}
@@ -277,6 +280,8 @@ func getSeverityScore(result analyzer.Result) int {
 		baseScore = 0
 	case analyzer.ReasonNotFound:
 		baseScore = 10
+	case analyzer.ReasonNotMember:
+		baseScore = 15
 	case analyzer.ReasonStaleInactive:
 		baseScore = 20
 	case analyzer.ReasonOutdated:

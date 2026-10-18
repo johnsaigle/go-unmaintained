@@ -16,6 +16,7 @@ A CLI tool that identifies unmaintained Go packages using heuristics.
 - Smart caching for performance (24-hour default)
 - Multiple output formats: console, JSON, GitHub Actions annotations, golangci-lint
 - Dependency tree visualization for indirect dependencies
+- Optional repository membership check for renamed or removed modules
 - Intelligent rate limiting and retry logic
 
 ## Installation
@@ -133,6 +134,9 @@ go-unmaintained --sync
 # Resolve non-GitHub dependencies
 go-unmaintained --resolve-unknown
 
+# Verify modules are still present in their repositories (renamed/removed detection)
+go-unmaintained --check-membership
+
 # Exit immediately on first unmaintained package
 go-unmaintained --fail-fast
 ```
@@ -205,6 +209,7 @@ The tool uses several heuristics to identify unmaintained packages:
 2. **Package Not Found**: Repository doesn't exist or is inaccessible (404 errors)
 3. **Inactive Repository**: No commits or updates within the specified time frame (default: 365 days, configurable with `--max-age`)
 4. **Outdated Versions**: (requires `--check-outdated`) Current version is significantly behind the latest released version
+5. **Module Not In Repository**: (requires `--check-membership`) Module path no longer matches the module directive in its repository (renamed or removed)
 5. **Unknown Status**: Non-GitHub dependencies that couldn't be resolved (shown with ❓)
    - Use `--resolve-unknown` to attempt deeper analysis of these packages
    - Popular/official packages (e.g., `golang.org/x/*`) are automatically recognized

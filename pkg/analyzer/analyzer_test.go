@@ -1,11 +1,20 @@
 package analyzer
 
 import (
+	"context"
+	"encoding/base64"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"testing"
-	"time"
 
+	"github.com/johnsaigle/go-unmaintained/pkg/cache"
+	"github.com/johnsaigle/go-unmaintained/pkg/github"
 	"github.com/johnsaigle/go-unmaintained/pkg/parser"
 	"github.com/johnsaigle/go-unmaintained/pkg/popular"
+	"github.com/johnsaigle/go-unmaintained/pkg/providers"
+	"github.com/johnsaigle/go-unmaintained/pkg/resolver"
+	"time"
 )
 
 func TestIsVersionOutdated(t *testing.T) {
@@ -228,5 +237,100 @@ func TestResultFromPopularEntry(t *testing.T) {
 				t.Error("expected indirect dependency to have IsDirect=false")
 			}
 		})
+	}
+}
+
+func TestAnalyzeDependency_Membership(t *testing.T) {
+	content := "module github.com/o/renamed\n\ngo 1.21\n"
+	encoded := base64.StdEncoding.EncodeToString([]byte(content))
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/repos/o/r":
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprint(w, `{"archived":false,"default_branch":"main","created_at":"2020-01-01T00:00:00Z","updated_at":"2026-10-01T00:00:00Z","html_url":"https://github.com/o/r"}`)
+		case "/repos/o/r/commits":
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprint(w, `[{"commit":{"committer":{"date":"2026-10-01T00:00:00Z"}}}]`)
+		case "/repos/o/r/contents/go.mod":
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprintf(w, `{"content":%q,"encoding":"base64"}`, encoded)
+		default:
+			w.WriteHeader(404)
+		}
+	}))
+	defer server.Close()
+
+	cacheInstance, err := cache.NewCache(true, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	a := &Analyzer{
+		githubClient:  github.NewClientForTest(server.URL),
+		cache:         cacheInstance,
+		resolver:      resolver.NewResolver(0),
+		multiProvider: providers.NewMultiProvider(),
+		config: Config{
+			Token:           "dummy",
+			MaxAge:          365 * 24 * time.Hour,
+			CheckMembership: true,
+			NoCache:         true,
+		},
+	}
+
+	dep := parser.Dependency{Path: "github.com/o/r", Version: "v1.0.0"}
+	result, err := a.AnalyzeDependency(context.Background(), dep)
+	if err != nil {
+		t.Fatalf("AnalyzeDependency error: %v", err)
+	}
+	if !result.IsUnmaintained {
+		t.Fatalf("expected unmaintained, got maintained: %+v", result)
+	}
+	if result.Reason != ReasonNotMember {
+		t.Errorf("reason = %s, want %s", result.Reason, ReasonNotMember)
+	}
+}
+
+func TestAnalyzeDependency_MembershipMatch(t *testing.T) {
+	content := "module github.com/o/r\n\ngo 1.21\n"
+	encoded := base64.StdEncoding.EncodeToString([]byte(content))
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/repos/o/r":
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprint(w, `{"archived":false,"default_branch":"main","created_at":"2020-01-01T00:00:00Z","updated_at":"2026-10-01T00:00:00Z","html_url":"https://github.com/o/r"}`)
+		case "/repos/o/r/commits":
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprint(w, `[{"commit":{"committer":{"date":"2026-10-01T00:00:00Z"}}}]`)
+		case "/repos/o/r/contents/go.mod":
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprintf(w, `{"content":%q,"encoding":"base64"}`, encoded)
+		default:
+			w.WriteHeader(404)
+		}
+	}))
+	defer server.Close()
+
+	cacheInstance, _ := cache.NewCache(true, 0)
+	a := &Analyzer{
+		githubClient:  github.NewClientForTest(server.URL),
+		cache:         cacheInstance,
+		resolver:      resolver.NewResolver(0),
+		multiProvider: providers.NewMultiProvider(),
+		config: Config{
+			MaxAge:          365 * 24 * time.Hour,
+			CheckMembership: true,
+			NoCache:         true,
+		},
+	}
+
+	dep := parser.Dependency{Path: "github.com/o/r", Version: "v1.0.0"}
+	result, err := a.AnalyzeDependency(context.Background(), dep)
+	if err != nil {
+		t.Fatalf("AnalyzeDependency error: %v", err)
+	}
+	if result.IsUnmaintained {
+		t.Fatalf("expected maintained, got unmaintained: %+v", result)
 	}
 }

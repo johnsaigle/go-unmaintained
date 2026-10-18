@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/google/go-github/v83/github"
 	"github.com/johnsaigle/go-unmaintained/pkg/types"
+	"golang.org/x/mod/modfile"
 	"golang.org/x/mod/semver"
 	"golang.org/x/oauth2"
 )
@@ -224,4 +226,45 @@ func (c *Client) GetLatestVersion(ctx context.Context, owner, repo string) (stri
 	})
 
 	return validVersions[0], nil
+}
+
+// GetModuleDirective fetches the go.mod at filePath (relative to the repo root)
+// on the repository's default branch and returns its module directive.
+// Returns os.ErrNotExist when the file is absent (i.e. the module is no
+// longer present in the repository).
+func (c *Client) GetModuleDirective(ctx context.Context, owner, repo, filePath string) (string, error) {
+	if c.client == nil {
+		return "", errors.New("GitHub client is nil")
+	}
+	if owner == "" || repo == "" {
+		return "", errors.New("owner and repo name must be provided")
+	}
+	if filePath == "" {
+		filePath = "go.mod"
+	}
+
+	fc, _, resp, err := c.client.Repositories.GetContents(ctx, owner, repo, filePath, nil)
+	if err != nil {
+		if resp != nil && resp.StatusCode == 404 {
+			return "", os.ErrNotExist
+		}
+		return "", fmt.Errorf("failed to fetch %s: %w", filePath, err)
+	}
+	if fc == nil {
+		return "", fmt.Errorf("unexpected directory response for %s", filePath)
+	}
+
+	content, err := fc.GetContent()
+	if err != nil {
+		return "", fmt.Errorf("failed to decode %s: %w", filePath, err)
+	}
+
+	mf, err := modfile.Parse(filePath, []byte(content), nil)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse %s: %w", filePath, err)
+	}
+	if mf.Module == nil {
+		return "", fmt.Errorf("no module directive in %s", filePath)
+	}
+	return mf.Module.Mod.Path, nil
 }

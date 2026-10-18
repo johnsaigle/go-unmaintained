@@ -31,6 +31,7 @@ var (
 	noWarnings      bool
 	noExitCode      bool
 	checkOutdated   bool
+	checkMembership bool
 	cacheDurationHr int
 	resolveUnknown  bool
 	resolverTimeout int
@@ -82,6 +83,7 @@ func init() {
 	rootCmd.Flags().IntVar(&maxAge, "max-age", 365, "Age in days that a repository must not exceed to be considered current")
 	rootCmd.Flags().BoolVar(&checkOutdated, "check-outdated", false, "Check if dependencies are using outdated versions")
 	rootCmd.Flags().BoolVar(&resolveUnknown, "resolve-unknown", false, "Try to resolve and check status of non-GitHub dependencies")
+	rootCmd.Flags().BoolVar(&checkMembership, "check-membership", false, "Verify each module is still present in its repository")
 	rootCmd.Flags().IntVar(&resolverTimeout, "resolver-timeout", 10, "Timeout in seconds for resolving non-GitHub dependencies")
 
 	// Output options
@@ -155,6 +157,7 @@ func analyzeProject(projectPath string) error {
 		Token:           token,
 		Verbose:         verbose,
 		CheckOutdated:   checkOutdated,
+		CheckMembership: checkMembership,
 		NoCache:         noCache,
 		CacheDuration:   time.Duration(cacheDurationHr) * time.Hour,
 		ResolveUnknown:  resolveUnknown,
@@ -247,6 +250,7 @@ func analyzeSinglePackage(pkg string) error {
 		Concurrency:     concurrency,
 		Verbose:         verbose,
 		CheckOutdated:   checkOutdated,
+		CheckMembership: checkMembership,
 		NoCache:         noCache,
 		ResolveUnknown:  resolveUnknown,
 		AsyncMode:       !syncMode,

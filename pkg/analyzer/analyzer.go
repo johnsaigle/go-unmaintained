@@ -2,7 +2,9 @@ package analyzer
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -26,6 +28,7 @@ const (
 	ReasonNotFound      UnmaintainedReason = "package_not_found"
 	ReasonStaleInactive UnmaintainedReason = "stale_dependencies_inactive_repo"
 	ReasonOutdated      UnmaintainedReason = "outdated_version"
+	ReasonNotMember     UnmaintainedReason = "module_not_in_repository"
 	ReasonUnknown       UnmaintainedReason = "unknown_source"
 	ReasonActive        UnmaintainedReason = "active_maintained"
 	// ReasonAnalysisError indicates a dependency could not be analyzed.
@@ -70,6 +73,7 @@ type Config struct {
 	CheckOutdated   bool
 	NoCache         bool
 	ResolveUnknown  bool
+	CheckMembership bool
 	AsyncMode       bool
 	ShowProgress    bool
 	ShowDepPath     bool
@@ -344,6 +348,18 @@ func (a *Analyzer) analyzeGitHubMapping(ctx context.Context, dep parser.Dependen
 		return result, nil
 	}
 
+	result.RepoInfo = repoInfo
+	result.DaysSinceUpdate = repoInfo.DaysSinceLastActivity()
+
+	// Optional membership check.
+	if a.config.CheckMembership && repoInfo.Exists && !repoInfo.IsArchived &&
+		a.membershipFailed(ctx, dep, owner, repo) {
+		result.IsUnmaintained = true
+		result.Reason = ReasonNotMember
+		result.Details = "Module not found in repository (renamed or removed)"
+		return result, nil
+	}
+
 	return a.applyRepoHeuristics(result, repoInfo, "Go extended package")
 }
 
@@ -422,6 +438,16 @@ func (a *Analyzer) analyzeGitHub(ctx context.Context, dep parser.Dependency, mod
 	result.RepoInfo = repoInfo
 	result.DaysSinceUpdate = repoInfo.DaysSinceLastActivity()
 	result.LatestVersion = latestVersion
+
+	// Optional membership check: verify the module is still present in its
+	// repository (catches renamed/moved/removed modules).
+	if a.config.CheckMembership && repoInfo.Exists && !repoInfo.IsArchived &&
+		a.membershipFailed(ctx, dep, owner, repo) {
+		result.IsUnmaintained = true
+		result.Reason = ReasonNotMember
+		result.Details = "Module not found in repository (renamed or removed)"
+		return result, nil
+	}
 
 	return a.applyHeuristics(result, dep)
 }
@@ -525,6 +551,24 @@ func (a *Analyzer) applyHeuristics(result Result, dep parser.Dependency) (Result
 	return result, nil
 }
 
+// membershipFailed reports whether the module is no longer present in its
+// repository. It returns false on any non-definitive error so the caller does
+// not produce a false positive.
+func (a *Analyzer) membershipFailed(ctx context.Context, dep parser.Dependency, owner, repo string) bool {
+	filePath := "go.mod"
+	if sub := parser.ModuleSubpath(dep.Path); sub != "" {
+		filePath = sub + "/go.mod"
+	}
+	directive, merr := a.githubClient.GetModuleDirective(ctx, owner, repo, filePath)
+	if merr == nil {
+		return directive != dep.Path
+	}
+	if errors.Is(merr, os.ErrNotExist) && filePath != "go.mod" {
+		return true
+	}
+	return false
+}
+
 // isVersionOutdated checks if the current version is outdated compared to the latest
 func (a *Analyzer) isVersionOutdated(current, latest string) bool {
 	if current == "" || latest == "" {
@@ -558,6 +602,7 @@ type SummaryStats struct {
 	NotFoundCount        int
 	StaleInactiveCount   int
 	OutdatedCount        int
+	NotMemberCount       int
 	UnknownCount         int
 	AnalysisErrorCount   int // Dependencies we could not analyze (network/401/etc.)
 	RetractedCount       int
@@ -589,6 +634,8 @@ func GetSummary(results []Result) SummaryStats {
 				stats.StaleInactiveCount++
 			case ReasonOutdated:
 				stats.OutdatedCount++
+			case ReasonNotMember:
+				stats.NotMemberCount++
 			}
 		} else {
 			// Non-unmaintained buckets. Distinguish "could not analyze"

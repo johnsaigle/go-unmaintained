@@ -2,9 +2,12 @@ package github
 
 import (
 	"context"
+	"encoding/base64"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 )
 
@@ -233,5 +236,67 @@ func TestNewClientForTest(t *testing.T) {
 	}
 	if c.baseURL != "http://127.0.0.1:1" {
 		t.Errorf("baseURL = %q, want %q", c.baseURL, "http://127.0.0.1:1")
+	}
+}
+
+func TestGetModuleDirective_Found(t *testing.T) {
+	content := "module github.com/o/r\n\ngo 1.21\n"
+	encoded := base64.StdEncoding.EncodeToString([]byte(content))
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/repos/o/r/contents/go.mod" {
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprintf(w, `{"content":%q,"encoding":"base64"}`, encoded)
+			return
+		}
+		w.WriteHeader(404)
+	}))
+	defer server.Close()
+
+	c := NewClientForTest(server.URL)
+	got, err := c.GetModuleDirective(context.Background(), "o", "r", "go.mod")
+	if err != nil {
+		t.Fatalf("GetModuleDirective() error: %v", err)
+	}
+	if got != "github.com/o/r" {
+		t.Errorf("directive = %q, want github.com/o/r", got)
+	}
+}
+
+func TestGetModuleDirective_Mismatch(t *testing.T) {
+	content := "module github.com/o/renamed\n\ngo 1.21\n"
+	encoded := base64.StdEncoding.EncodeToString([]byte(content))
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/repos/o/r/contents/sub/go.mod" {
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprintf(w, `{"content":%q,"encoding":"base64"}`, encoded)
+			return
+		}
+		w.WriteHeader(404)
+	}))
+	defer server.Close()
+
+	c := NewClientForTest(server.URL)
+	got, err := c.GetModuleDirective(context.Background(), "o", "r", "sub/go.mod")
+	if err != nil {
+		t.Fatalf("GetModuleDirective() error: %v", err)
+	}
+	if got != "github.com/o/renamed" {
+		t.Errorf("directive = %q, want github.com/o/renamed", got)
+	}
+}
+
+func TestGetModuleDirective_NotFound(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(404)
+	}))
+	defer server.Close()
+
+	c := NewClientForTest(server.URL)
+	_, err := c.GetModuleDirective(context.Background(), "o", "r", "go.mod")
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !errors.Is(err, os.ErrNotExist) {
+		t.Errorf("expected os.ErrNotExist, got %v", err)
 	}
 }

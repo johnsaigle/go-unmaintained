@@ -151,6 +151,27 @@ func ParseModulePath(path string) *ModuleInfo {
 	return info
 }
 
+// ModuleSubpath returns the portion of a module path that lies below its
+// hosting repository (owner/repo or the mapped GitHub repo). For example,
+// "github.com/aws/aws-sdk-go-v2/service/s3" returns "service/s3" and
+// "golang.org/x/tools/gopls" returns "gopls". Returns "" for root modules.
+func ModuleSubpath(modulePath string) string {
+	// Handle golang.org/x/ modules that map to GitHub repositories.
+	if owner, repo, ok := types.GetGitHubMapping(modulePath); ok && owner != "" && repo != "" {
+		prefix := "golang.org/x/" + repo
+		if len(modulePath) > len(prefix) && modulePath[len(prefix)] == '/' {
+			return modulePath[len(prefix)+1:]
+		}
+		return ""
+	}
+
+	parts := strings.Split(modulePath, "/")
+	if len(parts) <= 3 {
+		return ""
+	}
+	return strings.Join(parts[3:], "/")
+}
+
 // isWellKnownGoModule checks if the module is a well-known Go module.
 // Delegates to types.IsWellKnownModule for the canonical implementation.
 func isWellKnownGoModule(path string) bool {
