@@ -2,322 +2,82 @@
 
 [![Dependency Health](https://github.com/johnsaigle/go-unmaintained/actions/workflows/self-check.yml/badge.svg)](https://github.com/johnsaigle/go-unmaintained/actions/workflows/self-check.yml)
 
-> [!WARNING]
-> Largely vibe-coded, trust at your own peril.
+**Supply-chain risk detection for Go dependencies.**
 
-A CLI tool that identifies unmaintained Go packages using heuristics.
-
-## Features
-
-- Scans `go.mod` files to identify potentially unmaintained dependencies
-- Detects archived repositories, missing packages, inactive projects, and outdated versions
-- Multi-platform support: GitHub, GitLab, Bitbucket
-- Concurrent analysis with configurable workers (default: 5)
-- Smart caching for performance (24-hour default)
-- Multiple output formats: console, JSON, GitHub Actions annotations, golangci-lint
-- Dependency tree visualization for indirect dependencies
-- Optional repository membership check for renamed or removed modules
-- Intelligent rate limiting and retry logic
-
-## Installation
-
-### From Source
-
-```bash
-git clone https://github.com/johnsaigle/go-unmaintained.git
-cd go-unmaintained
-make build
-```
-
-The binary will be available at `./bin/go-unmaintained`.
-
-### Install to GOPATH
-
-```bash
-make install
-```
-
-### As GitHub Action
-
-Add to your workflow:
-
-```yaml
-- name: Check for unmaintained dependencies
-  uses: johnsaigle/go-unmaintained/.github/actions/check@v1
-  with:
-    github-token: ${{ secrets.PAT }}  # Required: see setup below
-```
-
-See [GitHub Action documentation](./.github/actions/check/README.md) for more details and examples.
-
-## GitHub Token Setup
-
-A GitHub Personal Access Token (PAT) is required for API access:
-
-**For CLI usage:**
-1. [Create a GitHub PAT](https://github.com/settings/tokens):
-   - **Fine-grained token (recommended)**: 
-     - Repository access: "Public Repositories (read-only)"
-     - No additional permissions needed (Metadata is auto-set to read-only)
-   - **Classic token**: No scopes needed (or `public_repo` for consistency)
-2. Set it as an environment variable:
-   ```bash
-   export PAT=your_token_here
-   ```
-   Or use the `--token` flag when running the tool
-
-**For GitHub Actions (check action):**
-1. [Create a GitHub PAT](https://github.com/settings/tokens):
-   - **Fine-grained token**: 
-     - Repository access: "All repositories" or "Only select repositories"
-     - Repository permissions: **Metadata** (auto-set to read-only)
-   - **Classic token**: `public_repo` scope (or no scopes)
-2. Add it as a repository secret named `PAT`:
-   - Go to Settings → Secrets and variables → Actions
-   - Click "New repository secret"  
-   - Name: `PAT`, Value: your token
-3. Use it in workflows: `github-token: ${{ secrets.PAT }}`
-
-**For cache building workflow (maintainers only):**
-1. [Create a GitHub PAT](https://github.com/settings/tokens):
-   - **Fine-grained token**: 
-     - Repository access: "Only select repositories" → select this repo
-     - Repository permissions: **Contents** → **Read and write**
-   - **Classic token**: `repo` scope (full control)
-2. Add as secret named `PAT` (same process as above)
-
-> **Note:** `GITHUB_TOKEN` (the default Actions token) has insufficient permissions for this tool. A PAT is required.
-
-## Usage
-
-### Basic Usage
-
-Analyze the current project (uses concurrent analysis by default):
-
-```bash
-go-unmaintained
-```
-
-Analyze a specific project:
-
-```bash
-go-unmaintained --target /path/to/project
-```
-
-### Common Options
-
-```bash
-# Check for outdated versions
-go-unmaintained --check-outdated
-
-# JSON output
-go-unmaintained --format json
-
-# GitHub Actions annotations
-go-unmaintained --format github-actions
-
-# Verbose details with maintained packages
-go-unmaintained --verbose
-
-# Show dependency tree for indirect dependencies
-go-unmaintained --tree
-
-# Control concurrent workers (default: 5)
-go-unmaintained --concurrency 10
-
-# Disable caching
-go-unmaintained --no-cache
-
-# Sequential processing (slower, less memory)
-go-unmaintained --sync
-
-# Resolve non-GitHub dependencies
-go-unmaintained --resolve-unknown
-
-# Verify modules are still present in their repositories (renamed/removed detection)
-go-unmaintained --check-membership
-
-# Exit immediately on first unmaintained package
-go-unmaintained --fail-fast
-```
-
-See `go-unmaintained --help` for all options.
-
-### Example Output
+`govulncheck` reports the vulnerabilities that are already known. It can't warn you about a dependency that will never be patched. An archived repo, a deleted project, or a maintainer who left years ago means the next CVE in that code stays open. A dependency nobody owns can also be taken over by someone else. `go-unmaintained` flags these dependencies before they become an incident.
 
 ```
-📦 Project: github.com/example/myapp
-🔍 Analyzing 25 dependencies (concurrent: 5 workers)...
+$ go-unmaintained
 
-Dependency Analysis Results
-═══════════════════════════
-
-UNMAINTAINED — DIRECT DEPENDENCIES (3)
-────────────────────────────────────────────
-Listed in your go.mod; upgrade or replace these directly.
-
+UNMAINTAINED — DIRECT DEPENDENCIES (2)
   ✗ github.com/abandoned/old-lib — Repository is archived
-     Repo: abandoned/old-lib (https://github.com/abandoned/old-lib)
-     No commits in 1024 days
-     Archived: no new commits are possible
-
-  ✗ github.com/missing/gone — Repository not found
-     Repo: missing/gone (https://github.com/missing/gone)
-
-  ✗ github.com/old/version — Using outdated version v1.2.0 (latest: v2.1.0)
-     Repo: old/version (https://github.com/old/version)
+  ✗ github.com/missing/gone      — Repository not found
 
 UNMAINTAINED — INDIRECT DEPENDENCIES (1)
-────────────────────────────────────────────
-Pulled in by your dependencies; fix the parent package.
-
-  ✗ github.com/stale/inactive — Repository inactive for 500 days
-     Repo: stale/inactive (https://github.com/stale/inactive)
-     No commits in 500 days
+  ✗ github.com/stale/inactive    — Repository inactive for 500 days
      Required by: myapp → dep-a → github.com/stale/inactive
-
-UNKNOWN STATUS (1)
-────────────────────────────────────────────
-
-  ? golang.org/x/tools — Active non-GitHub dependency (golang.org): Official Go extended package
-
-══════════════════════════════════════════════════
-ANALYSIS SUMMARY
-══════════════════════════════════════════════════
-Total dependencies analyzed: 25
-
-Unmaintained: 4 (3 direct, 1 indirect)
-   Archived repositories: 1
-   Not found/deleted: 1
-   Stale/inactive: 1
-   Outdated versions: 1
-
-Unknown status: 1
-   (Non-GitHub dependencies that couldn't be fully analyzed)
-
-Maintained: 20
-   (Active repositories with recent updates)
 ```
 
-Output is colorized when writing to a terminal (red for unmaintained, yellow for unknown, green for maintained). Control with `--color=always|auto|never`; `auto` (the default) also respects the `NO_COLOR` environment variable.
+## What it catches
 
-## Detection Heuristics
+| Signal | Risk |
+|---|---|
+| **Archived** | The repo is read-only, so future vulnerabilities will never be patched. |
+| **Not found** | The source was deleted or made private. You can no longer audit it, and its namespace may be open for someone else to claim. |
+| **Inactive** | No commits within `--max-age` days (default 365). Security fixes are unlikely to arrive. |
+| **Outdated** | You're far behind the latest release and may be missing fixes (`--check-outdated`). |
+| **Not in repo** | The module was renamed or removed upstream, so your code points at an orphaned path (`--check-membership`). |
 
-The tool uses several heuristics to identify unmaintained packages:
+Works with GitHub, GitLab, and Bitbucket. It reports direct and indirect dependencies separately. That covers the whole dependency tree and shows which risks you can fix yourself and which ones to raise with a parent package.
 
-1. **Repository Archived**: Repository is marked as archived (GitHub, GitLab, Bitbucket)
-2. **Package Not Found**: Repository doesn't exist or is inaccessible (404 errors)
-3. **Inactive Repository**: No commits or updates within the specified time frame (default: 365 days, configurable with `--max-age`)
-4. **Outdated Versions**: (requires `--check-outdated`) Current version is significantly behind the latest released version
-5. **Module Not In Repository**: (requires `--check-membership`) Module path no longer matches the module directive in its repository (renamed or removed)
-5. **Unknown Status**: Non-GitHub dependencies that couldn't be resolved (shown with ❓)
-   - Use `--resolve-unknown` to attempt deeper analysis of these packages
-   - Popular/official packages (e.g., `golang.org/x/*`) are automatically recognized
-
-### Multi-Platform Support
-
-The tool supports multiple Git hosting platforms:
-- **GitHub**: Full support with API integration
-- **GitLab**: Full support with API integration
-- **Bitbucket**: Full support with API integration
-- **Others**: Basic support via `--resolve-unknown` flag
-
-## Output Formats
-
-The tool supports multiple output formats via the `--format` flag:
-
-### Console (default)
-Human-readable output with emojis and color support:
-```bash
-go-unmaintained --format console
-```
-
-### JSON
-Machine-readable JSON output for automation:
-```bash
-go-unmaintained --format json
-```
-
-### GitHub Actions
-Annotations format for GitHub Actions workflows:
-```bash
-go-unmaintained --format github-actions
-```
-
-### golangci-lint
-Compatible with golangci-lint output format:
-```bash
-go-unmaintained --format golangci-lint
-```
-
-### Color Control
-Control color output for console format:
-```bash
-go-unmaintained --color always   # Always use colors
-go-unmaintained --color never    # Never use colors
-go-unmaintained --color auto     # Auto-detect (default)
-```
-
-## Performance & Configuration
-
-### Concurrent Processing
-
-By default, the tool uses 5 concurrent workers for parallel analysis. You can adjust this based on your needs:
+## Install
 
 ```bash
-# More workers for faster analysis (if you have good network/API limits)
-go-unmaintained --concurrency 10
-
-# Fewer workers to be more conservative with rate limits
-go-unmaintained --concurrency 2
-
-# Sequential processing (slowest, but minimal resource usage)
-go-unmaintained --sync
+go install github.com/johnsaigle/go-unmaintained@51c887651b0770b132e8cc63947f186a5dd6ba93
 ```
 
-### Caching
+The command pins an exact commit, so you know what you're installing and the build can be reproduced. Check the [commit history](https://github.com/johnsaigle/go-unmaintained/commits/main) for newer revisions.
 
-The tool caches API responses to disk for 24 hours by default:
+Or build from source with `make build` (the binary goes to `./bin/`).
+
+## Quick start
 
 ```bash
-# Adjust cache duration
-go-unmaintained --cache-duration 48  # 48 hours
-
-# Disable caching entirely
-go-unmaintained --no-cache
+export PAT=<github-token>   # read-only, no scopes needed (see docs/tokens.md)
+go-unmaintained             # scan the current module
 ```
 
-Cache location: `~/.cache/go-unmaintained/` (or system-appropriate cache directory)
+The exit code is `1` when an unmaintained dependency is found. Run it in CI to stop risky dependencies from being merged.
 
-### Maintaining the Popular Packages Cache
-
-The embedded popular-package cache is a bounded rolling snapshot of the most-starred Go repositories. Each update can add newly ranked repositories and independently refresh stale entries; repositories that fall outside the top 500 are removed.
+### Useful flags
 
 ```bash
-export PAT=your_token_here
-make download-cache
-make build-cache
-make upload-cache
+go-unmaintained --target ./path/to/module   # scan another project
+go-unmaintained --check-outdated            # also flag stale versions
+go-unmaintained --check-membership          # detect renamed/removed modules
+go-unmaintained --tree                      # show why indirect deps are pulled in
+go-unmaintained --format json               # or: github-actions, golangci-lint
+go-unmaintained --max-age 730               # change the inactivity threshold
 ```
 
-The limits can be adjusted for a local run:
+Run `go-unmaintained --help` for the full list.
 
-```bash
-make build-cache \
-  CACHE_NEW_ENTRIES=20 \
-  CACHE_REFRESH_ENTRIES=20 \
-  CACHE_MAX_ENTRIES=500 \
-  CACHE_STALE_DAYS=90
+## GitHub Action
+
+```yaml
+- uses: johnsaigle/go-unmaintained/.github/actions/check@v1
+  with:
+    github-token: ${{ secrets.PAT }}
 ```
 
-### Rate Limiting
+The default `GITHUB_TOKEN` won't work here. You need a PAT, as described in [docs/tokens.md](docs/tokens.md). More examples are in the [action README](.github/actions/check/README.md).
 
-- **Authenticated requests**: 5,000 GitHub API requests/hour
-- **Unauthenticated requests**: 60 GitHub API requests/hour
-- The tool includes intelligent rate limiting and retry logic
-- Caching significantly reduces API calls for repeated analyses
-- Clear error messages when rate limits are exceeded
+## Docs
+
+- [Token setup](docs/tokens.md): CLI, Actions, and maintainer tokens
+- [Configuration](docs/configuration.md): output formats, concurrency, caching, rate limits, and unknown/non-GitHub packages
+- [Maintaining the package cache](docs/cache.md): for project maintainers
 
 ## Acknowledgments
 
-Inspired by [cargo-unmaintained](https://github.com/trailofbits/cargo-unmaintained) for the Rust ecosystem.
+Inspired by [cargo-unmaintained](https://github.com/trailofbits/cargo-unmaintained) for Rust.
