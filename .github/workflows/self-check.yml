@@ -25,11 +25,9 @@ jobs:
     # Dedicated environment for PAT secret access (zizmor: secrets-outside-env)
     environment: self-check
     permissions:
-      contents: read
-      # Required for creating/updating issues on scheduled runs
-      issues: write
-      # Required for commenting on pull requests with dependency analysis
-      pull-requests: write
+      contents: read  # Required to check out the repository
+      issues: write  # Required for creating/updating issues on scheduled runs
+      pull-requests: write  # Required for commenting on pull requests with dependency analysis
     
     steps:
       - name: Checkout code

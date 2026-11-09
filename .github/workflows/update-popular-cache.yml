@@ -28,8 +28,7 @@ jobs:
     # Dedicated environment for PAT secret access (zizmor: secrets-outside-env)
     environment: cache-release
     permissions:
-      # Required to create/update releases and upload artifacts
-      contents: write
+      contents: write  # Required to create/update releases and upload artifacts
     
     steps:
       - name: Checkout repository

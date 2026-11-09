@@ -25,7 +25,7 @@ jobs:
         with:
           persist-credentials: false
       
-      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
         with:
           go-version-file: go.mod
           cache: false  # golangci-lint-action does its own caching
@@ -45,7 +45,7 @@ jobs:
         with:
           persist-credentials: false
       
-      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
         with:
           go-version-file: go.mod
           # cache: true is default, caches go modules
