@@ -40,7 +40,7 @@ Listed in your go.mod; upgrade or replace these directly.
 
   ✗ github.com/abandoned/old-lib — Repository is archived
      Repo: abandoned/old-lib (https://github.com/abandoned/old-lib)
-     No commits in 1024 days
+     Last commit: 1024 days ago
      Archived: no new commits are possible
 
   ✗ github.com/missing/gone — Repository not found
@@ -53,9 +53,9 @@ UNMAINTAINED — INDIRECT DEPENDENCIES (1)
 ────────────────────────────────────────────
 Pulled in by your dependencies; fix the parent package.
 
-  ✗ github.com/stale/inactive — Repository inactive for 500 days
+  ✗ github.com/stale/inactive — Stale: no repository updates in 500 days
      Repo: stale/inactive (https://github.com/stale/inactive)
-     No commits in 500 days
+     Last commit: 731 days ago
      Required by: myapp → dep-a → github.com/stale/inactive
 
 UNKNOWN STATUS (1)

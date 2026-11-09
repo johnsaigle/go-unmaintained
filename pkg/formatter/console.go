@@ -209,16 +209,14 @@ func (f *ConsoleFormatter) writeUnmaintained(w io.Writer, result analyzer.Result
 
 	f.writeRepoLine(w, result)
 
-	// Show last activity information with context. "No commits" and "last
-	// activity" are deliberately labeled differently: a commit is a push to
-	// the default branch, while activity also covers releases, issues, and
-	// other repository events.
+	// The headline (Details) reports days since the repository was last
+	// updated, which GitHub also bumps for non-code events such as metadata
+	// edits. The last commit date is often older, so show it on its own,
+	// explicitly labeled line, and skip it when it would just repeat the
+	// headline number.
 	if result.RepoInfo != nil {
-		if result.RepoInfo.LastCommitAt != nil {
-			daysSinceCommit := int(time.Since(*result.RepoInfo.LastCommitAt).Hours() / 24)
-			fmt.Fprintf(w, "     No commits in %d days\n", daysSinceCommit)
-		} else if result.DaysSinceUpdate > 0 {
-			fmt.Fprintf(w, "     Last activity: %d days ago (includes non-commit events)\n", result.DaysSinceUpdate)
+		if days, ok := lastCommitDays(result); ok && days != result.DaysSinceUpdate {
+			fmt.Fprintf(w, "     Last commit: %d days ago\n", days)
 		}
 
 		// For archived repos, note that they're archived
@@ -231,6 +229,15 @@ func (f *ConsoleFormatter) writeUnmaintained(w io.Writer, result analyzer.Result
 	if f.opts.ShowPaths && !result.IsDirect && len(result.DependencyPath) > 0 {
 		fmt.Fprintf(w, "     Required by: %s\n", f.c.Dim(strings.Join(result.DependencyPath, " → ")))
 	}
+}
+
+// lastCommitDays returns the whole days since the repository's last commit,
+// if known.
+func lastCommitDays(result analyzer.Result) (int, bool) {
+	if result.RepoInfo == nil || result.RepoInfo.LastCommitAt == nil {
+		return 0, false
+	}
+	return int(time.Since(*result.RepoInfo.LastCommitAt).Hours() / 24), true
 }
 
 // writeRepoLine writes the repository reference as a short slug with the full

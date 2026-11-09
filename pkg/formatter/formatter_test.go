@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/johnsaigle/go-unmaintained/pkg/analyzer"
 	"github.com/johnsaigle/go-unmaintained/pkg/types"
@@ -33,7 +34,7 @@ func testResults() []analyzer.Result {
 			IsUnmaintained:  true,
 			IsDirect:        false,
 			Reason:          analyzer.ReasonStaleInactive,
-			Details:         "Repository inactive for 400 days",
+			Details:         "Stale: no repository updates in 400 days",
 			CurrentVersion:  "v2.0.0",
 			DaysSinceUpdate: 400,
 			DependencyPath:  []string{"myproject", "github.com/middle/dep", "github.com/stale/repo"},
@@ -492,5 +493,53 @@ func TestGetSeverityScore(t *testing.T) {
 	indirectArchived := getSeverityScore(analyzer.Result{IsDirect: false, Reason: analyzer.ReasonArchived})
 	if directArchived >= indirectArchived {
 		t.Error("direct should be more severe (lower score) than indirect for same reason")
+	}
+}
+
+func TestConsoleFormatter_LastCommitLine(t *testing.T) {
+	commitAt := func(days int) *time.Time {
+		ts := time.Now().Add(-time.Duration(days)*24*time.Hour - time.Hour)
+		return &ts
+	}
+	stale := func(updateDays, commitDays int) analyzer.Result {
+		return analyzer.Result{
+			Package:         "github.com/stale/repo",
+			IsUnmaintained:  true,
+			IsDirect:        true,
+			Reason:          analyzer.ReasonStaleInactive,
+			Details:         "Stale: no repository updates in 400 days",
+			DaysSinceUpdate: updateDays,
+			RepoInfo:        &types.RepoInfo{Exists: true, LastCommitAt: commitAt(commitDays)},
+		}
+	}
+
+	tests := []struct {
+		name    string
+		result  analyzer.Result
+		want    string
+		notWant string
+	}{
+		{"commit older than last update is shown", stale(400, 900), "Last commit: 900 days ago", ""},
+		{"commit matching headline is not repeated", stale(400, 400), "", "Last commit"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var buf bytes.Buffer
+			f := &ConsoleFormatter{opts: Options{}}
+			results := []analyzer.Result{tt.result}
+			if err := f.Format(&buf, results, analyzer.GetSummary(results)); err != nil {
+				t.Fatal(err)
+			}
+			out := buf.String()
+			if tt.want != "" && !strings.Contains(out, tt.want) {
+				t.Errorf("expected %q in output:\n%s", tt.want, out)
+			}
+			if tt.notWant != "" && strings.Contains(out, tt.notWant) {
+				t.Errorf("did not expect %q in output:\n%s", tt.notWant, out)
+			}
+			if strings.Contains(out, "No commits in") {
+				t.Errorf("legacy ambiguous label still present:\n%s", out)
+			}
+		})
 	}
 }

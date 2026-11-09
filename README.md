@@ -14,7 +14,7 @@ UNMAINTAINED — DIRECT DEPENDENCIES (2)
   ✗ github.com/missing/gone      — Repository not found
 
 UNMAINTAINED — INDIRECT DEPENDENCIES (1)
-  ✗ github.com/stale/inactive    — Repository inactive for 500 days
+  ✗ github.com/stale/inactive    — Stale: no repository updates in 500 days
      Required by: myapp → dep-a → github.com/stale/inactive
 ```
 
