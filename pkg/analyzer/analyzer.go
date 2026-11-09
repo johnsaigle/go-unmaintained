@@ -502,7 +502,7 @@ func (a *Analyzer) applyRepoHeuristics(result Result, repoInfo *types.RepoInfo, 
 	if !repoInfo.IsRepositoryActive(a.config.MaxAge) {
 		result.IsUnmaintained = true
 		result.Reason = ReasonStaleInactive
-		result.Details = fmt.Sprintf("%s repository inactive for %d days", source, result.DaysSinceUpdate)
+		result.Details = fmt.Sprintf("Stale: no %s repository updates in %d days", source, result.DaysSinceUpdate)
 		return result, nil
 	}
 
@@ -532,7 +532,7 @@ func (a *Analyzer) applyHeuristics(result Result, dep parser.Dependency) (Result
 	if !repoInfo.IsRepositoryActive(a.config.MaxAge) {
 		result.IsUnmaintained = true
 		result.Reason = ReasonStaleInactive
-		result.Details = fmt.Sprintf("Repository inactive for %d days", result.DaysSinceUpdate)
+		result.Details = fmt.Sprintf("Stale: no repository updates in %d days", result.DaysSinceUpdate)
 		return result, nil
 	}
 
